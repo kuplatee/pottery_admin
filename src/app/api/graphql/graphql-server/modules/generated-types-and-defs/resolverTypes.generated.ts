@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  JSON: { input: any; output: any; }
 };
 
 export type Query = {
@@ -93,6 +94,7 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -100,16 +102,22 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  JSON: Scalars['JSON']['output'];
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
   Boolean: Scalars['Boolean']['output'];
 };
+
+export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  JSON?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
 };
 

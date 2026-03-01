@@ -10,6 +10,7 @@ generates:
       resolverMainFile: "./generated-types-and-defs/resolvers.generated.ts"
       typeDefsFilePath: "./generated-types-and-defs/typeDefs.generated.ts"
       mergeSchema: "./generated-types-and-defs/schema.generated.graphqls"
+      scalarsModule: graphql-scalars
 
   # Generates TypeScript types for the schema for use in the UI layer
   src/app/ui/types/graphql-schema-types.generated.ts:
