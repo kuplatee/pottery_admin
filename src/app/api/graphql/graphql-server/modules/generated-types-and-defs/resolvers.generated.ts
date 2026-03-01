@@ -1,0 +1,9 @@
+/* This file was automatically generated. DO NOT UPDATE MANUALLY. */
+    import type   { Resolvers } from './resolverTypes.generated';
+    import    { ping as Query_ping } from './../query/resolvers/Query/ping';
+    export const resolvers: Resolvers = {
+      Query: { ping: Query_ping },
+      
+      
+      
+    }

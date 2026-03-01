@@ -1,0 +1,17 @@
+schema: "src/app/api/graphql/graphql-server/modules/**/schema.graphql"
+
+generates:
+  # Generates resolver types, resolver stubs, and typeDefs from all module schemas
+  src/app/api/graphql/graphql-server/modules/:
+    preset: "@eddeee888/gcg-typescript-resolver-files"
+    presetConfig:
+      resolverTypesPath: "./generated-types-and-defs/resolverTypes.generated.ts"
+      resolverRelativeTargetDir: "resolvers"
+      resolverMainFile: "./generated-types-and-defs/resolvers.generated.ts"
+      typeDefsFilePath: "./generated-types-and-defs/typeDefs.generated.ts"
+      mergeSchema: "./generated-types-and-defs/schema.generated.graphqls"
+
+  # Generates TypeScript types for the schema for use in the UI layer
+  src/app/ui/types/graphql-schema-types.generated.ts:
+    plugins:
+      - typescript

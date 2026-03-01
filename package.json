@@ -6,9 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "codegen": "bunx graphql-codegen --config graphql-and-types.yml"
   },
   "dependencies": {
+    "@eddeee888/gcg-typescript-resolver-files": "^0.15.0",
+    "@graphql-codegen/cli": "^6.1.2",
+    "@graphql-codegen/near-operation-file-preset": "^4.0.0",
+    "@graphql-codegen/typescript-operations": "^5.0.8",
+    "@graphql-tools/schema": "^10.0.31",
+    "graphql": "^16.13.0",
+    "graphql-scalars": "^1.25.0",
+    "graphql-yoga": "^5.18.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
