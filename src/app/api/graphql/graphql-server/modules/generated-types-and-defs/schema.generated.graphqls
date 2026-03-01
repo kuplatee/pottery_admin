@@ -1,5 +1,37 @@
+type Category {
+  id: String!
+  names: LocalizedString!
+}
+
+input CreateCategoryInput {
+  names: LocalizedStringInput!
+}
+
 scalar JSON
 
+type LocalizedString {
+  en: String!
+  fi: String!
+}
+
+input LocalizedStringInput {
+  en: String!
+  fi: String!
+}
+
+type Mutation {
+  createCategory(input: CreateCategoryInput!): Category!
+  deleteCategory(id: String!): String!
+  updateCategory(input: UpdateCategoryInput!): Category!
+}
+
 type Query {
+  categories: [Category!]!
+  category(id: String!): Category
   ping: String
+}
+
+input UpdateCategoryInput {
+  id: String!
+  names: LocalizedStringInput!
 }

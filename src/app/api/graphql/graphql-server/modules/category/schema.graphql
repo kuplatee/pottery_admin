@@ -1,0 +1,24 @@
+type Category {
+  id: String!
+  names: LocalizedString!
+}
+
+input CreateCategoryInput {
+  names: LocalizedStringInput!
+}
+
+input UpdateCategoryInput {
+  id: String!
+  names: LocalizedStringInput!
+}
+
+extend type Query {
+  categories: [Category!]!
+  category(id: String!): Category
+}
+
+extend type Mutation {
+  createCategory(input: CreateCategoryInput!): Category!
+  updateCategory(input: UpdateCategoryInput!): Category!
+  deleteCategory(id: String!): String!
+}

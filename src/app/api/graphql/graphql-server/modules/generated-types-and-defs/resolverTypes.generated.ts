@@ -6,6 +6,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -16,9 +17,64 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['String']['output'];
+  names: LocalizedString;
+};
+
+export type CreateCategoryInput = {
+  names: LocalizedStringInput;
+};
+
+export type LocalizedString = {
+  __typename?: 'LocalizedString';
+  en: Scalars['String']['output'];
+  fi: Scalars['String']['output'];
+};
+
+export type LocalizedStringInput = {
+  en: Scalars['String']['input'];
+  fi: Scalars['String']['input'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createCategory: Category;
+  deleteCategory: Scalars['String']['output'];
+  updateCategory: Category;
+};
+
+
+export type MutationcreateCategoryArgs = {
+  input: CreateCategoryInput;
+};
+
+
+export type MutationdeleteCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationupdateCategoryArgs = {
+  input: UpdateCategoryInput;
+};
+
 export type Query = {
   __typename?: 'Query';
+  categories: Array<Category>;
+  category?: Maybe<Category>;
   ping?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type QuerycategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type UpdateCategoryInput = {
+  id: Scalars['String']['input'];
+  names: LocalizedStringInput;
 };
 
 
@@ -94,30 +150,63 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
-  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  Category: ResolverTypeWrapper<Category>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  CreateCategoryInput: CreateCategoryInput;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  LocalizedString: ResolverTypeWrapper<LocalizedString>;
+  LocalizedStringInput: LocalizedStringInput;
+  Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  UpdateCategoryInput: UpdateCategoryInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  JSON: Scalars['JSON']['output'];
-  Query: Record<PropertyKey, never>;
+  Category: Category;
   String: Scalars['String']['output'];
+  CreateCategoryInput: CreateCategoryInput;
+  JSON: Scalars['JSON']['output'];
+  LocalizedString: LocalizedString;
+  LocalizedStringInput: LocalizedStringInput;
+  Mutation: Record<PropertyKey, never>;
+  Query: Record<PropertyKey, never>;
+  UpdateCategoryInput: UpdateCategoryInput;
   Boolean: Scalars['Boolean']['output'];
+};
+
+export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  names?: Resolver<ResolversTypes['LocalizedString'], ParentType, ContextType>;
 };
 
 export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
 
+export type LocalizedStringResolvers<ContextType = any, ParentType extends ResolversParentTypes['LocalizedString'] = ResolversParentTypes['LocalizedString']> = {
+  en?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fi?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationcreateCategoryArgs, 'input'>>;
+  deleteCategory?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationdeleteCategoryArgs, 'id'>>;
+  updateCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationupdateCategoryArgs, 'input'>>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QuerycategoryArgs, 'id'>>;
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Category?: CategoryResolvers<ContextType>;
   JSON?: GraphQLScalarType;
+  LocalizedString?: LocalizedStringResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

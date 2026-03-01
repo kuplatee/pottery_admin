@@ -1,1 +1,11 @@
 scalar JSON
+
+type LocalizedString {
+  en: String!
+  fi: String!
+}
+
+input LocalizedStringInput {
+  en: String!
+  fi: String!
+}

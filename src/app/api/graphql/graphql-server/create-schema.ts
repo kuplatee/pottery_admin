@@ -6,6 +6,6 @@ import { resolvers } from './modules/generated-types-and-defs/resolvers.generate
 export function createSchema() {
   return makeExecutableSchema({
     typeDefs,
-    resolvers: { ...resolvers, JSON: GraphQLJSON },
+    resolvers: { ...resolvers, JSON: GraphQLJSON }
   })
 }

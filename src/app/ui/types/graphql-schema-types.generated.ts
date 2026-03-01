@@ -15,7 +15,62 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['String']['output'];
+  names: LocalizedString;
+};
+
+export type CreateCategoryInput = {
+  names: LocalizedStringInput;
+};
+
+export type LocalizedString = {
+  __typename?: 'LocalizedString';
+  en: Scalars['String']['output'];
+  fi: Scalars['String']['output'];
+};
+
+export type LocalizedStringInput = {
+  en: Scalars['String']['input'];
+  fi: Scalars['String']['input'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createCategory: Category;
+  deleteCategory: Scalars['String']['output'];
+  updateCategory: Category;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  input: CreateCategoryInput;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  input: UpdateCategoryInput;
+};
+
 export type Query = {
   __typename?: 'Query';
+  categories: Array<Category>;
+  category?: Maybe<Category>;
   ping?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type QueryCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type UpdateCategoryInput = {
+  id: Scalars['String']['input'];
+  names: LocalizedStringInput;
 };
