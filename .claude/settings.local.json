@@ -1,5 +1,10 @@
 {
   "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Write(**/.env*)",
+      "Edit(**/.env*)"
+    ],
     "allow": [
       "Bash(tree:*)",
       "Bash(ls:*)",

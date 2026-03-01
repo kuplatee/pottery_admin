@@ -4,6 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 We are building the app described in @SPEC.md and you should read that file for general architectural tasks or to check database structure, tech stack or application architecture (so not every time you do something).
 
+## Security
+
+**NEVER** read or write `.env` files. Do not access, display, or modify any `.env*` file contents.
+
 ## Communication Style
 
 Keep answers extremely concise. Focus on key information only — no unnecessary fluff.

@@ -1,7 +1,8 @@
 import type { MutationResolvers } from './../../../generated-types-and-defs/resolverTypes.generated'
+import { updateCategory as updateCategoryService } from '../../../../services/categories/categoriesService'
 
 export const updateCategory: NonNullable<
   MutationResolvers['updateCategory']
-> = async (_parent, _arg, _ctx) => {
-  throw new Error('Not implemented')
+> = async (_parent, { input }, _ctx) => {
+  return updateCategoryService(input)
 }
