@@ -1,8 +1,4 @@
-import type {
-  Category,
-  CreateCategoryInput,
-  UpdateCategoryInput
-} from '../../modules/generated-types-and-defs/resolverTypes.generated'
+import type { Category, CreateCategoryInput, UpdateCategoryInput } from './types'
 import {
   getAllCollectionDocuments,
   getCollectionDocumentById

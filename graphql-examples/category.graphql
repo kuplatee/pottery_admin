@@ -1,0 +1,24 @@
+{
+  categories {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+
+query GetCategory($id: String!) {
+  category(id: $id) {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+
+# Variables:
+# {
+#   "id": "YOUR_CATEGORY_ID"
+# }

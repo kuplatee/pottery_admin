@@ -2,7 +2,7 @@ import type {
   QueryDocumentSnapshot,
   DocumentData
 } from 'firebase-admin/firestore'
-import type { Category } from '../../modules/generated-types-and-defs/resolverTypes.generated'
+import type { Category } from './types'
 
 export function docToCategory(
   doc: QueryDocumentSnapshot<DocumentData>
