@@ -3,6 +3,6 @@ import { deleteCategory as deleteCategoryService } from '../../../../services/ca
 
 export const deleteCategory: NonNullable<
   MutationResolvers['deleteCategory']
-> = async (_parent, { id }, _ctx) => {
-  return deleteCategoryService(id)
+> = async (_parent, { id }, ctx) => {
+  return deleteCategoryService(ctx.db, id)
 }

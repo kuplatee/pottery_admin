@@ -3,6 +3,6 @@ import { updateCategory as updateCategoryService } from '../../../../services/ca
 
 export const updateCategory: NonNullable<
   MutationResolvers['updateCategory']
-> = async (_parent, { input }, _ctx) => {
-  return updateCategoryService(input)
+> = async (_parent, { input }, ctx) => {
+  return updateCategoryService(ctx.db, input)
 }

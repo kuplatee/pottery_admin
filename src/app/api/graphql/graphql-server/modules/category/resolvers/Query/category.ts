@@ -4,7 +4,7 @@ import { getCategory } from '../../../../services/categories/categoriesService'
 export const category: NonNullable<QueryResolvers['category']> = async (
   _parent,
   { id },
-  _ctx
+  ctx
 ) => {
-  return getCategory(id)
+  return getCategory(ctx.db, id)
 }
