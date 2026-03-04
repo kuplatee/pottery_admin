@@ -13,6 +13,6 @@ generates:
       scalarsModule: graphql-scalars
 
   # Generates TypeScript types for the schema for use in the UI layer
-  src/app/ui/types/graphql-schema-types.generated.ts:
+  src/app/types/graphql-schema-types.generated.ts:
     plugins:
       - typescript
