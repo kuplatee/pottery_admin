@@ -10,6 +10,10 @@ This app is small and local-only today, but treat every decision as if it will s
 
 **NEVER** read or write `.env` files. Do not access, display, or modify any `.env*` file contents.
 
+## Code Style
+
+Always use curly braces for `if`/`else` blocks — never the braceless single-line form (e.g., use `if (x) { throw ... }` not `if (x) throw ...`)
+
 ## Communication Style
 
 Keep answers extremely concise. Focus on key information only — no unnecessary fluff.

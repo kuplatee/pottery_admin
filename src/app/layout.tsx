@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { AppStateProvider } from '@/state/AppStateProvider'
+import { ApiClientProvider } from '@/services/graphql-client/client/ApiClientProvider'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <ApiClientProvider>
           <AppStateProvider>{children}</AppStateProvider>
-        </body>
+        </ApiClientProvider>
+      </body>
     </html>
   )
 }

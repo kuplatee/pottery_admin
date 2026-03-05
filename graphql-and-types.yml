@@ -16,3 +16,13 @@ generates:
   src/types/graphql-schema-types.generated.ts:
     plugins:
       - typescript
+
+  # Generates operation types next to each .graphql file in graphql-client
+  src/services/graphql-client/graphql-queries/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: "../../../types/graphql-schema-types.generated.ts"
+    documents: "src/services/graphql-client/graphql-queries/**/*.graphql"
+    plugins:
+      - typescript-operations

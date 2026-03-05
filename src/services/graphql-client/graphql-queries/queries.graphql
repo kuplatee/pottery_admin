@@ -1,0 +1,9 @@
+query GetAllCategories {
+  categories {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
