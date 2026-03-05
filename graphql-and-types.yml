@@ -25,4 +25,11 @@ generates:
       baseTypesPath: "../../../types/graphql-schema-types.generated.ts"
     documents: "src/services/graphql-client/graphql-queries/**/*.graphql"
     plugins:
+      - add:
+          content: "// @ts-nocheck"
+          placement: prepend
       - typescript-operations
+      - typescript-react-apollo:
+          withHooks: false
+          withHOC: false
+          withComponent: false
