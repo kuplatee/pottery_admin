@@ -20,6 +20,7 @@
     "@graphql-codegen/typescript-operations": "^5.0.8",
     "@graphql-codegen/typescript-react-apollo": "^4.4.0",
     "@graphql-tools/schema": "^10.0.31",
+    "@hookform/resolvers": "^5.2.2",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.7.0",
     "graphql": "^16.13.0",
@@ -27,7 +28,9 @@
     "graphql-yoga": "^5.18.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

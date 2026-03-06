@@ -1,8 +1,17 @@
+'use client'
+
+import { useAppState } from '@/state/AppStateContext'
+import { EntitiesPage } from '@/components/EntitiesPage'
+
 export default function CategoriesPage() {
+  const { state } = useAppState()
+
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-wide">Categories</h1>
-      <p className="mt-2 text-sm text-gray-500">Manage pottery categories</p>
-    </main>
+    <EntitiesPage
+      title="Categories"
+      label="Category"
+      description="Manage pottery categories"
+      entities={state.categories}
+    />
   )
 }
