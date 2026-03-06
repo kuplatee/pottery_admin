@@ -1,7 +1,8 @@
 import type { Category, CreateCategoryInput, UpdateCategoryInput } from './types'
 import {
   getAllCollectionDocuments,
-  getCollectionDocumentById
+  getCollectionDocumentById,
+  createCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { docToCategory } from './categoryMappers'
@@ -24,10 +25,13 @@ export async function getCategory(
 }
 
 export async function createCategory(
-  _db: Firestore,
-  _input: CreateCategoryInput
+  db: Firestore,
+  input: CreateCategoryInput
 ): Promise<Category> {
-  throw new Error('Not implemented')
+  const data = { names: { en: input.names.en, fi: input.names.fi } }
+  const id = await createCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, data)
+
+  return { id, names: input.names }
 }
 
 export async function updateCategory(

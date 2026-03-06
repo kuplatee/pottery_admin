@@ -11,6 +11,8 @@ export function makeMockDb(docs: MockDoc[] = []) {
       get: vi.fn().mockResolvedValue({ docs }),
       doc: vi.fn().mockReturnValue({
         get: vi.fn().mockResolvedValue({ exists: docs.length > 0, ...docs[0] }),
+        set: vi.fn().mockResolvedValue(undefined),
+        id: 'generated-id',
       }),
     }),
   }

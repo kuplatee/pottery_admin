@@ -27,3 +27,14 @@ export async function getAllCollectionDocuments(
 
   return snapshot.docs
 }
+
+export async function createCollectionDocument(
+  db: Firestore,
+  collectionName: DbCollectionName,
+  data: DocumentData
+): Promise<string> {
+  const ref = db.collection(collectionName).doc()
+  await ref.set(data)
+
+  return ref.id
+}
