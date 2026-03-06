@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { NamesFields } from './NamesFields'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -16,11 +18,13 @@ type Props = {
   onClose: () => void
 }
 
-function handleCreate(label: string, values: FormValues): void {
-  console.log(`TODO: create ${label}`, values)
+function handleCreate(label: string, id: string, values: FormValues): void {
+  console.log(`TODO: create ${label}`, { id, ...values })
 }
 
 export function CreateEntityModal({ label, onClose }: Props) {
+  const [id] = useState(() => crypto.randomUUID())
+
   const {
     register,
     handleSubmit,
@@ -28,7 +32,7 @@ export function CreateEntityModal({ label, onClose }: Props) {
   } = useForm<FormValues>({ resolver: zodResolver(schema) })
 
   function onSubmit(values: FormValues) {
-    handleCreate(label, values)
+    handleCreate(label, id, values)
     onClose()
   }
 
@@ -49,45 +53,14 @@ export function CreateEntityModal({ label, onClose }: Props) {
           <h2 id="create-entity-title" className="text-lg font-semibold">
             New {label}
           </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
-            <div>
-              <label
-                htmlFor="nameFi"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Name (Finnish)
-              </label>
-              <input
-                id="nameFi"
-                type="text"
-                {...register('nameFi')}
-                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-              />
-              {errors.nameFi && (
-                <p className="mt-1 text-xs text-red-500">
-                  {errors.nameFi.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="nameEn"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Name (English)
-              </label>
-              <input
-                id="nameEn"
-                type="text"
-                {...register('nameEn')}
-                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-              />
-              {errors.nameEn && (
-                <p className="mt-1 text-xs text-red-500">
-                  {errors.nameEn.message}
-                </p>
-              )}
-            </div>
+          <p className="mt-1 mb-4 text-xs text-gray-400"><span className="font-medium">DB ID:</span> {id}</p>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+            <NamesFields
+              fiRegistration={register('nameFi')}
+              enRegistration={register('nameEn')}
+              fiError={errors.nameFi}
+              enError={errors.nameEn}
+            />
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"

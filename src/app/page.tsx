@@ -1,4 +1,4 @@
-import HomeNav from '@/components/HomeNav'
+import HomeNav from '@/components/navigation/HomeNav'
 
 export default function Home() {
   return (

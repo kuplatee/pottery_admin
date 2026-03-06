@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { AppStateProvider } from '@/state/AppStateProvider'
 import { ApiClientProvider } from '@/services/graphql-client/client/ApiClientProvider'
-import { DataLoader } from '@/components/DataLoader'
-import TopNav from '@/components/TopNav'
+import { DataLoader } from '@/components/data/DataLoader'
+import TopNav from '@/components/navigation/TopNav'
 import './globals.css'
 
 export const metadata: Metadata = {
