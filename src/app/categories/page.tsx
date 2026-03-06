@@ -1,7 +1,7 @@
 'use client'
 
 import { useAppState } from '@/state/AppStateContext'
-import { EntitiesPage } from '@/components/EntitiesPage'
+import { EntitiesPage } from '@/components/entity-components/EntitiesPage'
 
 export default function CategoriesPage() {
   const { state } = useAppState()

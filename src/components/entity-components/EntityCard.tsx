@@ -8,11 +8,15 @@ type NamedEntity = {
 
 type Props = {
   entity: NamedEntity
+  onClick?: () => void
 }
 
-export function EntityCard({ entity }: Props) {
+export function EntityCard({ entity, onClick }: Props) {
   return (
-    <li className="rounded border border-gray-200 px-3 py-2">
+    <li
+      className="cursor-pointer rounded border border-gray-200 px-3 py-2 transition-colors hover:bg-gray-100"
+      onClick={onClick}
+    >
       <div className="font-medium">{entity.names.fi}</div>
       <div className="text-sm text-gray-400">{entity.names.en}</div>
     </li>
