@@ -7,3 +7,13 @@ query GetAllCategories {
     }
   }
 }
+
+mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}

@@ -8,6 +8,13 @@ export type GetAllCategoriesQueryVariables = Types.Exact<{ [key: string]: never;
 
 export type GetAllCategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, names: { __typename?: 'LocalizedString', en: string, fi: string } }> };
 
+export type CreateCategoryMutationVariables = Types.Exact<{
+  input: Types.CreateCategoryInput;
+}>;
+
+
+export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', id: string, names: { __typename?: 'LocalizedString', en: string, fi: string } } };
+
 
 export const GetAllCategoriesDocument = gql`
     query GetAllCategories {
@@ -21,3 +28,17 @@ export const GetAllCategoriesDocument = gql`
 }
     `;
 export type GetAllCategoriesQueryResult = Apollo.QueryResult<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>;
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+    `;
+export type CreateCategoryMutationFn = Apollo.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;

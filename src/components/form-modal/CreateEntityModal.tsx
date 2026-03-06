@@ -22,9 +22,10 @@ type Props = {
   label: string
   entity?: NamedEntity
   onClose: () => void
+  onCreate?: (names: { en: string; fi: string }) => Promise<void>
 }
 
-export function EntityModal({ label, entity, onClose }: Props) {
+export function EntityModal({ label, entity, onClose, onCreate }: Props) {
   const isEditing = entity !== undefined
   const id = entity?.id
 
@@ -39,11 +40,11 @@ export function EntityModal({ label, entity, onClose }: Props) {
       : undefined
   })
 
-  function onSubmit(values: FormValues) {
+  async function onSubmit(values: FormValues) {
     if (isEditing) {
       console.log(`TODO: update ${label}`, { id, ...values })
-    } else {
-      console.log(`TODO: create ${label}`, { id, ...values })
+    } else if (onCreate) {
+      await onCreate({ en: values.nameEn, fi: values.nameFi })
     }
     onClose()
   }

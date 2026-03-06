@@ -19,9 +19,10 @@ type Props = {
   label: string
   description: string
   entities: NamedEntity[]
+  onCreate?: (names: { en: string; fi: string }) => Promise<void>
 }
 
-export function EntitiesPage({ title, label, description, entities }: Props) {
+export function EntitiesPage({ title, label, description, entities, onCreate }: Props) {
   const [modal, setModal] = useState<ModalState>(null)
 
   return (
@@ -52,6 +53,7 @@ export function EntitiesPage({ title, label, description, entities }: Props) {
           label={label}
           entity={modal.type === 'edit' ? modal.entity : undefined}
           onClose={() => setModal(null)}
+          onCreate={onCreate}
         />
       )}
     </main>
