@@ -6,6 +6,10 @@ We are building the app described in @SPEC.md and you should read that file for 
 
 This app is small and local-only today, but treat every decision as if it will scale into a large, complex, production-grade system. Apply proper architecture, clean boundaries, and no shortcuts — even when a simpler approach would work for the current scope.
 
+## Git Commits
+
+Always use the `git-committer` skill — never commit directly via Bash.
+
 ## Security
 
 **NEVER** read or write `.env` files. Do not access, display, or modify any `.env*` file contents.
