@@ -2,11 +2,11 @@
 
 import { useAppState } from '@/state/AppStateContext'
 import { EntitiesPage } from '@/components/entity-components/EntitiesPage'
-import { useCreateCategory } from '@/services/graphql-client/hooks/useCreateCategory'
+import { useCategoryActions } from '@/services/graphql-client/hooks/useCategoryActions'
 
 export default function CategoriesPage() {
   const { state } = useAppState()
-  const { createCategory } = useCreateCategory()
+  const { createCategory, updateCategory, deleteCategory } = useCategoryActions()
 
   return (
     <EntitiesPage
@@ -15,6 +15,8 @@ export default function CategoriesPage() {
       description="Manage pottery categories"
       entities={state.categories}
       onCreate={(names) => createCategory({ names })}
+      onUpdate={(id, names) => updateCategory({ id, names })}
+      onDelete={(id) => deleteCategory(id)}
     />
   )
 }

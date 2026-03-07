@@ -20,9 +20,11 @@ type Props = {
   description: string
   entities: NamedEntity[]
   onCreate?: (names: { en: string; fi: string }) => Promise<void>
+  onUpdate?: (id: string, names: { en: string; fi: string }) => Promise<void>
+  onDelete?: (id: string) => Promise<void>
 }
 
-export function EntitiesPage({ title, label, description, entities, onCreate }: Props) {
+export function EntitiesPage({ title, label, description, entities, onCreate, onUpdate, onDelete }: Props) {
   const [modal, setModal] = useState<ModalState>(null)
 
   return (
@@ -45,6 +47,7 @@ export function EntitiesPage({ title, label, description, entities, onCreate }: 
             key={entity.id}
             entity={entity}
             onClick={() => setModal({ type: 'edit', entity })}
+            onDelete={onDelete ? () => onDelete(entity.id) : undefined}
           />
         ))}
       </ul>
@@ -54,6 +57,8 @@ export function EntitiesPage({ title, label, description, entities, onCreate }: 
           entity={modal.type === 'edit' ? modal.entity : undefined}
           onClose={() => setModal(null)}
           onCreate={onCreate}
+          onUpdate={onUpdate}
+          onDelete={modal.type === 'edit' && onDelete ? () => { onDelete(modal.entity.id); setModal(null) } : undefined}
         />
       )}
     </main>

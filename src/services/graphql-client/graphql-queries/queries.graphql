@@ -17,3 +17,17 @@ mutation CreateCategory($input: CreateCategoryInput!) {
     }
   }
 }
+
+mutation UpdateCategory($input: UpdateCategoryInput!) {
+  updateCategory(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+
+mutation DeleteCategory($id: String!) {
+  deleteCategory(id: $id)
+}

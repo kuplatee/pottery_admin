@@ -2,7 +2,9 @@ import type { Category, CreateCategoryInput, UpdateCategoryInput } from './types
 import {
   getAllCollectionDocuments,
   getCollectionDocumentById,
-  createCollectionDocument
+  createCollectionDocument,
+  updateCollectionDocument,
+  deleteCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { docToCategory } from './categoryMappers'
@@ -35,15 +37,32 @@ export async function createCategory(
 }
 
 export async function updateCategory(
-  _db: Firestore,
-  _input: UpdateCategoryInput
+  db: Firestore,
+  input: UpdateCategoryInput
 ): Promise<Category> {
-  throw new Error('Not implemented')
+  const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, input.id)
+  if (!existing) {
+    throw new Error(`Category with id "${input.id}" not found`)
+  }
+
+  const data = { names: { en: input.names.en, fi: input.names.fi } }
+  await updateCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, input.id, data)
+
+  return { id: input.id, names: input.names }
 }
 
 export async function deleteCategory(
-  _db: Firestore,
-  _id: string
+  db: Firestore,
+  id: string
 ): Promise<string> {
-  throw new Error('Not implemented')
+  const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, id)
+  if (!existing) {
+    throw new Error(`Category with id "${id}" not found`)
+  }
+
+  // FIXME: before deleting, check that no Design references this category (categoryIds).
+  // If any designs are linked, reject the deletion to preserve referential integrity.
+  await deleteCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, id)
+
+  return id
 }

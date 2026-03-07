@@ -4,7 +4,11 @@ export type AppState = {
   categories: Category[]
 }
 
-export type AppStateAction = { type: 'SET_CATEGORIES'; payload: Category[] }
+export type AppStateAction =
+  | { type: 'SET_CATEGORIES'; payload: Category[] }
+  | { type: 'ADD_CATEGORY'; payload: Category }
+  | { type: 'UPDATE_CATEGORY'; payload: Category }
+  | { type: 'DELETE_CATEGORY'; payload: string }
 
 export type AppStateContextValue = {
   state: AppState

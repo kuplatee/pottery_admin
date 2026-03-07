@@ -1,18 +1,20 @@
 type Props = {
   isEditing: boolean
-  onClose: () => void
+  onDelete?: () => void
 }
 
-export function ModalActions({ isEditing, onClose }: Props) {
+export function ModalActions({ isEditing, onDelete }: Props) {
   return (
-    <div className="flex justify-end gap-2 pt-2">
-      <button
-        type="button"
-        onClick={onClose}
-        className="rounded px-4 py-2 text-sm text-gray-600 hover:bg-gray-100"
-      >
-        Cancel
-      </button>
+    <div className="flex items-center justify-end gap-2 pt-2">
+      {isEditing && onDelete && (
+        <button
+          type="button"
+          onClick={onDelete}
+          className="rounded px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+        >
+          Delete
+        </button>
+      )}
       <button
         type="submit"
         className="rounded bg-gray-800 px-4 py-2 text-sm text-white hover:bg-gray-700"

@@ -23,9 +23,11 @@ type Props = {
   entity?: NamedEntity
   onClose: () => void
   onCreate?: (names: { en: string; fi: string }) => Promise<void>
+  onUpdate?: (id: string, names: { en: string; fi: string }) => Promise<void>
+  onDelete?: () => void
 }
 
-export function EntityModal({ label, entity, onClose, onCreate }: Props) {
+export function EntityModal({ label, entity, onClose, onCreate, onUpdate, onDelete }: Props) {
   const isEditing = entity !== undefined
   const id = entity?.id
 
@@ -41,8 +43,8 @@ export function EntityModal({ label, entity, onClose, onCreate }: Props) {
   })
 
   async function onSubmit(values: FormValues) {
-    if (isEditing) {
-      console.log(`TODO: update ${label}`, { id, ...values })
+    if (isEditing && id && onUpdate) {
+      await onUpdate(id, { en: values.nameEn, fi: values.nameFi })
     } else if (onCreate) {
       await onCreate({ en: values.nameEn, fi: values.nameFi })
     }
@@ -63,9 +65,22 @@ export function EntityModal({ label, entity, onClose, onCreate }: Props) {
         className="fixed inset-0 z-50 flex items-center justify-center"
       >
         <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
-          <h2 id="entity-modal-title" className="text-lg font-semibold">
-            {isEditing ? `Edit ${label}` : `New ${label}`}
-          </h2>
+          <div className="flex items-start justify-between">
+            <h2 id="entity-modal-title" className="text-lg font-semibold">
+              {isEditing ? `Edit ${label}` : `New ${label}`}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="ml-4 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              aria-label="Close"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
           {id && (
             <p className="mt-1 mb-4 text-xs text-gray-400">
               <span className="font-medium">DB ID:</span> {id}
@@ -78,7 +93,7 @@ export function EntityModal({ label, entity, onClose, onCreate }: Props) {
               fiError={errors.nameFi}
               enError={errors.nameEn}
             />
-            <ModalActions isEditing={isEditing} onClose={onClose} />
+            <ModalActions isEditing={isEditing} onDelete={onDelete} />
           </form>
         </div>
       </div>
