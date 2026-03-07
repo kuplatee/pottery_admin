@@ -10,7 +10,7 @@ export function ModalActions({ isEditing, onDelete }: Props) {
         <button
           type="button"
           onClick={onDelete}
-          className="rounded px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+          className="rounded px-4 py-2 text-sm text-gray-400 hover:text-red-500 hover:bg-red-50"
         >
           Delete
         </button>

@@ -2,29 +2,32 @@
 
 import { useState } from 'react'
 import { EntityCard } from '@/components/entity-components/EntityCard'
-import { EntityModal } from '@/components/form-modal/CreateEntityModal'
+import { EntityModal, type EntityFieldConfig, type EntityFormData } from '@/components/form-modal/CreateEntityModal'
 
-type NamedEntity = {
+type Entity = {
   id: string
   names: { en: string; fi: string }
+  description?: { en: string; fi: string }
+  details?: { en: Record<string, string>; fi: Record<string, string> }
 }
 
 type ModalState =
   | { type: 'create' }
-  | { type: 'edit'; entity: NamedEntity }
+  | { type: 'edit'; entity: Entity }
   | null
 
 type Props = {
   title: string
   label: string
   description: string
-  entities: NamedEntity[]
-  onCreate?: (names: { en: string; fi: string }) => Promise<void>
-  onUpdate?: (id: string, names: { en: string; fi: string }) => Promise<void>
+  fieldConfig: EntityFieldConfig
+  entities: Entity[]
+  onCreate?: (data: EntityFormData) => Promise<void>
+  onUpdate?: (id: string, data: EntityFormData) => Promise<void>
   onDelete?: (id: string) => Promise<void>
 }
 
-export function EntitiesPage({ title, label, description, entities, onCreate, onUpdate, onDelete }: Props) {
+export function EntitiesPage({ title, label, description, fieldConfig, entities, onCreate, onUpdate, onDelete }: Props) {
   const [modal, setModal] = useState<ModalState>(null)
 
   return (
@@ -54,6 +57,7 @@ export function EntitiesPage({ title, label, description, entities, onCreate, on
       {modal && (
         <EntityModal
           label={label}
+          fieldConfig={fieldConfig}
           entity={modal.type === 'edit' ? modal.entity : undefined}
           onClose={() => setModal(null)}
           onCreate={onCreate}

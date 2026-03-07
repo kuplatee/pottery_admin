@@ -22,8 +22,8 @@ export function docToDesign(doc: QueryDocumentSnapshot<DocumentData>): Design {
       fi: data.description.fi
     },
     details: {
-      en: data.details.en,
-      fi: data.details.fi
+      en: typeof data.details.en === 'string' ? JSON.parse(data.details.en) : data.details.en,
+      fi: typeof data.details.fi === 'string' ? JSON.parse(data.details.fi) : data.details.fi
     }
   }
 }

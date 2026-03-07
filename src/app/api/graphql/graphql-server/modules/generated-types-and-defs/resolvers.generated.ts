@@ -15,7 +15,7 @@ import    { Category } from './../category/resolvers/Category';
 import    { Design } from './../designs/resolvers/Design';
 import    { LocalizedJSON } from './../scalars/resolvers/LocalizedJSON';
 import    { LocalizedString } from './../scalars/resolvers/LocalizedString';
-import    { JSONResolver } from 'graphql-scalars';
+import    { JSONScalar } from './../scalars/resolvers/JSON';
     export const resolvers: Resolvers = {
       Query: { categories: Query_categories,category: Query_category,design: Query_design,designs: Query_designs,ping: Query_ping },
       Mutation: { createCategory: Mutation_createCategory,createDesign: Mutation_createDesign,deleteCategory: Mutation_deleteCategory,deleteDesign: Mutation_deleteDesign,updateCategory: Mutation_updateCategory,updateDesign: Mutation_updateDesign },
@@ -24,5 +24,5 @@ import    { JSONResolver } from 'graphql-scalars';
 Design: Design,
 LocalizedJSON: LocalizedJSON,
 LocalizedString: LocalizedString,
-JSON: JSONResolver
+JSON: JSONScalar
     }

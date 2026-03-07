@@ -14,9 +14,10 @@ export default function CategoriesPage() {
       title="Categories"
       label="Category"
       description="Manage pottery categories"
+      fieldConfig={{ names: true }}
       entities={state.categories}
-      onCreate={(names) => createCategory({ names })}
-      onUpdate={(id, names) => updateCategory({ id, names })}
+      onCreate={(data) => createCategory({ names: data.names! })}
+      onUpdate={(id, data) => updateCategory({ id, names: data.names! })}
       onDelete={(id) => deleteCategory(id)}
     />
   )

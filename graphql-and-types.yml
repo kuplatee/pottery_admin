@@ -11,6 +11,9 @@ generates:
       typeDefsFilePath: "./generated-types-and-defs/typeDefs.generated.ts"
       mergeSchema: "./generated-types-and-defs/schema.generated.graphqls"
       scalarsModule: graphql-scalars
+      scalarsOverrides:
+        JSON:
+          resolver: "../scalars/resolvers/JSON#JSONScalar"
 
   # Generates TypeScript types for the schema for use in the UI layer
   src/types/graphql-schema-types.generated.ts:
