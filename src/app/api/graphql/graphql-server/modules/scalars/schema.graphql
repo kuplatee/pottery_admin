@@ -9,3 +9,13 @@ input LocalizedStringInput {
   en: String!
   fi: String!
 }
+
+type LocalizedJSON {
+  en: JSON!
+  fi: JSON!
+}
+
+input LocalizedJSONInput {
+  en: JSON!
+  fi: JSON!
+}

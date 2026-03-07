@@ -25,6 +25,33 @@ export type CreateCategoryInput = {
   names: LocalizedStringInput;
 };
 
+export type CreateDesignInput = {
+  categoryIds: Array<Scalars['String']['input']>;
+  description: LocalizedStringInput;
+  details: LocalizedJsonInput;
+  names: LocalizedStringInput;
+};
+
+export type Design = {
+  __typename?: 'Design';
+  categoryIds: Array<Scalars['String']['output']>;
+  description: LocalizedString;
+  details: LocalizedJson;
+  id: Scalars['String']['output'];
+  names: LocalizedString;
+};
+
+export type LocalizedJson = {
+  __typename?: 'LocalizedJSON';
+  en: Scalars['JSON']['output'];
+  fi: Scalars['JSON']['output'];
+};
+
+export type LocalizedJsonInput = {
+  en: Scalars['JSON']['input'];
+  fi: Scalars['JSON']['input'];
+};
+
 export type LocalizedString = {
   __typename?: 'LocalizedString';
   en: Scalars['String']['output'];
@@ -39,8 +66,11 @@ export type LocalizedStringInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
+  createDesign: Design;
   deleteCategory: Scalars['String']['output'];
+  deleteDesign: Scalars['String']['output'];
   updateCategory: Category;
+  updateDesign: Design;
 };
 
 
@@ -49,7 +79,17 @@ export type MutationCreateCategoryArgs = {
 };
 
 
+export type MutationCreateDesignArgs = {
+  input: CreateDesignInput;
+};
+
+
 export type MutationDeleteCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteDesignArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -58,10 +98,17 @@ export type MutationUpdateCategoryArgs = {
   input: UpdateCategoryInput;
 };
 
+
+export type MutationUpdateDesignArgs = {
+  input: UpdateDesignInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   categories: Array<Category>;
   category?: Maybe<Category>;
+  design?: Maybe<Design>;
+  designs: Array<Design>;
   ping?: Maybe<Scalars['String']['output']>;
 };
 
@@ -70,7 +117,20 @@ export type QueryCategoryArgs = {
   id: Scalars['String']['input'];
 };
 
+
+export type QueryDesignArgs = {
+  id: Scalars['String']['input'];
+};
+
 export type UpdateCategoryInput = {
+  id: Scalars['String']['input'];
+  names: LocalizedStringInput;
+};
+
+export type UpdateDesignInput = {
+  categoryIds: Array<Scalars['String']['input']>;
+  description: LocalizedStringInput;
+  details: LocalizedJsonInput;
   id: Scalars['String']['input'];
   names: LocalizedStringInput;
 };

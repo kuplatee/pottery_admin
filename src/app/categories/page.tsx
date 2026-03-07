@@ -6,7 +6,8 @@ import { useCategoryActions } from '@/services/graphql-client/hooks/useCategoryA
 
 export default function CategoriesPage() {
   const { state } = useAppState()
-  const { createCategory, updateCategory, deleteCategory } = useCategoryActions()
+  const { createCategory, updateCategory, deleteCategory } =
+    useCategoryActions()
 
   return (
     <EntitiesPage

@@ -7,7 +7,32 @@ input CreateCategoryInput {
   names: LocalizedStringInput!
 }
 
+input CreateDesignInput {
+  categoryIds: [String!]!
+  description: LocalizedStringInput!
+  details: LocalizedJSONInput!
+  names: LocalizedStringInput!
+}
+
+type Design {
+  categoryIds: [String!]!
+  description: LocalizedString!
+  details: LocalizedJSON!
+  id: String!
+  names: LocalizedString!
+}
+
 scalar JSON
+
+type LocalizedJSON {
+  en: JSON!
+  fi: JSON!
+}
+
+input LocalizedJSONInput {
+  en: JSON!
+  fi: JSON!
+}
 
 type LocalizedString {
   en: String!
@@ -21,17 +46,30 @@ input LocalizedStringInput {
 
 type Mutation {
   createCategory(input: CreateCategoryInput!): Category!
+  createDesign(input: CreateDesignInput!): Design!
   deleteCategory(id: String!): String!
+  deleteDesign(id: String!): String!
   updateCategory(input: UpdateCategoryInput!): Category!
+  updateDesign(input: UpdateDesignInput!): Design!
 }
 
 type Query {
   categories: [Category!]!
   category(id: String!): Category
+  design(id: String!): Design
+  designs: [Design!]!
   ping: String
 }
 
 input UpdateCategoryInput {
+  id: String!
+  names: LocalizedStringInput!
+}
+
+input UpdateDesignInput {
+  categoryIds: [String!]!
+  description: LocalizedStringInput!
+  details: LocalizedJSONInput!
   id: String!
   names: LocalizedStringInput!
 }

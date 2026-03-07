@@ -1,0 +1,33 @@
+type Design {
+  id: String!
+  names: LocalizedString!
+  categoryIds: [String!]!
+  description: LocalizedString!
+  details: LocalizedJSON!
+}
+
+input CreateDesignInput {
+  names: LocalizedStringInput!
+  categoryIds: [String!]!
+  description: LocalizedStringInput!
+  details: LocalizedJSONInput!
+}
+
+input UpdateDesignInput {
+  id: String!
+  names: LocalizedStringInput!
+  categoryIds: [String!]!
+  description: LocalizedStringInput!
+  details: LocalizedJSONInput!
+}
+
+extend type Query {
+  designs: [Design!]!
+  design(id: String!): Design
+}
+
+extend type Mutation {
+  createDesign(input: CreateDesignInput!): Design!
+  updateDesign(input: UpdateDesignInput!): Design!
+  deleteDesign(id: String!): String!
+}

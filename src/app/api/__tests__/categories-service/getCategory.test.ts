@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { getCategory } from '../../graphql/graphql-server/services/categories/categoriesService'
 import { makeMockDb } from '../common/mock-db'
-import { categoryDocs } from './test-data'
+import { categoryDocs } from '../common/test-data'
 
 describe('Get single category from database', () => {
   it('queries the categories collection with the given id', async () => {
