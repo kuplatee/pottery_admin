@@ -1,7 +1,8 @@
-import type { Category } from '@/types/graphql-schema-types.generated'
+import type { Category, Design } from '@/types/graphql-schema-types.generated'
 
 export type AppState = {
   categories: Category[]
+  designs: Design[]
 }
 
 export type AppStateAction =
@@ -9,6 +10,10 @@ export type AppStateAction =
   | { type: 'ADD_CATEGORY'; payload: Category }
   | { type: 'UPDATE_CATEGORY'; payload: Category }
   | { type: 'DELETE_CATEGORY'; payload: string }
+  | { type: 'SET_DESIGNS'; payload: Design[] }
+  | { type: 'ADD_DESIGN'; payload: Design }
+  | { type: 'UPDATE_DESIGN'; payload: Design }
+  | { type: 'DELETE_DESIGN'; payload: string }
 
 export type AppStateContextValue = {
   state: AppState
@@ -16,5 +21,6 @@ export type AppStateContextValue = {
 }
 
 export const initialAppState: AppState = {
-  categories: []
+  categories: [],
+  designs: []
 }

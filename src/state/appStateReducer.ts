@@ -16,5 +16,19 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         ...state,
         categories: state.categories.filter((c) => c.id !== action.payload)
       }
+    case 'SET_DESIGNS':
+      return { ...state, designs: action.payload }
+    case 'ADD_DESIGN':
+      return { ...state, designs: [...state.designs, action.payload] }
+    case 'UPDATE_DESIGN':
+      return {
+        ...state,
+        designs: state.designs.map((d) => (d.id === action.payload.id ? action.payload : d))
+      }
+    case 'DELETE_DESIGN':
+      return {
+        ...state,
+        designs: state.designs.filter((d) => d.id !== action.payload)
+      }
   }
 }

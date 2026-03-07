@@ -1,12 +1,11 @@
 import type {
   QueryDocumentSnapshot,
-  DocumentData
+  DocumentData,
+  DocumentReference
 } from 'firebase-admin/firestore'
 import type { Design } from './types'
 
-export function docToDesign(
-  doc: QueryDocumentSnapshot<DocumentData>
-): Design {
+export function docToDesign(doc: QueryDocumentSnapshot<DocumentData>): Design {
   const data = doc.data()
 
   return {
@@ -15,7 +14,9 @@ export function docToDesign(
       en: data.names.en,
       fi: data.names.fi
     },
-    categoryIds: data.categoryIds,
+    categoryIds: (data.categoryIds as Array<string | DocumentReference>).map(
+      (ref) => (typeof ref === 'string' ? ref : ref.id)
+    ),
     description: {
       en: data.description.en,
       fi: data.description.fi

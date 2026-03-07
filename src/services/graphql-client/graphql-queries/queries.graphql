@@ -31,3 +31,64 @@ mutation UpdateCategory($input: UpdateCategoryInput!) {
 mutation DeleteCategory($id: String!) {
   deleteCategory(id: $id)
 }
+
+query GetAllDesigns {
+  designs {
+    id
+    names {
+      en
+      fi
+    }
+    categoryIds
+    description {
+      en
+      fi
+    }
+    details {
+      en
+      fi
+    }
+  }
+}
+
+mutation CreateDesign($input: CreateDesignInput!) {
+  createDesign(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+    categoryIds
+    description {
+      en
+      fi
+    }
+    details {
+      en
+      fi
+    }
+  }
+}
+
+mutation UpdateDesign($input: UpdateDesignInput!) {
+  updateDesign(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+    categoryIds
+    description {
+      en
+      fi
+    }
+    details {
+      en
+      fi
+    }
+  }
+}
+
+mutation DeleteDesign($id: String!) {
+  deleteDesign(id: $id)
+}

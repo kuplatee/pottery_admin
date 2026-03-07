@@ -5,7 +5,9 @@ import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
 import { useAppState } from '@/state/AppStateContext'
 import {
   GetAllCategoriesDocument,
-  type GetAllCategoriesQuery
+  type GetAllCategoriesQuery,
+  GetAllDesignsDocument,
+  type GetAllDesignsQuery
 } from '@/services/graphql-client/graphql-queries/queries.generated'
 
 export function DataLoader() {
@@ -14,15 +16,18 @@ export function DataLoader() {
 
   useEffect(() => {
     async function loadData() {
-      const result = await client.query<GetAllCategoriesQuery>({
-        query: GetAllCategoriesDocument
-      })
+      const [categoriesResult, designsResult] = await Promise.all([
+        client.query<GetAllCategoriesQuery>({ query: GetAllCategoriesDocument }),
+        client.query<GetAllDesignsQuery>({ query: GetAllDesignsDocument })
+      ])
 
-      if (!result.data) {
-        return
+      if (categoriesResult.data) {
+        dispatch({ type: 'SET_CATEGORIES', payload: categoriesResult.data.categories })
       }
 
-      dispatch({ type: 'SET_CATEGORIES', payload: result.data.categories })
+      if (designsResult.data) {
+        dispatch({ type: 'SET_DESIGNS', payload: designsResult.data.designs })
+      }
     }
 
     loadData()
