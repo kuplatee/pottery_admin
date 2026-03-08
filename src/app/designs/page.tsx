@@ -3,19 +3,7 @@
 import { useAppState } from '@/state/AppStateContext'
 import { EntitiesPage } from '@/components/entity-components/EntitiesPage'
 import { useDesignActions } from '@/services/graphql-client/hooks/useDesignActions'
-import type { EntityFormData } from '@/components/form-modal/CreateEntityModal'
-
-function toLocalizedJson(details: EntityFormData['details']): { en: Record<string, string>; fi: Record<string, string> } {
-  if (!details) { return { en: {}, fi: {} } }
-  return details.reduce<{ en: Record<string, string>; fi: Record<string, string> }>(
-    (acc, entry) => {
-      acc.en[entry.keyEn] = entry.valueEn
-      acc.fi[entry.keyFi] = entry.valueFi
-      return acc
-    },
-    { en: {}, fi: {} }
-  )
-}
+import { toLocalizedJson } from './designFormUtils'
 
 export default function DesignsPage() {
   const { state } = useAppState()
@@ -26,12 +14,18 @@ export default function DesignsPage() {
       title="Designs"
       label="Design"
       description="Manage pottery designs"
-      fieldConfig={{ names: true, description: true, details: true }}
+      fieldConfig={{
+        names: true,
+        description: true,
+        details: true,
+        categoryIds: true
+      }}
       entities={state.designs}
+      availableCategories={state.categories}
       onCreate={(data) =>
         createDesign({
           names: data.names!,
-          categoryIds: [],
+          categoryIds: data.categoryIds ?? [],
           description: data.description ?? { en: '', fi: '' },
           details: toLocalizedJson(data.details)
         })
@@ -40,7 +34,7 @@ export default function DesignsPage() {
         updateDesign({
           id,
           names: data.names!,
-          categoryIds: [],
+          categoryIds: data.categoryIds ?? [],
           description: data.description ?? { en: '', fi: '' },
           details: toLocalizedJson(data.details)
         })

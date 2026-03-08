@@ -1,32 +1,28 @@
 'use client'
 
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import type { FieldError, Resolver } from 'react-hook-form'
 import { MultilingualFields } from './MultilingualFields'
 import { DetailsFields, type DetailsEntry } from './DetailsFields'
+import { CategoryPicker } from './CategoryPicker'
 import { ModalActions } from './ModalActions'
 import { DbId } from './DbId'
 import { ModalHeader } from './ModalHeader'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import type { FieldError } from 'react-hook-form'
+import type { EntityFieldConfig, EntityFormData, EntityData, AvailableCategory } from './entity.types'
 
-export type EntityFieldConfig = {
-  names?: boolean
-  description?: boolean
-  details?: boolean
-}
-
-export type EntityFormData = {
-  names?: { en: string; fi: string }
-  description?: { en: string; fi: string }
+// FormValues covers all possible fields across entity types.
+// Fields are optional here because the dynamic schema (built from fieldConfig)
+// determines which are actually required at runtime via Zod validation.
+type FormValues = {
+  nameFi?: string
+  nameEn?: string
+  descriptionFi?: string
+  descriptionEn?: string
   details?: DetailsEntry[]
-}
-
-type EntityData = {
-  id: string
-  names?: { en: string; fi: string }
-  description?: { en: string; fi: string }
-  details?: { en: Record<string, string>; fi: Record<string, string> }
+  categoryIds?: string[]
 }
 
 const detailEntrySchema = z.object({
@@ -41,6 +37,7 @@ function buildSchema(config: EntityFieldConfig) {
     ...(config.names && { nameFi: z.string().min(1, 'Required'), nameEn: z.string().min(1, 'Required') }),
     ...(config.description && { descriptionFi: z.string().min(1, 'Required'), descriptionEn: z.string().min(1, 'Required') }),
     ...(config.details && { details: z.array(detailEntrySchema) }),
+    ...(config.categoryIds && { categoryIds: z.array(z.string()).min(1, 'Select at least one category') }),
   })
 }
 
@@ -57,36 +54,39 @@ type Props = {
   label: string
   fieldConfig: EntityFieldConfig
   entity?: EntityData
+  availableCategories?: AvailableCategory[]
   onClose: () => void
   onCreate?: (data: EntityFormData) => Promise<void>
   onUpdate?: (id: string, data: EntityFormData) => Promise<void>
   onDelete?: () => void
 }
 
-export function EntityModal({ label, fieldConfig, entity, onClose, onCreate, onUpdate, onDelete }: Props) {
+export function EntityModal({ label, fieldConfig, entity, availableCategories, onClose, onCreate, onUpdate, onDelete }: Props) {
   const isEditing = entity !== undefined
   const id = entity?.id
 
-  const schema = buildSchema(fieldConfig)
+  const schema = useMemo(() => buildSchema(fieldConfig), [fieldConfig])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { register, handleSubmit, control, formState: { errors: rawErrors } } = useForm<any>({
-    resolver: zodResolver(schema),
+  const { register, handleSubmit, control, formState: { errors } } = useForm<FormValues>({
+    // Cast is safe: buildSchema always produces a schema compatible with FormValues.
+    // Zod v4 + react-hook-form resolver types can't infer the dynamic spread shape.
+    resolver: zodResolver(schema) as Resolver<FormValues>,
     defaultValues: {
       ...(fieldConfig.names && { nameFi: entity?.names?.fi ?? '', nameEn: entity?.names?.en ?? '' }),
       ...(fieldConfig.description && { descriptionFi: entity?.description?.fi ?? '', descriptionEn: entity?.description?.en ?? '' }),
       ...(fieldConfig.details && { details: entity?.details ? toDetailsEntries(entity.details) : [] }),
+      ...(fieldConfig.categoryIds && { categoryIds: entity?.categoryIds ?? [] }),
     },
   })
 
-  const errors = rawErrors as Record<string, FieldError | undefined>
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function onSubmit(values: any) {
+  async function onSubmit(values: FormValues) {
+    // Non-null assertions below are safe: Zod has already validated that these
+    // fields are non-empty strings when their corresponding fieldConfig flag is true.
     const data: EntityFormData = {
-      ...(fieldConfig.names && { names: { en: values.nameEn, fi: values.nameFi } }),
-      ...(fieldConfig.description && { description: { en: values.descriptionEn, fi: values.descriptionFi } }),
+      ...(fieldConfig.names && { names: { en: values.nameEn!, fi: values.nameFi! } }),
+      ...(fieldConfig.description && { description: { en: values.descriptionEn!, fi: values.descriptionFi! } }),
       ...(fieldConfig.details && { details: values.details }),
+      ...(fieldConfig.categoryIds && { categoryIds: values.categoryIds }),
     }
 
     if (isEditing && id && onUpdate) {
@@ -121,8 +121,8 @@ export function EntityModal({ label, fieldConfig, entity, onClose, onCreate, onU
                 label="Names"
                 fiRegistration={register('nameFi')}
                 enRegistration={register('nameEn')}
-                fiError={errors.nameFi}
-                enError={errors.nameEn}
+                fiError={errors.nameFi as FieldError | undefined}
+                enError={errors.nameEn as FieldError | undefined}
               />
             )}
             {fieldConfig.description && (
@@ -130,8 +130,8 @@ export function EntityModal({ label, fieldConfig, entity, onClose, onCreate, onU
                 label="Description"
                 fiRegistration={register('descriptionFi')}
                 enRegistration={register('descriptionEn')}
-                fiError={errors.descriptionFi}
-                enError={errors.descriptionEn}
+                fiError={errors.descriptionFi as FieldError | undefined}
+                enError={errors.descriptionEn as FieldError | undefined}
               />
             )}
             {fieldConfig.details && (
@@ -139,7 +139,15 @@ export function EntityModal({ label, fieldConfig, entity, onClose, onCreate, onU
                 control={control}
                 register={register}
                 fieldName="details"
-                errors={rawErrors}
+                errors={errors}
+              />
+            )}
+            {fieldConfig.categoryIds && (
+              <CategoryPicker
+                control={control}
+                fieldName="categoryIds"
+                availableCategories={availableCategories ?? []}
+                error={errors.categoryIds as { message?: string } | undefined}
               />
             )}
             <ModalActions isEditing={isEditing} onDelete={onDelete} />

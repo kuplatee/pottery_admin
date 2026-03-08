@@ -2,19 +2,18 @@
 
 import { useState } from 'react'
 import { EntityCard } from '@/components/entity-components/EntityCard'
-import { EntityModal, type EntityFieldConfig, type EntityFormData } from '@/components/form-modal/CreateEntityModal'
+import { EntityModal } from '@/components/form-modal/EntityModal'
+import type { EntityFieldConfig, EntityFormData, AvailableCategory } from '@/components/form-modal/entity.types'
 
 type Entity = {
   id: string
   names: { en: string; fi: string }
   description?: { en: string; fi: string }
   details?: { en: Record<string, string>; fi: Record<string, string> }
+  categoryIds?: string[]
 }
 
-type ModalState =
-  | { type: 'create' }
-  | { type: 'edit'; entity: Entity }
-  | null
+type ModalState = { type: 'create' } | { type: 'edit'; entity: Entity } | null
 
 type Props = {
   title: string
@@ -22,12 +21,23 @@ type Props = {
   description: string
   fieldConfig: EntityFieldConfig
   entities: Entity[]
+  availableCategories?: AvailableCategory[]
   onCreate?: (data: EntityFormData) => Promise<void>
   onUpdate?: (id: string, data: EntityFormData) => Promise<void>
   onDelete?: (id: string) => Promise<void>
 }
 
-export function EntitiesPage({ title, label, description, fieldConfig, entities, onCreate, onUpdate, onDelete }: Props) {
+export function EntitiesPage({
+  title,
+  label,
+  description,
+  fieldConfig,
+  entities,
+  availableCategories,
+  onCreate,
+  onUpdate,
+  onDelete
+}: Props) {
   const [modal, setModal] = useState<ModalState>(null)
 
   return (
@@ -59,10 +69,18 @@ export function EntitiesPage({ title, label, description, fieldConfig, entities,
           label={label}
           fieldConfig={fieldConfig}
           entity={modal.type === 'edit' ? modal.entity : undefined}
+          availableCategories={availableCategories}
           onClose={() => setModal(null)}
           onCreate={onCreate}
           onUpdate={onUpdate}
-          onDelete={modal.type === 'edit' && onDelete ? () => { onDelete(modal.entity.id); setModal(null) } : undefined}
+          onDelete={
+            modal.type === 'edit' && onDelete
+              ? () => {
+                  onDelete(modal.entity.id)
+                  setModal(null)
+                }
+              : undefined
+          }
         />
       )}
     </main>
