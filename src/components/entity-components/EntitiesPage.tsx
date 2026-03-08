@@ -3,15 +3,10 @@
 import { useState } from 'react'
 import { EntityCard } from '@/components/entity-components/EntityCard'
 import { EntityModal } from '@/components/form-modal/EntityModal'
-import type { EntityFieldConfig, EntityFormData, AvailableCategory } from '@/components/form-modal/entity.types'
+import type { MultilingualText, EntityFieldConfig, EntityFormData, EntityData, AvailableCategory } from '@/components/form-modal/entity.types'
 
-type Entity = {
-  id: string
-  names: { en: string; fi: string }
-  description?: { en: string; fi: string }
-  details?: { en: Record<string, string>; fi: Record<string, string> }
-  categoryIds?: string[]
-}
+// EntitiesPage only handles entities that always have names (Category, Collection, Design).
+type Entity = EntityData & { names: MultilingualText }
 
 type ModalState = { type: 'create' } | { type: 'edit'; entity: Entity } | null
 

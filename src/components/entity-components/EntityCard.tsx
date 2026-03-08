@@ -1,9 +1,8 @@
+import { SUPPORTED_LANGUAGES, type Language } from '@/lib/languages'
+
 type NamedEntity = {
   id: string
-  names: {
-    en: string
-    fi: string
-  }
+  names: Record<Language, string>
 }
 
 type Props = {
@@ -20,8 +19,11 @@ export function EntityCard({ entity, onClick, onDelete }: Props) {
     >
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-medium">{entity.names.fi}</div>
-          <div className="text-sm text-gray-400">{entity.names.en}</div>
+          {SUPPORTED_LANGUAGES.map((lang, i) => (
+            <div key={lang} className={i === 0 ? 'font-medium' : 'text-sm text-gray-400'}>
+              {entity.names[lang]}
+            </div>
+          ))}
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onDelete?.() }}

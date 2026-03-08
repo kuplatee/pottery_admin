@@ -12,8 +12,8 @@ export function toLocalizedJson(details: DetailsEntry[] | undefined): {
     fi: Record<string, string>
   }>(
     (acc, entry) => {
-      acc.en[entry.keyEn] = entry.valueEn
-      acc.fi[entry.keyFi] = entry.valueFi
+      acc.en[entry.key.en] = entry.value.en
+      acc.fi[entry.key.fi] = entry.value.fi
       return acc
     },
     { en: {}, fi: {} }

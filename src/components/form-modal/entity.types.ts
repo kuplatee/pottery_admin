@@ -1,4 +1,7 @@
+import type { Language } from '@/lib/languages'
 import type { DetailsEntry } from './DetailsFields'
+
+export type MultilingualText = Record<Language, string>
 
 export type EntityFieldConfig = {
   names?: boolean
@@ -8,21 +11,21 @@ export type EntityFieldConfig = {
 }
 
 export type EntityFormData = {
-  names?: { en: string; fi: string }
-  description?: { en: string; fi: string }
+  names?: MultilingualText
+  description?: MultilingualText
   details?: DetailsEntry[]
   categoryIds?: string[]
 }
 
 export type EntityData = {
   id: string
-  names?: { en: string; fi: string }
-  description?: { en: string; fi: string }
-  details?: { en: Record<string, string>; fi: Record<string, string> }
+  names?: MultilingualText
+  description?: MultilingualText
+  details?: Record<Language, Record<string, string>>
   categoryIds?: string[]
 }
 
 export type AvailableCategory = {
   id: string
-  names: { en: string; fi: string }
+  names: MultilingualText
 }
