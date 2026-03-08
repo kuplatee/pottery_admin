@@ -45,7 +45,12 @@ const emptyEntry = (): DetailsEntry => ({
   ) as Record<Language, string>
 })
 
-export function DetailsFields({ control, register, fieldName, errors }: Props) {
+export function DetailsFieldsInput({
+  control,
+  register,
+  fieldName,
+  errors
+}: Props) {
   const { fields, append, remove } = useFieldArray({ control, name: fieldName })
 
   const fieldErrors: RowErrors[] = errors?.[fieldName] ?? []

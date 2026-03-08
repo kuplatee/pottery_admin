@@ -1,4 +1,4 @@
-import type { DetailsEntry } from '@/components/form-modal/DetailsFields'
+import type { DetailsEntry } from '@/components/entity-form-modal/inputs/DetailsFieldsInput'
 
 export function toLocalizedJson(details: DetailsEntry[] | undefined): {
   en: Record<string, string>

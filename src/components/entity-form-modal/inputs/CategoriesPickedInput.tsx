@@ -1,7 +1,7 @@
 'use client'
 
 import { Controller, type Control } from 'react-hook-form'
-import { AvailableCategory } from './entity.types'
+import { AvailableCategory } from '../types/entity.types'
 import { ErrorMessage } from '@/components/common-primitives/ErrorMessage'
 import { SectionTitle } from '@/components/common-primitives/SectionTitle'
 
@@ -13,7 +13,7 @@ type Props = {
   error?: { message?: string }
 }
 
-export function CategoryPicker({
+export function CategoryPickedInput({
   control,
   fieldName,
   availableCategories,
