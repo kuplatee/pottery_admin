@@ -1,0 +1,27 @@
+type Collection {
+  id: String!
+  names: LocalizedString!
+  description: LocalizedString!
+}
+
+input CreateCollectionInput {
+  names: LocalizedStringInput!
+  description: LocalizedStringInput!
+}
+
+input UpdateCollectionInput {
+  id: String!
+  names: LocalizedStringInput!
+  description: LocalizedStringInput!
+}
+
+extend type Query {
+  collections: [Collection!]!
+  collection(id: String!): Collection
+}
+
+extend type Mutation {
+  createCollection(input: CreateCollectionInput!): Collection!
+  updateCollection(input: UpdateCollectionInput!): Collection!
+  deleteCollection(id: String!): String!
+}

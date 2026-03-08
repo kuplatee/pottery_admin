@@ -21,7 +21,19 @@ export type Category = {
   names: LocalizedString;
 };
 
+export type Collection = {
+  __typename?: 'Collection';
+  description: LocalizedString;
+  id: Scalars['String']['output'];
+  names: LocalizedString;
+};
+
 export type CreateCategoryInput = {
+  names: LocalizedStringInput;
+};
+
+export type CreateCollectionInput = {
+  description: LocalizedStringInput;
   names: LocalizedStringInput;
 };
 
@@ -30,6 +42,13 @@ export type CreateDesignInput = {
   description: LocalizedStringInput;
   details: LocalizedJsonInput;
   names: LocalizedStringInput;
+};
+
+export type CreatePieceInput = {
+  collectionId?: InputMaybe<Scalars['String']['input']>;
+  designId: Scalars['String']['input'];
+  imageFileNames: Array<Scalars['String']['input']>;
+  sold: Scalars['Boolean']['input'];
 };
 
 export type Design = {
@@ -66,11 +85,17 @@ export type LocalizedStringInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
+  createCollection: Collection;
   createDesign: Design;
+  createPiece: Piece;
   deleteCategory: Scalars['String']['output'];
+  deleteCollection: Scalars['String']['output'];
   deleteDesign: Scalars['String']['output'];
+  deletePiece: Scalars['String']['output'];
   updateCategory: Category;
+  updateCollection: Collection;
   updateDesign: Design;
+  updatePiece: Piece;
 };
 
 
@@ -79,12 +104,27 @@ export type MutationCreateCategoryArgs = {
 };
 
 
+export type MutationCreateCollectionArgs = {
+  input: CreateCollectionInput;
+};
+
+
 export type MutationCreateDesignArgs = {
   input: CreateDesignInput;
 };
 
 
+export type MutationCreatePieceArgs = {
+  input: CreatePieceInput;
+};
+
+
 export type MutationDeleteCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCollectionArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -94,8 +134,18 @@ export type MutationDeleteDesignArgs = {
 };
 
 
+export type MutationDeletePieceArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationUpdateCategoryArgs = {
   input: UpdateCategoryInput;
+};
+
+
+export type MutationUpdateCollectionArgs = {
+  input: UpdateCollectionInput;
 };
 
 
@@ -103,12 +153,30 @@ export type MutationUpdateDesignArgs = {
   input: UpdateDesignInput;
 };
 
+
+export type MutationUpdatePieceArgs = {
+  input: UpdatePieceInput;
+};
+
+export type Piece = {
+  __typename?: 'Piece';
+  collectionId?: Maybe<Scalars['String']['output']>;
+  designId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  imageFileNames: Array<Scalars['String']['output']>;
+  sold: Scalars['Boolean']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   categories: Array<Category>;
   category?: Maybe<Category>;
+  collection?: Maybe<Collection>;
+  collections: Array<Collection>;
   design?: Maybe<Design>;
   designs: Array<Design>;
+  piece?: Maybe<Piece>;
+  pieces: Array<Piece>;
   ping?: Maybe<Scalars['String']['output']>;
 };
 
@@ -118,11 +186,27 @@ export type QueryCategoryArgs = {
 };
 
 
+export type QueryCollectionArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryDesignArgs = {
   id: Scalars['String']['input'];
 };
 
+
+export type QueryPieceArgs = {
+  id: Scalars['String']['input'];
+};
+
 export type UpdateCategoryInput = {
+  id: Scalars['String']['input'];
+  names: LocalizedStringInput;
+};
+
+export type UpdateCollectionInput = {
+  description: LocalizedStringInput;
   id: Scalars['String']['input'];
   names: LocalizedStringInput;
 };
@@ -133,4 +217,12 @@ export type UpdateDesignInput = {
   details: LocalizedJsonInput;
   id: Scalars['String']['input'];
   names: LocalizedStringInput;
+};
+
+export type UpdatePieceInput = {
+  collectionId?: InputMaybe<Scalars['String']['input']>;
+  designId: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  imageFileNames: Array<Scalars['String']['input']>;
+  sold: Scalars['Boolean']['input'];
 };

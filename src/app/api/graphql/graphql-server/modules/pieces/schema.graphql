@@ -1,0 +1,33 @@
+type Piece {
+  id: String!
+  designId: String!
+  imageFileNames: [String!]!
+  sold: Boolean!
+  collectionId: String
+}
+
+input CreatePieceInput {
+  designId: String!
+  imageFileNames: [String!]!
+  sold: Boolean!
+  collectionId: String
+}
+
+input UpdatePieceInput {
+  id: String!
+  designId: String!
+  imageFileNames: [String!]!
+  sold: Boolean!
+  collectionId: String
+}
+
+extend type Query {
+  pieces: [Piece!]!
+  piece(id: String!): Piece
+}
+
+extend type Mutation {
+  createPiece(input: CreatePieceInput!): Piece!
+  updatePiece(input: UpdatePieceInput!): Piece!
+  deletePiece(id: String!): String!
+}

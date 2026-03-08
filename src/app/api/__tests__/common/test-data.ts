@@ -24,3 +24,40 @@ export const designDocs = [
     })
   }
 ]
+
+export const collectionDocs = [
+  {
+    id: 'col-1',
+    data: () => ({
+      names: { en: 'Cafe Latte', fi: 'Cafe Latte' },
+      description: { en: 'Cozy cafe vibes', fi: 'Kodikas kahvilatunnelma' }
+    })
+  },
+  {
+    id: 'col-2',
+    data: () => ({
+      names: { en: 'Forest', fi: 'Metsä' },
+      description: { en: 'Inspired by forests', fi: 'Metsän inspiroimana' }
+    })
+  }
+]
+
+export const pieceDocs = [
+  {
+    id: 'piece-1',
+    data: () => ({
+      designId: 'design-1',
+      imageFileNames: ['img1.jpg'],
+      sold: false,
+      collectionId: 'col-1'
+    })
+  },
+  {
+    id: 'piece-2',
+    data: () => ({
+      designId: 'design-2',
+      imageFileNames: ['img2.jpg', 'img3.jpg'],
+      sold: true
+    })
+  }
+]

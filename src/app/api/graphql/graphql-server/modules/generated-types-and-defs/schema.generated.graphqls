@@ -3,7 +3,18 @@ type Category {
   names: LocalizedString!
 }
 
+type Collection {
+  description: LocalizedString!
+  id: String!
+  names: LocalizedString!
+}
+
 input CreateCategoryInput {
+  names: LocalizedStringInput!
+}
+
+input CreateCollectionInput {
+  description: LocalizedStringInput!
   names: LocalizedStringInput!
 }
 
@@ -12,6 +23,13 @@ input CreateDesignInput {
   description: LocalizedStringInput!
   details: LocalizedJSONInput!
   names: LocalizedStringInput!
+}
+
+input CreatePieceInput {
+  collectionId: String
+  designId: String!
+  imageFileNames: [String!]!
+  sold: Boolean!
 }
 
 type Design {
@@ -46,22 +64,46 @@ input LocalizedStringInput {
 
 type Mutation {
   createCategory(input: CreateCategoryInput!): Category!
+  createCollection(input: CreateCollectionInput!): Collection!
   createDesign(input: CreateDesignInput!): Design!
+  createPiece(input: CreatePieceInput!): Piece!
   deleteCategory(id: String!): String!
+  deleteCollection(id: String!): String!
   deleteDesign(id: String!): String!
+  deletePiece(id: String!): String!
   updateCategory(input: UpdateCategoryInput!): Category!
+  updateCollection(input: UpdateCollectionInput!): Collection!
   updateDesign(input: UpdateDesignInput!): Design!
+  updatePiece(input: UpdatePieceInput!): Piece!
+}
+
+type Piece {
+  collectionId: String
+  designId: String!
+  id: String!
+  imageFileNames: [String!]!
+  sold: Boolean!
 }
 
 type Query {
   categories: [Category!]!
   category(id: String!): Category
+  collection(id: String!): Collection
+  collections: [Collection!]!
   design(id: String!): Design
   designs: [Design!]!
+  piece(id: String!): Piece
+  pieces: [Piece!]!
   ping: String
 }
 
 input UpdateCategoryInput {
+  id: String!
+  names: LocalizedStringInput!
+}
+
+input UpdateCollectionInput {
+  description: LocalizedStringInput!
   id: String!
   names: LocalizedStringInput!
 }
@@ -72,4 +114,12 @@ input UpdateDesignInput {
   details: LocalizedJSONInput!
   id: String!
   names: LocalizedStringInput!
+}
+
+input UpdatePieceInput {
+  collectionId: String
+  designId: String!
+  id: String!
+  imageFileNames: [String!]!
+  sold: Boolean!
 }
