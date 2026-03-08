@@ -1,5 +1,5 @@
 import { SUPPORTED_LANGUAGES, type Language } from '@/lib/languages'
-import { DeleteButton } from '@/components/common/DeleteButton'
+import { DeleteButton } from '@/components/common-primitives/DeleteIconButton'
 
 type NamedEntity = {
   id: string

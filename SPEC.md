@@ -1,4 +1,3 @@
-
 # TECHNICAL SPECIFICATION DOCUMENT
 
 ## 1. SYSTEM OVERVIEW
@@ -24,8 +23,6 @@ This application is:
 
 The architecture must remain clean and extensible so authentication and e-commerce features can be introduced later without restructuring the core domain.
 
-
-
 ## 2. ARCHITECTURE
 
 ### High-Level Flow
@@ -40,14 +37,14 @@ UI (Next.js + Apollo)
 
 ### Layered Responsibility Model
 
-| Layer | Responsibility |
-|-|-|
-| UI | Forms, list views, editing flows, GraphQL queries/mutations |
-| GraphQL | Schema definition and strict API contract |
-| Resolvers | Input validation, orchestration, error shaping |
-| Services | Business logic, Firestore interaction, Cloudinary integration |
-| Firestore | Canonical data storage |
-| Cloudinary | Image storage and CDN delivery |
+| Layer      | Responsibility                                                |
+| ---------- | ------------------------------------------------------------- |
+| UI         | Forms, list views, editing flows, GraphQL queries/mutations   |
+| GraphQL    | Schema definition and strict API contract                     |
+| Resolvers  | Input validation, orchestration, error shaping                |
+| Services   | Business logic, Firestore interaction, Cloudinary integration |
+| Firestore  | Canonical data storage                                        |
+| Cloudinary | Image storage and CDN delivery                                |
 
 ### Architectural Principles
 
@@ -57,8 +54,6 @@ UI (Next.js + Apollo)
 - Services encapsulate all persistence logic
 - Domain modules are isolated and cohesive
 - Types are generated, not duplicated
-
-
 
 ## 3. TECH STACK
 
@@ -110,8 +105,6 @@ UI (Next.js + Apollo)
 - Biome (lint/format)
 - dotenv
 
-
-
 ## 4. DOMAIN MODEL OVERVIEW
 
 The system models four primary domain entities:
@@ -134,7 +127,6 @@ A Design can belong to multiple Categories.
 A Piece references exactly one Design.
 A Piece may optionally belong to a Collection.
 
-
 ## 5. FIRESTORE DATA STRUCTURE
 
 ## Collections
@@ -143,8 +135,6 @@ A Piece may optionally belong to a Collection.
 - `collections/`
 - `designs/`
 - `pieces/`
-
-
 
 ## Category
 
@@ -159,10 +149,9 @@ A Piece may optionally belong to a Collection.
 ```
 
 **Constraints:**
+
 - Names required in both languages
 - No empty strings
-
-
 
 ## Collection
 
@@ -181,10 +170,9 @@ A Piece may optionally belong to a Collection.
 ```
 
 **Constraints:**
+
 - Names required in both languages
 - Description required in both languages
-
-
 
 ## Design
 
@@ -208,11 +196,10 @@ A Piece may optionally belong to a Collection.
 ```
 
 **Constraints:**
+
 - Must reference valid `categoryIds`
 - Details keys may vary but must be consistent per language
 - All languages must be present
-
-
 
 ## Piece
 
@@ -227,12 +214,11 @@ A Piece may optionally belong to a Collection.
 ```
 
 **Constraints:**
+
 - `designId` must reference an existing Design
 - `collectionId`, if provided, must reference an existing Collection
 - `imageFileNames` cannot be empty
 - `sold` defaults to `false`
-
-
 
 ## 6. GRAPHQL SCHEMA DESIGN
 
@@ -264,8 +250,6 @@ Each module contains:
 
 GraphQL is the API contract layer. The Flutter app indirectly depends on the integrity of this structure.
 
-
-
 ## 7. RESOLVER LAYER DESIGN
 
 Resolvers act as controlled entry points into the domain.
@@ -284,8 +268,6 @@ Resolvers act as controlled entry points into the domain.
 - Transform data across domains
 
 Error handling must standardize GraphQL error extensions for consistent client-side handling.
-
-
 
 ## 8. SERVICE LAYER DESIGN
 
@@ -316,150 +298,3 @@ services/database-utils/
 - Cannot delete a Collection if Pieces reference it
 
 These rules live in services, not resolvers.
-
-
-
-## 9. CLOUDINARY INTEGRATION
-
-### Image Lifecycle
-
-1. User selects image(s) in the UI
-2. UI calls a GraphQL mutation
-3. Resolver delegates to the service layer
-4. Service uploads the image to Cloudinary
-5. Returned `public_id` is stored in Firestore
-
-### Storage Strategy
-
-- Only store Cloudinary identifiers in Firestore
-- No image binaries stored in Firestore
-- No direct file system storage
-
-### Future Enhancement
-
-Signed client-side uploads can be introduced later for improved scalability and upload performance.
-
-
-
-## 10. FOLDER STRUCTURE
-
-```
-app/
-  api/
-    __tests__/
-    graphql/
-      modules/
-        category/
-          resolvers/
-            Query/
-            Mutation/
-          schema.graphql
-        collection/
-          resolvers/
-            Query/
-            Mutation/
-          schema.graphql
-        design/
-          resolvers/
-            Query/
-            Mutation/
-          schema.graphql
-        piece/
-          resolvers/
-            Query/
-            Mutation/
-          schema.graphql
-        generated-types-and-defs/
-      services/
-        categories/
-        collections/
-        designs/
-        pieces/
-        database-utils/
-      utils/
-        validator.ts
-        hasValue.ts
-      route.ts
-```
-
-
-
-## 11. STATE MANAGEMENT
-
-- Apollo Client handles all GraphQL state
-- Use normalized cache
-- Prefer simple refetch after mutations
-- Avoid complex client state until necessary
-- Keep UI stateless relative to business logic
-
-The admin app prioritizes correctness over client-side performance optimizations.
-
-
-
-## 12. VALIDATION STRATEGY
-
-Validation occurs at the resolver boundary before any service calls.
-
-### Rules
-
-- All required multilingual fields must be present
-- Strings must not be empty
-- References (IDs) must be validated to exist
-- Arrays must be explicitly validated
-- Reject unknown fields where possible
-
-AJV schemas should mirror GraphQL input types to maintain consistency between the two layers.
-
-
-
-## 13. TESTING STRATEGY
-
-### Unit Tests (Vitest)
-
-- Service functions
-- Validation schemas
-- Referential integrity rules
-- Cloudinary integration (mocked)
-
-### API Tests (Jest)
-
-- GraphQL operations (queries and mutations)
-- Error handling and error shape
-- Mutation side effects
-- Firestore interaction via emulator (preferred)
-
-### Priorities
-
-Testing must prioritize:
-
-- Data correctness
-- Referential safety
-- Type stability
-
-
-
-## 14. NON-FUNCTIONAL REQUIREMENTS
-
-- Strict type safety across the full stack
-- No duplicated types
-- Clear domain boundaries
-- Local-first development
-- Maintainable modular structure
-- Predictable data model
-- Easy schema evolution
-
-Performance requirements are minimal due to the single-user, local nature of the application.
-
-
-
-## 15. FUTURE EXTENSIBILITY
-
-The system should support adding the following without major restructuring:
-
-- Authentication and role-based access control
-- Audit logs
-- Soft deletes
-- Stock tracking
-- Order management
-- E-commerce integration
-- Public API exposure

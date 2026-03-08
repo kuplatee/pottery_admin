@@ -2,37 +2,25 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-We are building the app described in @SPEC.md and you should read that file for general architectural tasks or to check database structure, tech stack or application architecture (so not every time you do something).
+We are building the app described in @SPEC.md and you should read that file only when specifically asked.
 
 This app is small and local-only today, but treat every decision as if it will scale into a large, complex, production-grade system. Apply proper architecture, clean boundaries, and no shortcuts — even when a simpler approach would work for the current scope.
+
+To save on tokens:
+ALWAYS READ ONLY FILES NEEDED!
+Always avoid scanning the whole repo unless necessary!
 
 ## Engineering expectations
 
 Prefer solutions that reflect strong senior-engineering judgment, not just the fastest local fix.
-
-Before implementing, briefly evaluate whether the approach is:
-
-- maintainable
-- appropriately scoped
-- easy to understand
-- aligned with existing patterns
-- safe to extend later
-- tested at the right level
-
-If the requested change would be a weak or overly junior move, say so clearly and explain:
-
-1. why it is not a strong professional choice
-2. what risks it creates
-3. what better alternatives exist
-4. which option you recommend and why
-
 Optimize for excellent production code and for teaching the user to think like a senior engineer.
 
-Use the `senior-engineering-coach` skill - always log that you are using it!
+Use the `senior-engineering-coach` skill and log that you use it.
 
 ## Git Commits
 
 Always use the `git-committer` skill — never commit directly via Bash.
+Do not suggest to commit on your own. I will ask you to commit when needed.
 
 ## Security
 

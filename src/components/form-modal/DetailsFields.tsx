@@ -10,7 +10,11 @@ import {
   LANGUAGE_LABELS,
   type Language
 } from '@/lib/languages'
-import { DeleteButton } from '@/components/common/DeleteButton'
+import { DeleteButton } from '@/components/common-primitives/DeleteIconButton'
+import { ErrorMessage } from '@/components/common-primitives/ErrorMessage'
+import { AutoResizeTextarea } from '@/components/common-primitives/AutoResizeTextarea'
+import { LanguageLabel } from '@/components/common-primitives/LanguageLabel'
+import { SectionTitle } from '@/components/common-primitives/SectionTitle'
 
 export type DetailsEntry = {
   key: Record<Language, string>
@@ -32,9 +36,6 @@ type Props = {
   errors?: any
 }
 
-const inputClass =
-  'w-full rounded border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400'
-
 const emptyEntry = (): DetailsEntry => ({
   key: Object.fromEntries(
     SUPPORTED_LANGUAGES.map((lang) => [lang, ''])
@@ -51,8 +52,8 @@ export function DetailsFields({ control, register, fieldName, errors }: Props) {
 
   return (
     <div>
-      <div className="flex items-center justify-between pt-3">
-        <p className="text-base font-medium text-gray-700">Details</p>
+      <div className="flex items-center justify-between">
+        <SectionTitle>Details</SectionTitle>
         <button
           type="button"
           onClick={() => append(emptyEntry())}
@@ -65,9 +66,7 @@ export function DetailsFields({ control, register, fieldName, errors }: Props) {
         <div className="mt-3 space-y-1">
           {SUPPORTED_LANGUAGES.map((lang, langIndex) => (
             <div key={lang} className={langIndex > 0 ? 'pt-2' : undefined}>
-              <p className="text-xs font-medium text-gray-500 mb-1">
-                {LANGUAGE_LABELS[lang]}
-              </p>
+              <LanguageLabel>{LANGUAGE_LABELS[lang]}</LanguageLabel>
               <div className="space-y-2">
                 {fields.map((field, index) => {
                   const rowErrors = fieldErrors[index]
@@ -79,30 +78,32 @@ export function DetailsFields({ control, register, fieldName, errors }: Props) {
                       {langIndex === 0 ? (
                         <DeleteButton onClick={() => remove(index)} />
                       ) : (
-                        <div className="w-4 shrink-0" />
+                        <div className="w-6 shrink-0" />
                       )}
                       <div className="w-28 shrink-0">
-                        <input
-                          {...register(`${fieldName}.${index}.key.${lang}`)}
+                        <AutoResizeTextarea
+                          registration={register(
+                            `${fieldName}.${index}.key.${lang}`
+                          )}
                           placeholder="label"
-                          className={inputClass}
                         />
                         {rowErrors?.key?.[lang]?.message && (
-                          <p className="text-xs text-red-500">
-                            {rowErrors.key[lang]!.message}
-                          </p>
+                          <ErrorMessage
+                            message={rowErrors.key[lang]!.message!}
+                          />
                         )}
                       </div>
                       <div className="flex-1">
-                        <input
-                          {...register(`${fieldName}.${index}.value.${lang}`)}
+                        <AutoResizeTextarea
+                          registration={register(
+                            `${fieldName}.${index}.value.${lang}`
+                          )}
                           placeholder="value"
-                          className={inputClass}
                         />
                         {rowErrors?.value?.[lang]?.message && (
-                          <p className="text-xs text-red-500">
-                            {rowErrors.value[lang]!.message}
-                          </p>
+                          <ErrorMessage
+                            message={rowErrors.value[lang]!.message!}
+                          />
                         )}
                       </div>
                     </div>

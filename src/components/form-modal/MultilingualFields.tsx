@@ -1,6 +1,7 @@
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 import { SUPPORTED_LANGUAGES, LANGUAGE_LABELS, type Language } from '@/lib/languages'
 import { FormField } from './FormField'
+import { SectionTitle } from '@/components/common-primitives/SectionTitle'
 
 type Props = {
   label: string
@@ -11,7 +12,7 @@ type Props = {
 export function MultilingualFields({ label, registrations, errors }: Props) {
   return (
     <>
-      <p className="pt-3 text-base font-medium text-gray-700">{label}</p>
+      <SectionTitle>{label}</SectionTitle>
       {SUPPORTED_LANGUAGES.map(lang => (
         <FormField
           key={lang}
