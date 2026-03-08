@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { MultilingualFieldsInput } from './inputs/MultilingualFieldsInput'
 import { DetailsFieldsInput } from './inputs/DetailsFieldsInput'
 import { CategoryPickedInput } from './inputs/CategoriesPickedInput'
@@ -35,6 +36,8 @@ export function EntityFormModal({
   onUpdate,
   onDelete
 }: Props) {
+  const t = useTranslations('entityForm')
+
   const {
     isEditing,
     id,
@@ -65,21 +68,21 @@ export function EntityFormModal({
           onClick={(e) => e.stopPropagation()}
         >
           <ModalHeader
-            title={isEditing ? `Edit ${label}` : `New ${label}`}
+            title={isEditing ? t('editTitle', { label }) : t('newTitle', { label })}
             onClose={onClose}
           />
           <DbIdInfo id={id} />
           <form onSubmit={handleSubmit} className="space-y-3">
             {fieldConfig.names && (
               <MultilingualFieldsInput
-                label="Names"
+                label={t('names')}
                 registrations={multilingualRegistrations('names')}
                 errors={multilingualErrors('names')}
               />
             )}
             {fieldConfig.description && (
               <MultilingualFieldsInput
-                label="Description"
+                label={t('description')}
                 registrations={multilingualRegistrations('description')}
                 errors={multilingualErrors('description')}
               />

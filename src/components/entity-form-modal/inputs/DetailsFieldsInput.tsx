@@ -5,6 +5,7 @@ import {
   type Control,
   type UseFormRegister
 } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 import {
   SUPPORTED_LANGUAGES,
   LANGUAGE_LABELS,
@@ -51,6 +52,7 @@ export function DetailsFieldsInput({
   fieldName,
   errors
 }: Props) {
+  const t = useTranslations('entityForm')
   const { fields, append, remove } = useFieldArray({ control, name: fieldName })
 
   const fieldErrors: RowErrors[] = errors?.[fieldName] ?? []
@@ -58,13 +60,13 @@ export function DetailsFieldsInput({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <SectionTitle>Details</SectionTitle>
+        <SectionTitle>{t('details')}</SectionTitle>
         <button
           type="button"
           onClick={() => append(emptyEntry())}
           className="text-xs text-gray-500 underline hover:text-gray-700"
         >
-          + Add entry
+          {t('addEntry')}
         </button>
       </div>
       {fields.length > 0 && (
@@ -90,7 +92,7 @@ export function DetailsFieldsInput({
                           registration={register(
                             `${fieldName}.${index}.key.${lang}`
                           )}
-                          placeholder="label"
+                          placeholder={t('keyPlaceholder')}
                         />
                         {rowErrors?.key?.[lang]?.message && (
                           <ErrorMessage
@@ -103,7 +105,7 @@ export function DetailsFieldsInput({
                           registration={register(
                             `${fieldName}.${index}.value.${lang}`
                           )}
-                          placeholder="value"
+                          placeholder={t('valuePlaceholder')}
                         />
                         {rowErrors?.value?.[lang]?.message && (
                           <ErrorMessage

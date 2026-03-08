@@ -1,19 +1,21 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
-import { EntitiesPage } from '@/components/entity-components/EntitiesPage'
 import { useDesignActions } from '@/services/graphql-client/hooks/useDesignActions'
 import { toLocalizedJson } from './designFormUtils'
+import { EntitiesPage } from '@/components/entities-page/EntitiesPage'
 
 export default function DesignsPage() {
+  const t = useTranslations('pages.designs')
   const { state } = useAppState()
   const { createDesign, updateDesign, deleteDesign } = useDesignActions()
 
   return (
     <EntitiesPage
-      title="Designs"
-      label="Design"
-      description="Manage pottery designs"
+      title={t('title')}
+      label={t('label')}
+      description={t('description')}
       fieldConfig={{
         names: true,
         description: true,

@@ -1,29 +1,32 @@
 import Link from 'next/link'
-
-const NAV_ITEMS = [
-  {
-    href: '/categories',
-    label: 'Categories',
-    description: 'Manage pottery categories'
-  },
-  {
-    href: '/collections',
-    label: 'Collections',
-    description: 'Manage aesthetic collections'
-  },
-  {
-    href: '/designs',
-    label: 'Designs',
-    description: 'Manage artistic designs and their details'
-  },
-  {
-    href: '/items',
-    label: 'Items',
-    description: 'Manage individual physical pottery pieces'
-  }
-]
+import { useTranslations } from 'next-intl'
 
 export default function HomeNav() {
+  const t = useTranslations('nav')
+
+  const NAV_ITEMS = [
+    {
+      href: '/categories',
+      label: t('categories'),
+      description: t('categoriesDescription')
+    },
+    {
+      href: '/collections',
+      label: t('collections'),
+      description: t('collectionsDescription')
+    },
+    {
+      href: '/designs',
+      label: t('designs'),
+      description: t('designsDescription')
+    },
+    {
+      href: '/items',
+      label: t('items'),
+      description: t('itemsDescription')
+    }
+  ]
+
   return (
     <div className="grid grid-cols-2 gap-6 w-full max-w-2xl">
       {NAV_ITEMS.map(({ href, label, description }) => (

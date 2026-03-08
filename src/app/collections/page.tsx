@@ -1,8 +1,12 @@
+import { useTranslations } from 'next-intl'
+
 export default function CollectionsPage() {
+  const t = useTranslations('pages.collections')
+
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-bold tracking-wide">Collections</h1>
-      <p className="mt-2 text-sm text-gray-500">Manage pottery collections</p>
+      <h1 className="text-2xl font-bold tracking-wide">{t('title')}</h1>
+      <p className="mt-2 text-sm text-gray-500">{t('description')}</p>
     </main>
   )
 }

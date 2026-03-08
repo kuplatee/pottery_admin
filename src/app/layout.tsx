@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import { AppStateProvider } from '@/state/AppStateProvider'
 import { ApiClientProvider } from '@/services/graphql-client/client/ApiClientProvider'
 import { DataLoader } from '@/components/data/DataLoader'
@@ -10,21 +12,26 @@ export const metadata: Metadata = {
   description: 'Internal admin app for managing pottery inventory'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className="antialiased">
-        <ApiClientProvider>
-          <AppStateProvider>
-            <DataLoader />
-            <TopNav />
-            {children}
-          </AppStateProvider>
-        </ApiClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ApiClientProvider>
+            <AppStateProvider>
+              <DataLoader />
+              <TopNav />
+              {children}
+            </AppStateProvider>
+          </ApiClientProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

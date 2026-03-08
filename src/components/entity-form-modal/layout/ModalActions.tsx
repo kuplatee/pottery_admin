@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { DeleteTextButton } from '@/components/common-primitives/DeleteTextButton'
 import { MainActionButton } from '@/components/common-primitives/MainActionButton'
 
@@ -7,10 +8,12 @@ type Props = {
 }
 
 export function ModalActions({ isEditing, onDelete }: Props) {
+  const t = useTranslations('common')
+
   return (
     <div className="flex items-center justify-end gap-2 pt-2">
       {isEditing && onDelete && <DeleteTextButton onClick={onDelete} />}
-      <MainActionButton label={isEditing ? 'Save' : 'Create'} />
+      <MainActionButton label={isEditing ? t('save') : t('create')} />
     </div>
   )
 }

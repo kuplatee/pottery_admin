@@ -1,0 +1,54 @@
+{
+  "common": {
+    "save": "Tallenna",
+    "create": "Luo",
+    "delete": "Poista"
+  },
+  "nav": {
+    "appName": "Tsirbunen Pottery Admin",
+    "categories": "Kategoriat",
+    "collections": "Kokoelmat",
+    "designs": "Mallit",
+    "items": "Tuotteet",
+    "categoriesDescription": "Hallinnoi keramiikkakategorioita",
+    "collectionsDescription": "Hallinnoi esteettisiä kokoelmia",
+    "designsDescription": "Hallinnoi taiteellisia malleja ja niiden tietoja",
+    "itemsDescription": "Hallinnoi yksittäisiä keramiikkaesineitä"
+  },
+  "entityForm": {
+    "names": "Nimet",
+    "description": "Kuvaus",
+    "details": "Tiedot",
+    "addEntry": "+ Lisää rivi",
+    "categories": "Kategoriat",
+    "noCategoriesAvailable": "Ei kategorioita saatavilla",
+    "editTitle": "Muokkaa: {label}",
+    "newTitle": "Uusi {label}",
+    "newButton": "+ Uusi {label}",
+    "dbId": "DB-tunnus",
+    "keyPlaceholder": "avain",
+    "valuePlaceholder": "arvo"
+  },
+  "pages": {
+    "categories": {
+      "title": "Kategoriat",
+      "label": "Kategoria",
+      "description": "Hallinnoi keramiikkakategorioita"
+    },
+    "collections": {
+      "title": "Kokoelmat",
+      "label": "Kokoelma",
+      "description": "Hallinnoi keramiikkakokoelmia"
+    },
+    "designs": {
+      "title": "Mallit",
+      "label": "Malli",
+      "description": "Hallinnoi keramiikkamalleja"
+    },
+    "items": {
+      "title": "Tuotteet",
+      "label": "Tuote",
+      "description": "Hallinnoi keramiikkaesineitä"
+    }
+  }
+}

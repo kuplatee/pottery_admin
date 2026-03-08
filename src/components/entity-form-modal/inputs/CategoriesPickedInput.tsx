@@ -1,6 +1,7 @@
 'use client'
 
 import { Controller, type Control } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 import { AvailableCategory } from '../types/entity.types'
 import { ErrorMessage } from '@/components/common-primitives/ErrorMessage'
 import { SectionTitle } from '@/components/common-primitives/SectionTitle'
@@ -19,9 +20,11 @@ export function CategoryPickedInput({
   availableCategories,
   error
 }: Props) {
+  const t = useTranslations('entityForm')
+
   return (
     <div>
-      <SectionTitle>Categories</SectionTitle>
+      <SectionTitle>{t('categories')}</SectionTitle>
       <Controller
         control={control}
         name={fieldName}
@@ -57,7 +60,7 @@ export function CategoryPickedInput({
               })}
               {availableCategories.length === 0 && (
                 <p className="text-sm text-gray-400 italic">
-                  No categories available
+                  {t('noCategoriesAvailable')}
                 </p>
               )}
             </div>

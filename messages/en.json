@@ -1,0 +1,54 @@
+{
+  "common": {
+    "save": "Save",
+    "create": "Create",
+    "delete": "Delete"
+  },
+  "nav": {
+    "appName": "Tsirbunen Pottery Admin",
+    "categories": "Categories",
+    "collections": "Collections",
+    "designs": "Designs",
+    "items": "Items",
+    "categoriesDescription": "Manage pottery categories",
+    "collectionsDescription": "Manage aesthetic collections",
+    "designsDescription": "Manage artistic designs and their details",
+    "itemsDescription": "Manage individual physical pottery pieces"
+  },
+  "entityForm": {
+    "names": "Names",
+    "description": "Description",
+    "details": "Details",
+    "addEntry": "+ Add entry",
+    "categories": "Categories",
+    "noCategoriesAvailable": "No categories available",
+    "editTitle": "Edit {label}",
+    "newTitle": "New {label}",
+    "newButton": "+ New {label}",
+    "dbId": "DB ID",
+    "keyPlaceholder": "label",
+    "valuePlaceholder": "value"
+  },
+  "pages": {
+    "categories": {
+      "title": "Categories",
+      "label": "Category",
+      "description": "Manage pottery categories"
+    },
+    "collections": {
+      "title": "Collections",
+      "label": "Collection",
+      "description": "Manage pottery collections"
+    },
+    "designs": {
+      "title": "Designs",
+      "label": "Design",
+      "description": "Manage pottery designs"
+    },
+    "items": {
+      "title": "Items",
+      "label": "Item",
+      "description": "Manage pottery items"
+    }
+  }
+}
