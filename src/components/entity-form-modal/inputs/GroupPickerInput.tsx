@@ -1,8 +1,7 @@
 'use client'
 
 import { Controller, type Control } from 'react-hook-form'
-import { useTranslations } from 'next-intl'
-import { AvailableCategory } from '../types/entity.types'
+import type { AvailableGroup } from '../types/entity.types'
 import { ErrorMessage } from '@/components/common-primitives/ErrorMessage'
 import { SectionTitle } from '@/components/common-primitives/SectionTitle'
 
@@ -10,58 +9,69 @@ type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   fieldName: string
-  availableCategories: AvailableCategory[]
+  label: string
+  availableGroups: AvailableGroup[]
+  multiSelect?: boolean
+  emptyLabel?: string
   error?: { message?: string }
 }
 
-export function CategoryPickedInput({
+export function GroupPickerInput({
   control,
   fieldName,
-  availableCategories,
+  label,
+  availableGroups,
+  multiSelect = true,
+  emptyLabel,
   error
 }: Props) {
-  const t = useTranslations('entityForm')
-
   return (
     <div>
-      <SectionTitle>{t('categories')}</SectionTitle>
+      <SectionTitle>{label}</SectionTitle>
       <Controller
         control={control}
         name={fieldName}
         render={({ field }) => {
-          const selected: string[] = field.value ?? []
+          const selected: string[] = multiSelect
+            ? (field.value ?? [])
+            : field.value
+              ? [field.value]
+              : []
 
           function toggle(id: string) {
-            if (selected.includes(id)) {
-              field.onChange(selected.filter((s) => s !== id))
+            if (multiSelect) {
+              const current: string[] = field.value ?? []
+              if (current.includes(id)) {
+                field.onChange(current.filter((s) => s !== id))
+              } else {
+                field.onChange([...current, id])
+              }
             } else {
-              field.onChange([...selected, id])
+              field.onChange(field.value === id ? '' : id)
             }
           }
 
           return (
             <div className="flex flex-wrap gap-2">
-              {availableCategories.map((cat) => {
-                const isSelected = selected.includes(cat.id)
+              {availableGroups.map((group) => {
+                const isSelected = selected.includes(group.id)
                 return (
                   <button
-                    key={cat.id}
+                    key={group.id}
                     type="button"
-                    onClick={() => toggle(cat.id)}
+                    onClick={() => toggle(group.id)}
                     className={`rounded-full border px-3 py-1 text-sm transition-colors ${
                       isSelected
                         ? 'border-gray-700 bg-gray-700 text-white'
                         : 'border-gray-300 bg-white text-gray-600 hover:border-gray-500'
                     }`}
                   >
-                    {cat.names.en}
+                    {group.names.en}
                   </button>
                 )
               })}
-              {availableCategories.length === 0 && (
-                <p className="text-sm text-gray-400 italic">
-                  {t('noCategoriesAvailable')}
-                </p>
+              {availableGroups.length === 0 && emptyLabel && (
+                <p className="text-sm text-gray-400 italic">{emptyLabel}</p>
               )}
             </div>
           )

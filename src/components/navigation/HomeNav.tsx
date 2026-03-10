@@ -21,9 +21,9 @@ export default function HomeNav() {
       description: t('designsDescription')
     },
     {
-      href: '/items',
-      label: t('items'),
-      description: t('itemsDescription')
+      href: '/pieces',
+      label: t('pieces'),
+      description: t('piecesDescription')
     }
   ]
 

@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
 import { useCategoryActions } from '@/services/graphql-client/hooks/useCategoryActions'
-import { EntitiesPage } from '@/components/entities-page/EntitiesPage'
+import { EntitiesView } from '@/components/views/EntitiesView'
 
 export default function CategoriesPage() {
   const t = useTranslations('pages.categories')
@@ -12,7 +12,7 @@ export default function CategoriesPage() {
     useCategoryActions()
 
   return (
-    <EntitiesPage
+    <EntitiesView
       title={t('title')}
       label={t('label')}
       description={t('description')}

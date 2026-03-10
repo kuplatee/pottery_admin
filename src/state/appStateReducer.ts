@@ -16,6 +16,20 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         ...state,
         categories: state.categories.filter((c) => c.id !== action.payload)
       }
+    case 'SET_COLLECTIONS':
+      return { ...state, collections: action.payload }
+    case 'ADD_COLLECTION':
+      return { ...state, collections: [...state.collections, action.payload] }
+    case 'UPDATE_COLLECTION':
+      return {
+        ...state,
+        collections: state.collections.map((c) => (c.id === action.payload.id ? action.payload : c))
+      }
+    case 'DELETE_COLLECTION':
+      return {
+        ...state,
+        collections: state.collections.filter((c) => c.id !== action.payload)
+      }
     case 'SET_DESIGNS':
       return { ...state, designs: action.payload }
     case 'ADD_DESIGN':
@@ -29,6 +43,20 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       return {
         ...state,
         designs: state.designs.filter((d) => d.id !== action.payload)
+      }
+    case 'SET_PIECES':
+      return { ...state, pieces: action.payload }
+    case 'ADD_PIECE':
+      return { ...state, pieces: [...state.pieces, action.payload] }
+    case 'UPDATE_PIECE':
+      return {
+        ...state,
+        pieces: state.pieces.map((p) => (p.id === action.payload.id ? action.payload : p))
+      }
+    case 'DELETE_PIECE':
+      return {
+        ...state,
+        pieces: state.pieces.filter((p) => p.id !== action.payload)
       }
   }
 }

@@ -28,7 +28,15 @@ export function buildDefaultValues(
     ...(fieldConfig.details && {
       details: entity?.details ? toDetailsEntries(entity.details) : []
     }),
-    ...(fieldConfig.categoryIds && { categoryIds: entity?.categoryIds ?? [] })
+    ...(fieldConfig.categoryIds && { categoryIds: entity?.categoryIds ?? [] }),
+    ...(fieldConfig.imageFileNames && {
+      imageFileNames: entity?.imageFileNames ?? []
+    }),
+    ...(fieldConfig.designId && { designId: entity?.designId ?? '' }),
+    ...(fieldConfig.collectionId && {
+      collectionId: entity?.collectionId ?? ''
+    }),
+    ...(fieldConfig.sold && { sold: entity?.sold ?? false })
   }
 }
 

@@ -1,0 +1,45 @@
+query GetAllCollections {
+  collections {
+    id
+    names {
+      en
+      fi
+    }
+    description {
+      en
+      fi
+    }
+  }
+}
+
+mutation CreateCollection($input: CreateCollectionInput!) {
+  createCollection(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+    description {
+      en
+      fi
+    }
+  }
+}
+
+mutation UpdateCollection($input: UpdateCollectionInput!) {
+  updateCollection(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+    description {
+      en
+      fi
+    }
+  }
+}
+
+mutation DeleteCollection($id: String!) {
+  deleteCollection(id: $id)
+}

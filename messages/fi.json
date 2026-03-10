@@ -9,11 +9,11 @@
     "categories": "Kategoriat",
     "collections": "Kokoelmat",
     "designs": "Mallit",
-    "items": "Tuotteet",
+    "pieces": "Esineet",
     "categoriesDescription": "Hallinnoi keramiikkakategorioita",
     "collectionsDescription": "Hallinnoi esteettisiä kokoelmia",
     "designsDescription": "Hallinnoi taiteellisia malleja ja niiden tietoja",
-    "itemsDescription": "Hallinnoi yksittäisiä keramiikkaesineitä"
+    "piecesDescription": "Hallinnoi yksittäisiä keramiikkaesineitä"
   },
   "entityForm": {
     "names": "Nimet",
@@ -27,7 +27,12 @@
     "newButton": "+ Uusi {label}",
     "dbId": "DB-tunnus",
     "keyPlaceholder": "avain",
-    "valuePlaceholder": "arvo"
+    "valuePlaceholder": "arvo",
+    "design": "Malli",
+    "noDesignsAvailable": "Ei malleja saatavilla",
+    "collections": "Kokoelmat",
+    "noCollectionsAvailable": "Ei kokoelmia saatavilla",
+    "sold": "Myyty"
   },
   "pages": {
     "categories": {
@@ -45,9 +50,9 @@
       "label": "Malli",
       "description": "Hallinnoi keramiikkamalleja"
     },
-    "items": {
-      "title": "Tuotteet",
-      "label": "Tuote",
+    "pieces": {
+      "title": "Esineet",
+      "label": "Esine",
       "description": "Hallinnoi keramiikkaesineitä"
     }
   }

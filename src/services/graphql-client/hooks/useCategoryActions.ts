@@ -2,15 +2,19 @@
 
 import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
 import { useAppState } from '@/state/AppStateContext'
+
+import type {
+  CreateCategoryInput,
+  UpdateCategoryInput
+} from '@/types/graphql-schema-types.generated'
 import {
   CreateCategoryDocument,
-  UpdateCategoryDocument,
+  CreateCategoryMutation,
   DeleteCategoryDocument,
-  type CreateCategoryMutation,
-  type UpdateCategoryMutation,
-  type DeleteCategoryMutation
-} from '@/services/graphql-client/graphql-queries/queries.generated'
-import type { CreateCategoryInput, UpdateCategoryInput } from '@/types/graphql-schema-types.generated'
+  DeleteCategoryMutation,
+  UpdateCategoryDocument,
+  UpdateCategoryMutation
+} from '../graphql-queries/categories.generated'
 
 export function useCategoryActions() {
   const client = useApiClient()

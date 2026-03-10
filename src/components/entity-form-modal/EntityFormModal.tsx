@@ -3,7 +3,8 @@
 import { useTranslations } from 'next-intl'
 import { MultilingualFieldsInput } from './inputs/MultilingualFieldsInput'
 import { DetailsFieldsInput } from './inputs/DetailsFieldsInput'
-import { CategoryPickedInput } from './inputs/CategoriesPickedInput'
+import { GroupPickerInput } from './inputs/GroupPickerInput'
+import { BooleanFieldInput } from './inputs/BooleanFieldInput'
 import { ModalActions } from './layout/ModalActions'
 import { DbIdInfo } from './layout/DbIdInfo'
 import { ModalHeader } from './layout/ModalHeader'
@@ -11,7 +12,7 @@ import type {
   EntityFieldConfig,
   EntityFormData,
   EntityData,
-  AvailableCategory
+  AvailableGroup
 } from './types/entity.types'
 import { useEntityForm } from './utils/useEntityForm'
 
@@ -19,7 +20,9 @@ type Props = {
   label: string
   fieldConfig: EntityFieldConfig
   entity?: EntityData
-  availableCategories?: AvailableCategory[]
+  availableCategories?: AvailableGroup[]
+  availableCollections?: AvailableGroup[]
+  availableDesigns?: AvailableGroup[]
   onClose: () => void
   onCreate?: (data: EntityFormData) => Promise<void>
   onUpdate?: (id: string, data: EntityFormData) => Promise<void>
@@ -31,6 +34,8 @@ export function EntityFormModal({
   fieldConfig,
   entity,
   availableCategories,
+  availableCollections,
+  availableDesigns,
   onClose,
   onCreate,
   onUpdate,
@@ -68,7 +73,9 @@ export function EntityFormModal({
           onClick={(e) => e.stopPropagation()}
         >
           <ModalHeader
-            title={isEditing ? t('editTitle', { label }) : t('newTitle', { label })}
+            title={
+              isEditing ? t('editTitle', { label }) : t('newTitle', { label })
+            }
             onClose={onClose}
           />
           <DbIdInfo id={id} />
@@ -96,11 +103,42 @@ export function EntityFormModal({
               />
             )}
             {fieldConfig.categoryIds && (
-              <CategoryPickedInput
+              <GroupPickerInput
                 control={control}
                 fieldName="categoryIds"
-                availableCategories={availableCategories ?? []}
+                label={t('categories')}
+                availableGroups={availableCategories ?? []}
+                emptyLabel={t('noCategoriesAvailable')}
                 error={errors.categoryIds as { message?: string } | undefined}
+              />
+            )}
+            {fieldConfig.designId && (
+              <GroupPickerInput
+                control={control}
+                fieldName="designId"
+                label={t('design')}
+                availableGroups={availableDesigns ?? []}
+                multiSelect={false}
+                emptyLabel={t('noDesignsAvailable')}
+                error={errors.designId as { message?: string } | undefined}
+              />
+            )}
+            {fieldConfig.collectionId && (
+              <GroupPickerInput
+                control={control}
+                fieldName="collectionId"
+                label={t('collections')}
+                availableGroups={availableCollections ?? []}
+                multiSelect={false}
+                emptyLabel={t('noCollectionsAvailable')}
+                error={errors.collectionId as { message?: string } | undefined}
+              />
+            )}
+            {fieldConfig.sold && (
+              <BooleanFieldInput
+                label={t('sold')}
+                registration={register('sold')}
+                error={errors.sold}
               />
             )}
             <ModalActions isEditing={isEditing} onDelete={onDelete} />

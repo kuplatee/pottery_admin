@@ -9,11 +9,11 @@
     "categories": "Categories",
     "collections": "Collections",
     "designs": "Designs",
-    "items": "Items",
+    "pieces": "Pieces",
     "categoriesDescription": "Manage pottery categories",
     "collectionsDescription": "Manage aesthetic collections",
     "designsDescription": "Manage artistic designs and their details",
-    "itemsDescription": "Manage individual physical pottery pieces"
+    "piecesDescription": "Manage individual physical pottery pieces"
   },
   "entityForm": {
     "names": "Names",
@@ -27,7 +27,12 @@
     "newButton": "+ New {label}",
     "dbId": "DB ID",
     "keyPlaceholder": "label",
-    "valuePlaceholder": "value"
+    "valuePlaceholder": "value",
+    "design": "Design",
+    "noDesignsAvailable": "No designs available",
+    "collections": "Collections",
+    "noCollectionsAvailable": "No collections available",
+    "sold": "Sold"
   },
   "pages": {
     "categories": {
@@ -45,10 +50,10 @@
       "label": "Design",
       "description": "Manage pottery designs"
     },
-    "items": {
-      "title": "Items",
-      "label": "Item",
-      "description": "Manage pottery items"
+    "pieces": {
+      "title": "Pieces",
+      "label": "Piece",
+      "description": "Manage pottery pieces"
     }
   }
 }

@@ -1,0 +1,33 @@
+query GetAllPieces {
+  pieces {
+    id
+    designId
+    imageFileNames
+    sold
+    collectionId
+  }
+}
+
+mutation CreatePiece($input: CreatePieceInput!) {
+  createPiece(input: $input) {
+    id
+    designId
+    imageFileNames
+    sold
+    collectionId
+  }
+}
+
+mutation UpdatePiece($input: UpdatePieceInput!) {
+  updatePiece(input: $input) {
+    id
+    designId
+    imageFileNames
+    sold
+    collectionId
+  }
+}
+
+mutation DeletePiece($id: String!) {
+  deletePiece(id: $id)
+}

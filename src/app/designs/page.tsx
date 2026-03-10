@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
 import { useDesignActions } from '@/services/graphql-client/hooks/useDesignActions'
 import { toLocalizedJson } from './designFormUtils'
-import { EntitiesPage } from '@/components/entities-page/EntitiesPage'
+import { EntitiesView } from '@/components/views/EntitiesView'
 
 export default function DesignsPage() {
   const t = useTranslations('pages.designs')
@@ -12,7 +12,7 @@ export default function DesignsPage() {
   const { createDesign, updateDesign, deleteDesign } = useDesignActions()
 
   return (
-    <EntitiesPage
+    <EntitiesView
       title={t('title')}
       label={t('label')}
       description={t('description')}

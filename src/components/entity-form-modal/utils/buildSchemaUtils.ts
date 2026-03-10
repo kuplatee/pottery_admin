@@ -24,6 +24,12 @@ export function buildSchema(config: EntityFieldConfig) {
     ...(config.details && { details: z.array(detailEntrySchema) }),
     ...(config.categoryIds && {
       categoryIds: z.array(z.string()).min(1, 'Select at least one category')
-    })
+    }),
+    ...(config.imageFileNames && {
+      imageFileNames: z.array(z.string()).min(1, 'At least one image required')
+    }),
+    ...(config.designId && { designId: z.string().min(1, 'Required') }),
+    ...(config.collectionId && { collectionId: z.string().optional() }),
+    ...(config.sold && { sold: z.boolean() })
   })
 }

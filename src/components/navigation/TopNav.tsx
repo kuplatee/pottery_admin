@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
-const NAV_HREFS = ['/categories', '/collections', '/designs', '/items'] as const
+const NAV_HREFS = ['/categories', '/collections', '/designs', '/pieces'] as const
 
 type NavHref = (typeof NAV_HREFS)[number]
 
@@ -16,7 +16,7 @@ export default function TopNav() {
     { href: '/categories', label: t('categories') },
     { href: '/collections', label: t('collections') },
     { href: '/designs', label: t('designs') },
-    { href: '/items', label: t('items') }
+    { href: '/pieces', label: t('pieces') }
   ]
 
   if (pathname === '/') {

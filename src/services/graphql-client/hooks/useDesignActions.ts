@@ -2,15 +2,19 @@
 
 import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
 import { useAppState } from '@/state/AppStateContext'
+
+import type {
+  CreateDesignInput,
+  UpdateDesignInput
+} from '@/types/graphql-schema-types.generated'
 import {
+  CreateDesignMutation,
   CreateDesignDocument,
+  UpdateDesignMutation,
   UpdateDesignDocument,
-  DeleteDesignDocument,
-  type CreateDesignMutation,
-  type UpdateDesignMutation,
-  type DeleteDesignMutation
-} from '@/services/graphql-client/graphql-queries/queries.generated'
-import type { CreateDesignInput, UpdateDesignInput } from '@/types/graphql-schema-types.generated'
+  DeleteDesignMutation,
+  DeleteDesignDocument
+} from '../graphql-queries/designs.generated'
 
 export function useDesignActions() {
   const client = useApiClient()

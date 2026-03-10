@@ -1,8 +1,10 @@
-import type { Category, Design } from '@/types/graphql-schema-types.generated'
+import type { Category, Collection, Design, Piece } from '@/types/graphql-schema-types.generated'
 
 export type AppState = {
   categories: Category[]
+  collections: Collection[]
   designs: Design[]
+  pieces: Piece[]
 }
 
 export type AppStateAction =
@@ -10,10 +12,18 @@ export type AppStateAction =
   | { type: 'ADD_CATEGORY'; payload: Category }
   | { type: 'UPDATE_CATEGORY'; payload: Category }
   | { type: 'DELETE_CATEGORY'; payload: string }
+  | { type: 'SET_COLLECTIONS'; payload: Collection[] }
+  | { type: 'ADD_COLLECTION'; payload: Collection }
+  | { type: 'UPDATE_COLLECTION'; payload: Collection }
+  | { type: 'DELETE_COLLECTION'; payload: string }
   | { type: 'SET_DESIGNS'; payload: Design[] }
   | { type: 'ADD_DESIGN'; payload: Design }
   | { type: 'UPDATE_DESIGN'; payload: Design }
   | { type: 'DELETE_DESIGN'; payload: string }
+  | { type: 'SET_PIECES'; payload: Piece[] }
+  | { type: 'ADD_PIECE'; payload: Piece }
+  | { type: 'UPDATE_PIECE'; payload: Piece }
+  | { type: 'DELETE_PIECE'; payload: string }
 
 export type AppStateContextValue = {
   state: AppState
@@ -22,5 +32,7 @@ export type AppStateContextValue = {
 
 export const initialAppState: AppState = {
   categories: [],
-  designs: []
+  collections: [],
+  designs: [],
+  pieces: []
 }

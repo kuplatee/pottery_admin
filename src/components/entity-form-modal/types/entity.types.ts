@@ -8,6 +8,10 @@ export type EntityFieldConfig = {
   description?: boolean
   details?: boolean
   categoryIds?: boolean
+  imageFileNames?: boolean
+  designId?: boolean
+  collectionId?: boolean
+  sold?: boolean
 }
 
 export type FormValues = {
@@ -15,6 +19,10 @@ export type FormValues = {
   description?: Record<Language, string>
   details?: DetailsEntry[]
   categoryIds?: string[]
+  imageFileNames?: string[]
+  designId?: string
+  collectionId?: string
+  sold?: boolean
 }
 
 export type EntityFormData = {
@@ -22,6 +30,10 @@ export type EntityFormData = {
   description?: MultilingualText
   details?: DetailsEntry[]
   categoryIds?: string[]
+  imageFileNames?: string[]
+  designId?: string
+  collectionId?: string
+  sold?: boolean
 }
 
 export type EntityData = {
@@ -30,9 +42,13 @@ export type EntityData = {
   description?: MultilingualText
   details?: Record<Language, Record<string, string>>
   categoryIds?: string[]
+  imageFileNames?: string[]
+  designId?: string
+  collectionId?: string
+  sold?: boolean
 }
 
-export type AvailableCategory = {
+export type AvailableGroup = {
   id: string
   names: MultilingualText
 }

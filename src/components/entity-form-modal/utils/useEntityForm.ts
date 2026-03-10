@@ -49,7 +49,11 @@ export function useEntityForm({
       ...(fieldConfig.names && { names: values.names }),
       ...(fieldConfig.description && { description: values.description }),
       ...(fieldConfig.details && { details: values.details }),
-      ...(fieldConfig.categoryIds && { categoryIds: values.categoryIds })
+      ...(fieldConfig.categoryIds && { categoryIds: values.categoryIds }),
+      ...(fieldConfig.imageFileNames && { imageFileNames: values.imageFileNames }),
+      ...(fieldConfig.designId && { designId: values.designId }),
+      ...(fieldConfig.collectionId && { collectionId: values.collectionId }),
+      ...(fieldConfig.sold && { sold: values.sold })
     }
 
     if (isEditing && id && onUpdate) {

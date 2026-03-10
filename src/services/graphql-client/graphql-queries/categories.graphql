@@ -1,0 +1,33 @@
+query GetAllCategories {
+  categories {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+
+mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+
+mutation UpdateCategory($input: UpdateCategoryInput!) {
+  updateCategory(input: $input) {
+    id
+    names {
+      en
+      fi
+    }
+  }
+}
+
+mutation DeleteCategory($id: String!) {
+  deleteCategory(id: $id)
+}
