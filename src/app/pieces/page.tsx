@@ -16,7 +16,16 @@ const PIECE_FIELD_CONFIG: EntityFieldConfig = {
 export default function PiecesPage() {
   const t = useTranslations('pages.pieces')
   const { state } = useAppState()
-  const { updatePiece, deletePiece } = usePieceActions()
+  const { createPiece, updatePiece, deletePiece } = usePieceActions()
+
+  async function handleCreatePiece(data: EntityFormData): Promise<void> {
+    await createPiece({
+      designId: data.designId!,
+      sold: data.sold ?? false,
+      imageFileNames: data.imageFileNames ?? [],
+      collectionId: data.collectionId ?? undefined
+    })
+  }
 
   async function handleUpdatePiece(id: string, data: EntityFormData): Promise<void> {
     await updatePiece({
@@ -37,6 +46,7 @@ export default function PiecesPage() {
       pieces={state.pieces}
       designs={state.designs}
       collections={state.collections}
+      onCreate={handleCreatePiece}
       onUpdate={handleUpdatePiece}
       onDelete={deletePiece}
     />

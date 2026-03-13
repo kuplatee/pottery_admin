@@ -60,8 +60,16 @@ export async function deleteCategory(
     throw new Error(`Category with id "${id}" not found`)
   }
 
-  // FIXME: before deleting, check that no Design references this category (categoryIds).
-  // If any designs are linked, reject the deletion to preserve referential integrity.
+  const referencingDesigns = await db
+    .collection(DB_COLLECTIONS.DESIGNS)
+    .where('categoryIds', 'array-contains', id)
+    .limit(1)
+    .get()
+
+  if (!referencingDesigns.empty) {
+    throw new Error(`Category with id "${id}" cannot be deleted because it is referenced by one or more designs`)
+  }
+
   await deleteCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, id)
 
   return id

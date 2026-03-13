@@ -101,8 +101,15 @@ export async function deleteDesign(db: Firestore, id: string): Promise<string> {
     throw new Error(`Design with id "${id}" not found`)
   }
 
-  // FIXME: before deleting, check that no Piece references this design (designId).
-  // If any pieces are linked, reject the deletion to preserve referential integrity.
+  const referencingPieces = await db
+    .collection(DB_COLLECTIONS.PIECES)
+    .where('designId', '==', id)
+    .limit(1)
+    .get()
+
+  if (!referencingPieces.empty) {
+    throw new Error(`Design with id "${id}" cannot be deleted because it is referenced by one or more pieces`)
+  }
 
   await deleteCollectionDocument(db, DB_COLLECTIONS.DESIGNS, id)
 
