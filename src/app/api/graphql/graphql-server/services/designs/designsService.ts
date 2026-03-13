@@ -8,6 +8,7 @@ import {
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { docToDesign } from './designMappers'
+import { NotFoundError, ReferentialIntegrityError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
 
 export async function getAllDesigns(db: Firestore): Promise<Design[]> {
@@ -39,7 +40,7 @@ export async function createDesign(
       categoryId
     )
     if (!category) {
-      throw new Error(`Category with id "${categoryId}" not found`)
+      throw new NotFoundError('Category', categoryId)
     }
   }
 
@@ -65,7 +66,7 @@ export async function updateDesign(
     input.id
   )
   if (!existing) {
-    throw new Error(`Design with id "${input.id}" not found`)
+    throw new NotFoundError('Design', input.id)
   }
 
   for (const categoryId of input.categoryIds) {
@@ -75,7 +76,7 @@ export async function updateDesign(
       categoryId
     )
     if (!category) {
-      throw new Error(`Category with id "${categoryId}" not found`)
+      throw new NotFoundError('Category', categoryId)
     }
   }
 
@@ -98,7 +99,7 @@ export async function deleteDesign(db: Firestore, id: string): Promise<string> {
     id
   )
   if (!existing) {
-    throw new Error(`Design with id "${id}" not found`)
+    throw new NotFoundError('Design', id)
   }
 
   const referencingPieces = await db
@@ -108,7 +109,7 @@ export async function deleteDesign(db: Firestore, id: string): Promise<string> {
     .get()
 
   if (!referencingPieces.empty) {
-    throw new Error(`Design with id "${id}" cannot be deleted because it is referenced by one or more pieces`)
+    throw new ReferentialIntegrityError('Design', id, 'pieces')
   }
 
   await deleteCollectionDocument(db, DB_COLLECTIONS.DESIGNS, id)

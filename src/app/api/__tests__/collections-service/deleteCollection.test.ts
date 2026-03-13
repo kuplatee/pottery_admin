@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { deleteCollection } from '../../graphql/graphql-server/services/collections/collectionsService'
+import { NotFoundError, ReferentialIntegrityError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { collectionDocs } from '../common/test-data'
 
@@ -28,15 +29,15 @@ describe('Delete collection from database', () => {
 
   it('throws when the collection does not exist', async () => {
     const db = makeMockDb()
-    await expect(deleteCollection(db as any, 'nonexistent')).rejects.toThrow(
-      'Collection with id "nonexistent" not found'
-    )
+    const promise = deleteCollection(db as any, 'nonexistent')
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Collection not found: nonexistent')
   })
 
   it('throws when the collection is referenced by one or more pieces', async () => {
     const db = makeMockDb([collectionDocs[0]], { hasReferencingDocs: true })
-    await expect(deleteCollection(db as any, 'col-1')).rejects.toThrow(
-      'Collection with id "col-1" cannot be deleted because it is referenced by one or more pieces'
-    )
+    const promise = deleteCollection(db as any, 'col-1')
+    await expect(promise).rejects.toBeInstanceOf(ReferentialIntegrityError)
+    await expect(promise).rejects.toThrow('Collection cannot be deleted, referenced by one or more pieces: col-1')
   })
 })

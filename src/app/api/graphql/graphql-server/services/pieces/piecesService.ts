@@ -9,6 +9,7 @@ import {
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { docToPiece } from './pieceMappers'
 import { deleteImages } from '../cloudinary/cloudinaryService'
+import { NotFoundError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
 
 export async function getAllPieces(db: Firestore): Promise<Piece[]> {
@@ -35,7 +36,7 @@ export async function createPiece(
 ): Promise<Piece> {
   const design = await getCollectionDocumentById(db, DB_COLLECTIONS.DESIGNS, input.designId)
   if (!design) {
-    throw new Error(`Design with id "${input.designId}" not found`)
+    throw new NotFoundError('Design', input.designId)
   }
 
   if (input.collectionId != null) {
@@ -45,7 +46,7 @@ export async function createPiece(
       input.collectionId
     )
     if (!collection) {
-      throw new Error(`Collection with id "${input.collectionId}" not found`)
+      throw new NotFoundError('Collection', input.collectionId)
     }
   }
 
@@ -67,12 +68,12 @@ export async function updatePiece(
 ): Promise<Piece> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.PIECES, input.id)
   if (!existing) {
-    throw new Error(`Piece with id "${input.id}" not found`)
+    throw new NotFoundError('Piece', input.id)
   }
 
   const design = await getCollectionDocumentById(db, DB_COLLECTIONS.DESIGNS, input.designId)
   if (!design) {
-    throw new Error(`Design with id "${input.designId}" not found`)
+    throw new NotFoundError('Design', input.designId)
   }
 
   if (input.collectionId != null) {
@@ -82,7 +83,7 @@ export async function updatePiece(
       input.collectionId
     )
     if (!collection) {
-      throw new Error(`Collection with id "${input.collectionId}" not found`)
+      throw new NotFoundError('Collection', input.collectionId)
     }
   }
 
@@ -107,7 +108,7 @@ export async function updatePiece(
 export async function deletePiece(db: Firestore, id: string): Promise<string> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.PIECES, id)
   if (!existing) {
-    throw new Error(`Piece with id "${id}" not found`)
+    throw new NotFoundError('Piece', id)
   }
 
   const piece = docToPiece(existing as Parameters<typeof docToPiece>[0])

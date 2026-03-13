@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { deleteCategory } from '../../graphql/graphql-server/services/categories/categoriesService'
+import { NotFoundError, ReferentialIntegrityError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { categoryDocs } from '../common/test-data'
 
@@ -28,8 +29,15 @@ describe('Delete category from database', () => {
 
   it('throws when the category does not exist', async () => {
     const db = makeMockDb()
-    await expect(deleteCategory(db as any, 'nonexistent')).rejects.toThrow(
-      'Category with id "nonexistent" not found'
-    )
+    const promise = deleteCategory(db as any, 'nonexistent')
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Category not found: nonexistent')
+  })
+
+  it('throws when the category is referenced by one or more designs', async () => {
+    const db = makeMockDb([categoryDocs[0]], { hasReferencingDocs: true })
+    const promise = deleteCategory(db as any, 'cat-1')
+    await expect(promise).rejects.toBeInstanceOf(ReferentialIntegrityError)
+    await expect(promise).rejects.toThrow('Category cannot be deleted, referenced by one or more designs: cat-1')
   })
 })

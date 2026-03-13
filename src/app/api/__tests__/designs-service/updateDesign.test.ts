@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { updateDesign } from '../../graphql/graphql-server/services/designs/designsService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { designDocs } from '../common/test-data'
 
@@ -41,8 +42,8 @@ describe('Update design in database', () => {
 
   it('throws when the design does not exist', async () => {
     const db = makeMockDb()
-    await expect(updateDesign(db as any, input)).rejects.toThrow(
-      'Design with id "design-1" not found'
-    )
+    const promise = updateDesign(db as any, input)
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Design not found: design-1')
   })
 })

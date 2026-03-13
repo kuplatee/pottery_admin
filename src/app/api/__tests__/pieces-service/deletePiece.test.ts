@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { deletePiece } from '../../graphql/graphql-server/services/pieces/piecesService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { pieceDocs } from '../common/test-data'
 
@@ -28,8 +29,8 @@ describe('Delete piece from database', () => {
 
   it('throws when the piece does not exist', async () => {
     const db = makeMockDb()
-    await expect(deletePiece(db as any, 'nonexistent')).rejects.toThrow(
-      'Piece with id "nonexistent" not found'
-    )
+    const promise = deletePiece(db as any, 'nonexistent')
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Piece not found: nonexistent')
   })
 })

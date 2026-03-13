@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { updatePiece } from '../../graphql/graphql-server/services/pieces/piecesService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { pieceDocs } from '../common/test-data'
 
@@ -52,8 +53,8 @@ describe('Update piece in database', () => {
 
   it('throws when the piece does not exist', async () => {
     const db = makeMockDb()
-    await expect(updatePiece(db as any, input)).rejects.toThrow(
-      'Piece with id "piece-1" not found'
-    )
+    const promise = updatePiece(db as any, input)
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Piece not found: piece-1')
   })
 })

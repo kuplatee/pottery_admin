@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { createDesign } from '../../graphql/graphql-server/services/designs/designsService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { categoryDocs } from '../common/test-data'
 
@@ -40,8 +41,8 @@ describe('Create design in database', () => {
 
   it('throws when a categoryId does not exist', async () => {
     const db = makeMockDb()
-    await expect(createDesign(db as any, input)).rejects.toThrow(
-      'Category with id "cat-1" not found'
-    )
+    const promise = createDesign(db as any, input)
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Category not found: cat-1')
   })
 })

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { updateCategory } from '../../graphql/graphql-server/services/categories/categoriesService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { categoryDocs } from '../common/test-data'
 
@@ -30,8 +31,8 @@ describe('Update category in database', () => {
 
   it('throws when the category does not exist', async () => {
     const db = makeMockDb()
-    await expect(
-      updateCategory(db as any, { id: 'nonexistent', names: { en: 'Mugs', fi: 'Mukit' } })
-    ).rejects.toThrow('Category with id "nonexistent" not found')
+    const promise = updateCategory(db as any, { id: 'nonexistent', names: { en: 'Mugs', fi: 'Mukit' } })
+    await expect(promise).rejects.toBeInstanceOf(NotFoundError)
+    await expect(promise).rejects.toThrow('Category not found: nonexistent')
   })
 })
