@@ -11,6 +11,7 @@ export function ConfirmDeleteModal({ onConfirm, onCancel }: Props) {
   const t = useTranslations('common')
 
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation()
     if (e.target === e.currentTarget) {
       onCancel()
     }
