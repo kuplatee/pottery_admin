@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { updateDesign } from '../../graphql/graphql-server/services/designs/designsService'
-import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
+import { NotFoundError, ValidationError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { designDocs } from '../common/test-data'
 
@@ -45,5 +45,15 @@ describe('Update design in database', () => {
     const promise = updateDesign(db as any, input)
     await expect(promise).rejects.toBeInstanceOf(NotFoundError)
     await expect(promise).rejects.toThrow('Design not found: design-1')
+  })
+
+  it('throws when details keys differ across languages', async () => {
+    const db = makeMockDb([designDocs[0]])
+    const mismatchedInput = {
+      ...input,
+      details: { en: { height: '12cm', width: '5cm' }, fi: { korkeus: '12cm' } },
+    }
+    const promise = updateDesign(db as any, mismatchedInput)
+    await expect(promise).rejects.toBeInstanceOf(ValidationError)
   })
 })

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { createDesign } from '../../graphql/graphql-server/services/designs/designsService'
-import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
+import { NotFoundError, ValidationError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { categoryDocs } from '../common/test-data'
 
@@ -44,5 +44,15 @@ describe('Create design in database', () => {
     const promise = createDesign(db as any, input)
     await expect(promise).rejects.toBeInstanceOf(NotFoundError)
     await expect(promise).rejects.toThrow('Category not found: cat-1')
+  })
+
+  it('throws when details keys differ across languages', async () => {
+    const db = makeMockDb(categoryDocs)
+    const mismatchedInput = {
+      ...input,
+      details: { en: { height: '10cm', width: '5cm' }, fi: { korkeus: '10cm' } },
+    }
+    const promise = createDesign(db as any, mismatchedInput)
+    await expect(promise).rejects.toBeInstanceOf(ValidationError)
   })
 })

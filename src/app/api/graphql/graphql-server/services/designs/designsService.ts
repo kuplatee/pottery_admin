@@ -8,8 +8,18 @@ import {
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { docToDesign } from './designMappers'
-import { NotFoundError, ReferentialIntegrityError } from '../../errors/AppError'
+import { NotFoundError, ReferentialIntegrityError, ValidationError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
+
+function assertDetailsKeysConsistent(details: CreateDesignInput['details']): void {
+  const enCount = Object.keys(details.en).length
+  const fiCount = Object.keys(details.fi).length
+  if (enCount !== fiCount) {
+    throw new ValidationError(
+      `details must have the same number of keys in each language — en: ${enCount}, fi: ${fiCount}`
+    )
+  }
+}
 
 export async function getAllDesigns(db: Firestore): Promise<Design[]> {
   const docs = await getAllCollectionDocuments(db, DB_COLLECTIONS.DESIGNS)
@@ -33,6 +43,8 @@ export async function createDesign(
   db: Firestore,
   input: CreateDesignInput
 ): Promise<Design> {
+  assertDetailsKeysConsistent(input.details)
+
   for (const categoryId of input.categoryIds) {
     const category = await getCollectionDocumentById(
       db,
@@ -60,6 +72,8 @@ export async function updateDesign(
   db: Firestore,
   input: UpdateDesignInput
 ): Promise<Design> {
+  assertDetailsKeysConsistent(input.details)
+
   const existing = await getCollectionDocumentById(
     db,
     DB_COLLECTIONS.DESIGNS,
