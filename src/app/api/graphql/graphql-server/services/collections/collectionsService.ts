@@ -7,6 +7,7 @@ import {
   deleteCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
+import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToCollection } from './collectionMappers'
 import { NotFoundError, ReferentialIntegrityError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
@@ -49,7 +50,7 @@ export async function updateCollection(
 ): Promise<Collection> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.COLLECTIONS, input.id)
   if (!existing) {
-    throw new NotFoundError('Collection', input.id)
+    throw new NotFoundError(ENTITY_NAMES.COLLECTION, input.id)
   }
 
   const data = {
@@ -65,7 +66,7 @@ export async function updateCollection(
 export async function deleteCollection(db: Firestore, id: string): Promise<string> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.COLLECTIONS, id)
   if (!existing) {
-    throw new NotFoundError('Collection', id)
+    throw new NotFoundError(ENTITY_NAMES.COLLECTION, id)
   }
 
   const referencingPieces = await db
@@ -75,7 +76,7 @@ export async function deleteCollection(db: Firestore, id: string): Promise<strin
     .get()
 
   if (!referencingPieces.empty) {
-    throw new ReferentialIntegrityError('Collection', id, 'pieces')
+    throw new ReferentialIntegrityError(ENTITY_NAMES.COLLECTION, id, 'pieces')
   }
 
   await deleteCollectionDocument(db, DB_COLLECTIONS.COLLECTIONS, id)

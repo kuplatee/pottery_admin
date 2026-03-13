@@ -7,6 +7,7 @@ import {
   deleteCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
+import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToCategory } from './categoryMappers'
 import { NotFoundError, ReferentialIntegrityError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
@@ -43,7 +44,7 @@ export async function updateCategory(
 ): Promise<Category> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, input.id)
   if (!existing) {
-    throw new NotFoundError('Category', input.id)
+    throw new NotFoundError(ENTITY_NAMES.CATEGORY, input.id)
   }
 
   const data = { names: { en: input.names.en, fi: input.names.fi } }
@@ -58,7 +59,7 @@ export async function deleteCategory(
 ): Promise<string> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, id)
   if (!existing) {
-    throw new NotFoundError('Category', id)
+    throw new NotFoundError(ENTITY_NAMES.CATEGORY, id)
   }
 
   const referencingDesigns = await db
@@ -68,7 +69,7 @@ export async function deleteCategory(
     .get()
 
   if (!referencingDesigns.empty) {
-    throw new ReferentialIntegrityError('Category', id, 'designs')
+    throw new ReferentialIntegrityError(ENTITY_NAMES.CATEGORY, id, 'designs')
   }
 
   await deleteCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, id)

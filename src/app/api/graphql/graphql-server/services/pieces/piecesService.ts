@@ -7,6 +7,7 @@ import {
   deleteCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
+import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToPiece } from './pieceMappers'
 import { deleteImages } from '../cloudinary/cloudinaryService'
 import { NotFoundError } from '../../errors/AppError'
@@ -36,7 +37,7 @@ export async function createPiece(
 ): Promise<Piece> {
   const design = await getCollectionDocumentById(db, DB_COLLECTIONS.DESIGNS, input.designId)
   if (!design) {
-    throw new NotFoundError('Design', input.designId)
+    throw new NotFoundError(ENTITY_NAMES.DESIGN, input.designId)
   }
 
   if (input.collectionId != null) {
@@ -46,7 +47,7 @@ export async function createPiece(
       input.collectionId
     )
     if (!collection) {
-      throw new NotFoundError('Collection', input.collectionId)
+      throw new NotFoundError(ENTITY_NAMES.COLLECTION, input.collectionId)
     }
   }
 
@@ -68,12 +69,12 @@ export async function updatePiece(
 ): Promise<Piece> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.PIECES, input.id)
   if (!existing) {
-    throw new NotFoundError('Piece', input.id)
+    throw new NotFoundError(ENTITY_NAMES.PIECE, input.id)
   }
 
   const design = await getCollectionDocumentById(db, DB_COLLECTIONS.DESIGNS, input.designId)
   if (!design) {
-    throw new NotFoundError('Design', input.designId)
+    throw new NotFoundError(ENTITY_NAMES.DESIGN, input.designId)
   }
 
   if (input.collectionId != null) {
@@ -83,7 +84,7 @@ export async function updatePiece(
       input.collectionId
     )
     if (!collection) {
-      throw new NotFoundError('Collection', input.collectionId)
+      throw new NotFoundError(ENTITY_NAMES.COLLECTION, input.collectionId)
     }
   }
 
@@ -108,7 +109,7 @@ export async function updatePiece(
 export async function deletePiece(db: Firestore, id: string): Promise<string> {
   const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.PIECES, id)
   if (!existing) {
-    throw new NotFoundError('Piece', id)
+    throw new NotFoundError(ENTITY_NAMES.PIECE, id)
   }
 
   const piece = docToPiece(existing as Parameters<typeof docToPiece>[0])

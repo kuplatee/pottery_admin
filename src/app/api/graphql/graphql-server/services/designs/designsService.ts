@@ -7,6 +7,7 @@ import {
   deleteCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
+import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToDesign } from './designMappers'
 import { NotFoundError, ReferentialIntegrityError, ValidationError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
@@ -52,7 +53,7 @@ export async function createDesign(
       categoryId
     )
     if (!category) {
-      throw new NotFoundError('Category', categoryId)
+      throw new NotFoundError(ENTITY_NAMES.CATEGORY, categoryId)
     }
   }
 
@@ -80,7 +81,7 @@ export async function updateDesign(
     input.id
   )
   if (!existing) {
-    throw new NotFoundError('Design', input.id)
+    throw new NotFoundError(ENTITY_NAMES.DESIGN, input.id)
   }
 
   for (const categoryId of input.categoryIds) {
@@ -90,7 +91,7 @@ export async function updateDesign(
       categoryId
     )
     if (!category) {
-      throw new NotFoundError('Category', categoryId)
+      throw new NotFoundError(ENTITY_NAMES.CATEGORY, categoryId)
     }
   }
 
@@ -113,7 +114,7 @@ export async function deleteDesign(db: Firestore, id: string): Promise<string> {
     id
   )
   if (!existing) {
-    throw new NotFoundError('Design', id)
+    throw new NotFoundError(ENTITY_NAMES.DESIGN, id)
   }
 
   const referencingPieces = await db
@@ -123,7 +124,7 @@ export async function deleteDesign(db: Firestore, id: string): Promise<string> {
     .get()
 
   if (!referencingPieces.empty) {
-    throw new ReferentialIntegrityError('Design', id, 'pieces')
+    throw new ReferentialIntegrityError(ENTITY_NAMES.DESIGN, id, 'pieces')
   }
 
   await deleteCollectionDocument(db, DB_COLLECTIONS.DESIGNS, id)
