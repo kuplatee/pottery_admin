@@ -15,7 +15,7 @@ export function DeleteButton({ onClick }: Props) {
       type="button"
       onClick={handleClick}
       aria-label="Delete"
-      className="rounded p-1 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
+      className="rounded p-1 text-gray-400 transition-colors hover:bg-red-500 hover:text-white"
     >
       <TrashIcon />
     </button>

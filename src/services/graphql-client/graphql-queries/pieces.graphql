@@ -31,3 +31,13 @@ mutation UpdatePiece($input: UpdatePieceInput!) {
 mutation DeletePiece($id: String!) {
   deletePiece(id: $id)
 }
+
+mutation GetUploadSignature {
+  getUploadSignature {
+    signature
+    timestamp
+    apiKey
+    cloudName
+    folder
+  }
+}

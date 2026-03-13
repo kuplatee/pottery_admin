@@ -26,7 +26,16 @@ extend type Query {
   piece(id: String!): Piece
 }
 
+type UploadSignature {
+  signature: String!
+  timestamp: Int!
+  apiKey: String!
+  cloudName: String!
+  folder: String!
+}
+
 extend type Mutation {
+  getUploadSignature: UploadSignature!
   createPiece(input: CreatePieceInput!): Piece!
   updatePiece(input: UpdatePieceInput!): Piece!
   deletePiece(id: String!): String!

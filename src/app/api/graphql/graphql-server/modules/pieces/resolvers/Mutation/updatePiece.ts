@@ -6,6 +6,6 @@ export const updatePiece: NonNullable<
 > = async (_parent, { input }, ctx) => {
   return updatePieceService(ctx.db, {
     ...input,
-    collectionId: input.collectionId ?? undefined
+    collectionId: input.collectionId || undefined
   })
 }

@@ -92,6 +92,7 @@ export type Mutation = {
   deleteCollection: Scalars['String']['output'];
   deleteDesign: Scalars['String']['output'];
   deletePiece: Scalars['String']['output'];
+  getUploadSignature: UploadSignature;
   updateCategory: Category;
   updateCollection: Collection;
   updateDesign: Design;
@@ -225,4 +226,13 @@ export type UpdatePieceInput = {
   id: Scalars['String']['input'];
   imageFileNames: Array<Scalars['String']['input']>;
   sold: Scalars['Boolean']['input'];
+};
+
+export type UploadSignature = {
+  __typename?: 'UploadSignature';
+  apiKey: Scalars['String']['output'];
+  cloudName: Scalars['String']['output'];
+  folder: Scalars['String']['output'];
+  signature: Scalars['String']['output'];
+  timestamp: Scalars['Int']['output'];
 };

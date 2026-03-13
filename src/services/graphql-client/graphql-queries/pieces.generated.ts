@@ -29,6 +29,11 @@ export type DeletePieceMutationVariables = Types.Exact<{
 
 export type DeletePieceMutation = { __typename?: 'Mutation', deletePiece: string };
 
+export type GetUploadSignatureMutationVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type GetUploadSignatureMutation = { __typename?: 'Mutation', getUploadSignature: { __typename?: 'UploadSignature', signature: string, timestamp: number, apiKey: string, cloudName: string, folder: string } };
+
 
 export const GetAllPiecesDocument = gql`
     query GetAllPieces {
@@ -78,3 +83,17 @@ export const DeletePieceDocument = gql`
 export type DeletePieceMutationFn = Apollo.MutationFunction<DeletePieceMutation, DeletePieceMutationVariables>;
 export type DeletePieceMutationResult = Apollo.MutationResult<DeletePieceMutation>;
 export type DeletePieceMutationOptions = Apollo.BaseMutationOptions<DeletePieceMutation, DeletePieceMutationVariables>;
+export const GetUploadSignatureDocument = gql`
+    mutation GetUploadSignature {
+  getUploadSignature {
+    signature
+    timestamp
+    apiKey
+    cloudName
+    folder
+  }
+}
+    `;
+export type GetUploadSignatureMutationFn = Apollo.MutationFunction<GetUploadSignatureMutation, GetUploadSignatureMutationVariables>;
+export type GetUploadSignatureMutationResult = Apollo.MutationResult<GetUploadSignatureMutation>;
+export type GetUploadSignatureMutationOptions = Apollo.BaseMutationOptions<GetUploadSignatureMutation, GetUploadSignatureMutationVariables>;

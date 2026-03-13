@@ -71,6 +71,7 @@ type Mutation {
   deleteCollection(id: String!): String!
   deleteDesign(id: String!): String!
   deletePiece(id: String!): String!
+  getUploadSignature: UploadSignature!
   updateCategory(input: UpdateCategoryInput!): Category!
   updateCollection(input: UpdateCollectionInput!): Collection!
   updateDesign(input: UpdateDesignInput!): Design!
@@ -122,4 +123,12 @@ input UpdatePieceInput {
   id: String!
   imageFileNames: [String!]!
   sold: Boolean!
+}
+
+type UploadSignature {
+  apiKey: String!
+  cloudName: String!
+  folder: String!
+  signature: String!
+  timestamp: Int!
 }

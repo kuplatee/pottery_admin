@@ -5,6 +5,7 @@ import { MultilingualFieldsInput } from './inputs/MultilingualFieldsInput'
 import { DetailsFieldsInput } from './inputs/DetailsFieldsInput'
 import { GroupPickerInput } from './inputs/GroupPickerInput'
 import { BooleanFieldInput } from './inputs/BooleanFieldInput'
+import { ImageDropZone } from './inputs/ImageDropZone'
 import { ModalActions } from './layout/ModalActions'
 import { DbIdInfo } from './layout/DbIdInfo'
 import { ModalHeader } from './layout/ModalHeader'
@@ -15,6 +16,7 @@ import type {
   AvailableGroup
 } from './types/entity.types'
 import { useEntityForm } from './utils/useEntityForm'
+import { useImageUpload } from './utils/useImageUpload'
 
 type Props = {
   label: string
@@ -43,6 +45,8 @@ export function EntityFormModal({
 }: Props) {
   const t = useTranslations('entityForm')
 
+  const imageUpload = useImageUpload()
+
   const {
     isEditing,
     id,
@@ -52,7 +56,14 @@ export function EntityFormModal({
     handleSubmit,
     multilingualRegistrations,
     multilingualErrors
-  } = useEntityForm({ fieldConfig, entity, onClose, onCreate, onUpdate })
+  } = useEntityForm({
+    fieldConfig,
+    entity,
+    onClose,
+    onCreate,
+    onUpdate,
+    onBeforeSubmit: fieldConfig.imageFileNames ? imageUpload.uploadPending : undefined
+  })
 
   return (
     <>
@@ -85,6 +96,13 @@ export function EntityFormModal({
                 label={t('names')}
                 registrations={multilingualRegistrations('names')}
                 errors={multilingualErrors('names')}
+              />
+            )}
+            {fieldConfig.sold && (
+              <BooleanFieldInput
+                label={t('sold')}
+                registration={register('sold')}
+                error={errors.sold}
               />
             )}
             {fieldConfig.description && (
@@ -134,13 +152,16 @@ export function EntityFormModal({
                 error={errors.collectionId as { message?: string } | undefined}
               />
             )}
-            {fieldConfig.sold && (
-              <BooleanFieldInput
-                label={t('sold')}
-                registration={register('sold')}
-                error={errors.sold}
+            {fieldConfig.imageFileNames && (
+              <ImageDropZone
+                control={control}
+                pendingFiles={imageUpload.pendingFiles}
+                uploadState={imageUpload.uploadState}
+                onFilesAdded={imageUpload.addFiles}
+                onPendingFileRemoved={imageUpload.removePendingFile}
               />
             )}
+
             <ModalActions isEditing={isEditing} onDelete={onDelete} />
           </form>
         </div>

@@ -21,6 +21,7 @@
     "@graphql-codegen/typescript-react-apollo": "^4.4.0",
     "@graphql-tools/schema": "^10.0.31",
     "@hookform/resolvers": "^5.2.2",
+    "cloudinary": "^2.9.0",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.7.0",
     "graphql": "^16.13.0",

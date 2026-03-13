@@ -6,6 +6,6 @@ export const createPiece: NonNullable<
 > = async (_parent, { input }, ctx) => {
   return createPieceService(ctx.db, {
     ...input,
-    collectionId: input.collectionId ?? undefined
+    collectionId: input.collectionId || undefined
   })
 }

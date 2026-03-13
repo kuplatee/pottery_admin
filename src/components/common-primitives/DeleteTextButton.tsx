@@ -13,7 +13,7 @@ export function DeleteTextButton({ onClick }: Props) {
     <button
       type="button"
       onClick={onClick}
-      className="rounded px-4 py-2 text-sm text-gray-400 hover:text-red-500 hover:bg-red-50"
+      className="rounded px-4 py-2 text-sm text-gray-400 transition-colors hover:bg-red-500 hover:text-white"
     >
       {t('delete')}
     </button>

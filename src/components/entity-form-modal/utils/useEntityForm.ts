@@ -18,6 +18,7 @@ type Props = {
   onClose: () => void
   onCreate?: (data: EntityFormData) => Promise<void>
   onUpdate?: (id: string, data: EntityFormData) => Promise<void>
+  onBeforeSubmit?: () => Promise<string[]>
 }
 
 export function useEntityForm({
@@ -25,7 +26,8 @@ export function useEntityForm({
   entity,
   onClose,
   onCreate,
-  onUpdate
+  onUpdate,
+  onBeforeSubmit
 }: Props) {
   const isEditing = entity !== undefined
   const id = entity?.id
@@ -45,12 +47,18 @@ export function useEntityForm({
   })
 
   async function onSubmit(values: FormValues) {
+    const pendingIds = onBeforeSubmit ? await onBeforeSubmit() : []
+    const mergedImageFileNames = [
+      ...(values.imageFileNames ?? []),
+      ...pendingIds
+    ]
+
     const data: EntityFormData = {
       ...(fieldConfig.names && { names: values.names }),
       ...(fieldConfig.description && { description: values.description }),
       ...(fieldConfig.details && { details: values.details }),
       ...(fieldConfig.categoryIds && { categoryIds: values.categoryIds }),
-      ...(fieldConfig.imageFileNames && { imageFileNames: values.imageFileNames }),
+      ...(fieldConfig.imageFileNames && { imageFileNames: mergedImageFileNames }),
       ...(fieldConfig.designId && { designId: values.designId }),
       ...(fieldConfig.collectionId && { collectionId: values.collectionId }),
       ...(fieldConfig.sold && { sold: values.sold })

@@ -94,6 +94,7 @@ export type Mutation = {
   deleteCollection: Scalars['String']['output'];
   deleteDesign: Scalars['String']['output'];
   deletePiece: Scalars['String']['output'];
+  getUploadSignature: UploadSignature;
   updateCategory: Category;
   updateCollection: Collection;
   updateDesign: Design;
@@ -229,6 +230,15 @@ export type UpdatePieceInput = {
   sold: Scalars['Boolean']['input'];
 };
 
+export type UploadSignature = {
+  __typename?: 'UploadSignature';
+  apiKey: Scalars['String']['output'];
+  cloudName: Scalars['String']['output'];
+  folder: Scalars['String']['output'];
+  signature: Scalars['String']['output'];
+  timestamp: Scalars['Int']['output'];
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -323,6 +333,8 @@ export type ResolversTypes = {
   UpdateCollectionInput: UpdateCollectionInput;
   UpdateDesignInput: UpdateDesignInput;
   UpdatePieceInput: UpdatePieceInput;
+  UploadSignature: ResolverTypeWrapper<UploadSignature>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -348,6 +360,8 @@ export type ResolversParentTypes = {
   UpdateCollectionInput: UpdateCollectionInput;
   UpdateDesignInput: UpdateDesignInput;
   UpdatePieceInput: UpdatePieceInput;
+  UploadSignature: UploadSignature;
+  Int: Scalars['Int']['output'];
 };
 
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
@@ -392,6 +406,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteCollection?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationdeleteCollectionArgs, 'id'>>;
   deleteDesign?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationdeleteDesignArgs, 'id'>>;
   deletePiece?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationdeletePieceArgs, 'id'>>;
+  getUploadSignature?: Resolver<ResolversTypes['UploadSignature'], ParentType, ContextType>;
   updateCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationupdateCategoryArgs, 'input'>>;
   updateCollection?: Resolver<ResolversTypes['Collection'], ParentType, ContextType, RequireFields<MutationupdateCollectionArgs, 'input'>>;
   updateDesign?: Resolver<ResolversTypes['Design'], ParentType, ContextType, RequireFields<MutationupdateDesignArgs, 'input'>>;
@@ -418,6 +433,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
+export type UploadSignatureResolvers<ContextType = any, ParentType extends ResolversParentTypes['UploadSignature'] = ResolversParentTypes['UploadSignature']> = {
+  apiKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cloudName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  folder?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signature?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Category?: CategoryResolvers<ContextType>;
   Collection?: CollectionResolvers<ContextType>;
@@ -428,5 +451,6 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Piece?: PieceResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  UploadSignature?: UploadSignatureResolvers<ContextType>;
 };
 

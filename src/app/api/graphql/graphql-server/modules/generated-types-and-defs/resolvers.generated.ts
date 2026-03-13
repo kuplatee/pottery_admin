@@ -17,6 +17,7 @@ import    { deleteCategory as Mutation_deleteCategory } from './../category/reso
 import    { deleteCollection as Mutation_deleteCollection } from './../collections/resolvers/Mutation/deleteCollection';
 import    { deleteDesign as Mutation_deleteDesign } from './../designs/resolvers/Mutation/deleteDesign';
 import    { deletePiece as Mutation_deletePiece } from './../pieces/resolvers/Mutation/deletePiece';
+import    { getUploadSignature as Mutation_getUploadSignature } from './../pieces/resolvers/Mutation/getUploadSignature';
 import    { updateCategory as Mutation_updateCategory } from './../category/resolvers/Mutation/updateCategory';
 import    { updateCollection as Mutation_updateCollection } from './../collections/resolvers/Mutation/updateCollection';
 import    { updateDesign as Mutation_updateDesign } from './../designs/resolvers/Mutation/updateDesign';
@@ -27,10 +28,11 @@ import    { Design } from './../designs/resolvers/Design';
 import    { LocalizedJSON } from './../scalars/resolvers/LocalizedJSON';
 import    { LocalizedString } from './../scalars/resolvers/LocalizedString';
 import    { Piece } from './../pieces/resolvers/Piece';
+import    { UploadSignature } from './../pieces/resolvers/UploadSignature';
 import    { JSONScalar } from './../scalars/resolvers/JSON';
     export const resolvers: Resolvers = {
       Query: { categories: Query_categories,category: Query_category,collection: Query_collection,collections: Query_collections,design: Query_design,designs: Query_designs,piece: Query_piece,pieces: Query_pieces,ping: Query_ping },
-      Mutation: { createCategory: Mutation_createCategory,createCollection: Mutation_createCollection,createDesign: Mutation_createDesign,createPiece: Mutation_createPiece,deleteCategory: Mutation_deleteCategory,deleteCollection: Mutation_deleteCollection,deleteDesign: Mutation_deleteDesign,deletePiece: Mutation_deletePiece,updateCategory: Mutation_updateCategory,updateCollection: Mutation_updateCollection,updateDesign: Mutation_updateDesign,updatePiece: Mutation_updatePiece },
+      Mutation: { createCategory: Mutation_createCategory,createCollection: Mutation_createCollection,createDesign: Mutation_createDesign,createPiece: Mutation_createPiece,deleteCategory: Mutation_deleteCategory,deleteCollection: Mutation_deleteCollection,deleteDesign: Mutation_deleteDesign,deletePiece: Mutation_deletePiece,getUploadSignature: Mutation_getUploadSignature,updateCategory: Mutation_updateCategory,updateCollection: Mutation_updateCollection,updateDesign: Mutation_updateDesign,updatePiece: Mutation_updatePiece },
       
       Category: Category,
 Collection: Collection,
@@ -38,5 +40,6 @@ Design: Design,
 LocalizedJSON: LocalizedJSON,
 LocalizedString: LocalizedString,
 Piece: Piece,
+UploadSignature: UploadSignature,
 JSON: JSONScalar
     }
