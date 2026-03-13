@@ -2,7 +2,10 @@
   "common": {
     "save": "Tallenna",
     "create": "Luo",
-    "delete": "Poista"
+    "delete": "Poista",
+    "cancel": "Peruuta",
+    "confirmDeleteTitle": "Vahvista poisto",
+    "confirmDeleteMessage": "Haluatko varmasti poistaa tämän kohteen? Toimintoa ei voi peruuttaa."
   },
   "nav": {
     "appName": "Tsirbunen Pottery Admin",
