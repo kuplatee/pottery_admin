@@ -8,6 +8,7 @@ import {
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { docToPiece } from './pieceMappers'
+import { deleteImages } from '../cloudinary/cloudinaryService'
 import type { Firestore } from 'firebase-admin/firestore'
 
 export async function getAllPieces(db: Firestore): Promise<Piece[]> {
@@ -94,6 +95,12 @@ export async function updatePiece(
 
   await updateCollectionDocument(db, DB_COLLECTIONS.PIECES, input.id, data)
 
+  const existingPiece = docToPiece(existing as Parameters<typeof docToPiece>[0])
+  const removedFileNames = existingPiece.imageFileNames.filter(
+    (name) => !input.imageFileNames.includes(name)
+  )
+  await deleteImages(removedFileNames)
+
   return { ...input }
 }
 
@@ -103,7 +110,10 @@ export async function deletePiece(db: Firestore, id: string): Promise<string> {
     throw new Error(`Piece with id "${id}" not found`)
   }
 
+  const piece = docToPiece(existing as Parameters<typeof docToPiece>[0])
+
   await deleteCollectionDocument(db, DB_COLLECTIONS.PIECES, id)
+  await deleteImages(piece.imageFileNames)
 
   return id
 }
