@@ -1,14 +1,13 @@
 import { GraphQLError } from 'graphql'
 import { AppError } from './AppError'
+import { logger } from './logger'
 
 function logError(error: unknown): void {
-  const timestamp = new Date().toISOString()
-
   if (error instanceof AppError) {
-    console.warn(`[${timestamp}] [${error.code}] ${error.message}\n${error.stack}`)
+    logger.logAppError(error)
   } else {
     const err = error instanceof Error ? error : new Error(String(error))
-    console.error(`[${timestamp}] [INTERNAL_ERROR] ${err.message}\n${err.stack}`)
+    logger.logInternalError(err)
   }
 }
 
