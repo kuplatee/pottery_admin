@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import LanguageToggle from '@/components/language/LanguageToggle'
 
 const NAV_HREFS = ['/categories', '/collections', '/designs', '/pieces'] as const
 
@@ -24,7 +25,7 @@ export default function TopNav() {
   }
 
   return (
-    <nav className="flex items-center gap-1 border-b border-gray-200 px-6 py-3">
+    <nav className="flex items-center gap-1 border-b border-gray-200 px-8 py-3">
       <Link
         href="/"
         className="mr-4 text-xs font-semibold tracking-widest uppercase text-gray-400 hover:text-gray-800 transition-colors leading-tight"
@@ -44,6 +45,7 @@ export default function TopNav() {
           {label}
         </Link>
       ))}
+      <LanguageToggle />
     </nav>
   )
 }
