@@ -12,7 +12,7 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={handleToggle}
-      className="ml-auto flex items-center gap-1.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-800 hover:bg-gray-100 transition-colors"
+      className="ml-auto flex items-center gap-1.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-800 bg-gray-100 transition-colors"
       aria-label="Change language"
     >
       <svg
