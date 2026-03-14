@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { SUPPORTED_LANGUAGES, type Language } from '@/lib/languages'
 import { DeleteButton } from '@/components/common-primitives/DeleteIconButton'
+import { EditIconButton } from '@/components/common-primitives/EditIconButton'
 
 type NamedEntity = {
   id: string
@@ -10,11 +11,12 @@ type NamedEntity = {
 type Props = {
   entity: NamedEntity
   onClick?: () => void
+  onEdit?: () => void
   onDelete?: () => void
   pieceCount?: number
 }
 
-export function EntityCard({ entity, onClick, onDelete, pieceCount }: Props) {
+export function EntityCard({ entity, onClick, onEdit, onDelete, pieceCount }: Props) {
   const t = useTranslations('entityForm')
 
   return (
@@ -38,7 +40,10 @@ export function EntityCard({ entity, onClick, onDelete, pieceCount }: Props) {
             </div>
           )}
         </div>
-        <DeleteButton onClick={onDelete} />
+        <div className="flex items-center gap-1">
+          <DeleteButton onClick={onDelete} />
+          <EditIconButton onClick={onEdit} />
+        </div>
       </div>
     </li>
   )

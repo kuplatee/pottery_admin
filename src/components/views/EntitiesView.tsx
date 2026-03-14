@@ -106,7 +106,7 @@ export function EntitiesView({
             <EntityCard
               key={entity.id}
               entity={entity}
-              onClick={() => setModal({ type: 'edit', entity })}
+              onEdit={() => setModal({ type: 'edit', entity })}
               onDelete={onDelete ? () => onDelete(entity.id) : undefined}
               pieceCount={entityPieceCounts?.[entity.id]}
             />
