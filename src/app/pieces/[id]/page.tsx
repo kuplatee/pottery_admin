@@ -1,9 +1,9 @@
 'use client'
 
 import { use } from 'react'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
+import { GoBackButton } from '@/components/common-primitives/GoBackButton'
 import { SinglePieceView } from '@/components/views/SinglePieceView'
 
 type Props = {
@@ -12,8 +12,7 @@ type Props = {
 
 export default function PiecePage({ params }: Props) {
   const { id } = use(params)
-  const router = useRouter()
-  const t = useTranslations('common')
+  const t = useTranslations('pages.pieces')
   const { state } = useAppState()
 
   const piece = state.pieces.find((p) => p.id === id)
@@ -21,13 +20,8 @@ export default function PiecePage({ params }: Props) {
   if (!piece) {
     return (
       <main className="p-8">
-        <p className="text-sm text-gray-500">Piece not found.</p>
-        <button
-          className="mt-4 rounded-lg px-4 py-1.5 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-800"
-          onClick={() => router.back()}
-        >
-          {t('goBack')}
-        </button>
+        <p className="text-sm text-gray-500">{t('notFound')}</p>
+        <GoBackButton />
       </main>
     )
   }

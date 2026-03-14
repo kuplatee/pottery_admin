@@ -65,12 +65,14 @@
     "designs": {
       "title": "Designs",
       "label": "Design",
-      "description": "Manage pottery designs"
+      "description": "Manage pottery designs",
+      "notFound": "Design not found."
     },
     "pieces": {
       "title": "Pieces",
       "label": "Piece",
-      "description": "Manage pottery pieces"
+      "description": "Manage pottery pieces",
+      "notFound": "Piece not found."
     }
   }
 }

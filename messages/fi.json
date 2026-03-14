@@ -65,12 +65,14 @@
     "designs": {
       "title": "Mallit",
       "label": "Malli",
-      "description": "Hallinnoi keramiikkamalleja"
+      "description": "Hallinnoi keramiikkamalleja",
+      "notFound": "Mallia ei löydy."
     },
     "pieces": {
       "title": "Esineet",
       "label": "Esine",
-      "description": "Hallinnoi keramiikkaesineitä"
+      "description": "Hallinnoi keramiikkaesineitä",
+      "notFound": "Esinettä ei löydy."
     }
   }
 }
