@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
 import { useDesignActions } from '@/services/graphql-client/hooks/useDesignActions'
@@ -8,6 +9,7 @@ import { EntitiesView } from '@/components/views/EntitiesView'
 
 export default function DesignsPage() {
   const t = useTranslations('pages.designs')
+  const router = useRouter()
   const { state } = useAppState()
   const { createDesign, updateDesign, deleteDesign } = useDesignActions()
 
@@ -29,6 +31,7 @@ export default function DesignsPage() {
       }}
       entities={state.designs}
       entityPieceCounts={pieceCountsByDesignId}
+      onEntityClick={(id) => router.push(`/designs/${id}`)}
       availableCategories={state.categories}
       onCreate={(data) =>
         createDesign({

@@ -28,7 +28,7 @@
     "editTitle": "Edit {label}",
     "newTitle": "New {label}",
     "newButton": "+ New {label}",
-    "dbId": "DB ID",
+    "dbId": "DB id",
     "keyPlaceholder": "label",
     "valuePlaceholder": "value",
     "design": "Design",
@@ -37,6 +37,13 @@
     "noCollectionsAvailable": "No collections available",
     "sold": "Sold",
     "pieceCount": "Pieces:"
+  },
+  "singleDesign": {
+    "english": "English",
+    "finnish": "Finnish",
+    "name": "Name",
+    "pieces": "Pieces ({count})",
+    "noImage": "No image"
   },
   "pages": {
     "categories": {

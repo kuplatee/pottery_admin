@@ -28,7 +28,7 @@
     "editTitle": "Muokkaa: {label}",
     "newTitle": "Uusi {label}",
     "newButton": "+ Uusi {label}",
-    "dbId": "DB-tunnus",
+    "dbId": "DB-id",
     "keyPlaceholder": "avain",
     "valuePlaceholder": "arvo",
     "design": "Malli",
@@ -37,6 +37,13 @@
     "noCollectionsAvailable": "Ei kokoelmia saatavilla",
     "sold": "Myyty",
     "pieceCount": "Esineitä:"
+  },
+  "singleDesign": {
+    "english": "Englanti",
+    "finnish": "Suomi",
+    "name": "Nimi",
+    "pieces": "Esineet ({count})",
+    "noImage": "Ei kuvaa"
   },
   "pages": {
     "categories": {
