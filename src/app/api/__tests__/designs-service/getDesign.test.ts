@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { getDesign } from '../../graphql/graphql-server/services/designs/designsService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { designDocs } from '../common/test-data'
 
@@ -24,10 +25,9 @@ describe('Get single design from database', () => {
     })
   })
 
-  it('returns null when the design does not exist', async () => {
+  it('throws NotFoundError when the design does not exist', async () => {
     const db = makeMockDb()
-    const result = await getDesign(db as any, 'nonexistent')
 
-    expect(result).toBeNull()
+    await expect(getDesign(db as any, 'nonexistent')).rejects.toThrow(NotFoundError)
   })
 })

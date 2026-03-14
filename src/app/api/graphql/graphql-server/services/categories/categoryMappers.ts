@@ -1,13 +1,17 @@
 import type {
-  QueryDocumentSnapshot,
+  DocumentSnapshot,
   DocumentData
 } from 'firebase-admin/firestore'
 import type { Category } from './types'
+import { InternalDataError } from '../../errors/AppError'
 
 export function docToCategory(
-  doc: QueryDocumentSnapshot<DocumentData>
+  doc: DocumentSnapshot<DocumentData>
 ): Category {
   const data = doc.data()
+  if (!data) {
+    throw new InternalDataError(`Document ${doc.id} has no data`)
+  }
 
   return {
     id: doc.id,

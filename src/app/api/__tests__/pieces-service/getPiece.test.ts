@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { getPiece } from '../../graphql/graphql-server/services/pieces/piecesService'
+import { NotFoundError } from '../../graphql/graphql-server/errors/AppError'
 import { makeMockDb } from '../common/mock-db'
 import { pieceDocs } from '../common/test-data'
 
@@ -24,10 +25,9 @@ describe('Get single piece from database', () => {
     })
   })
 
-  it('returns null when the piece does not exist', async () => {
+  it('throws NotFoundError when the piece does not exist', async () => {
     const db = makeMockDb()
-    const result = await getPiece(db as any, 'nonexistent')
 
-    expect(result).toBeNull()
+    await expect(getPiece(db as any, 'nonexistent')).rejects.toThrow(NotFoundError)
   })
 })

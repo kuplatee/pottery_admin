@@ -1,12 +1,16 @@
 import type {
-  QueryDocumentSnapshot,
+  DocumentSnapshot,
   DocumentData,
   DocumentReference
 } from 'firebase-admin/firestore'
 import type { Design } from './types'
+import { InternalDataError } from '../../errors/AppError'
 
-export function docToDesign(doc: QueryDocumentSnapshot<DocumentData>): Design {
+export function docToDesign(doc: DocumentSnapshot<DocumentData>): Design {
   const data = doc.data()
+  if (!data) {
+    throw new InternalDataError(`Document ${doc.id} has no data`)
+  }
 
   return {
     id: doc.id,

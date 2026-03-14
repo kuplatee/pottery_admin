@@ -2,6 +2,7 @@ export enum ErrorCode {
   NOT_FOUND = 'NOT_FOUND',
   REFERENTIAL_INTEGRITY_VIOLATION = 'REFERENTIAL_INTEGRITY_VIOLATION',
   VALIDATION_ERROR = 'VALIDATION_ERROR',
+  INTERNAL_DATA_ERROR = 'INTERNAL_DATA_ERROR',
 }
 
 export class AppError extends Error {
@@ -32,5 +33,11 @@ export class ReferentialIntegrityError extends AppError {
 export class ValidationError extends AppError {
   constructor(message: string) {
     super(ErrorCode.VALIDATION_ERROR, message)
+  }
+}
+
+export class InternalDataError extends AppError {
+  constructor(message: string) {
+    super(ErrorCode.INTERNAL_DATA_ERROR, message)
   }
 }
