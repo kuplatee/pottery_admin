@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 const PHOTO_BASE_URL = process.env.NEXT_PUBLIC_PHOTO_BASE_URL ?? ''
 
@@ -17,6 +18,7 @@ type Props = {
 }
 
 export function PieceCard({ piece, designName, collectionName, onClick, onDelete }: Props) {
+  const t = useTranslations()
   const imageUrl = piece.imageFileNames[0] ? `${PHOTO_BASE_URL}${piece.imageFileNames[0]}` : null
 
   return (
@@ -29,12 +31,12 @@ export function PieceCard({ piece, designName, collectionName, onClick, onDelete
           <Image src={imageUrl} alt={piece.id} fill className="object-cover object-center" sizes="144px" />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-gray-400">
-            No image
+            {t('singlePiece.noImage')}
           </div>
         )}
         {piece.sold && (
           <span className="absolute left-2 top-2 rounded bg-red-500 px-1.5 py-0.5 text-xs font-medium text-white">
-            Sold
+            {t('entityForm.sold')}
           </span>
         )}
 

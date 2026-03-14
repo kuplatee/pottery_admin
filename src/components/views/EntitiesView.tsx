@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 import { EntityFormModal } from '@/components/entity-form-modal/EntityFormModal'
 import type {
@@ -12,38 +12,22 @@ import type {
   AvailableGroup
 } from '@/components/entity-form-modal/types/entity.types'
 import { EntityCard } from './EntityCard'
-import { PieceCard } from './PieceCard'
 
 type Entity = EntityData & { names: MultilingualText }
-type ModalState =
-  | { type: 'create' }
-  | { type: 'edit'; entity: Entity }
-  | { type: 'edit-piece'; piece: Piece }
-  | null
-
-type LocalizedNames = { en: string; fi: string }
-type Piece = { id: string; designId: string; sold: boolean; collectionId?: string | null; imageFileNames: string[] }
-type Design = { id: string; names: LocalizedNames }
-type Collection = { id: string; names: LocalizedNames }
+type ModalState = { type: 'create' } | { type: 'edit'; entity: Entity } | null
 
 type Props = {
   title: string
   description: string
-  // Named entity CRUD mode
-  label?: string
-  fieldConfig?: EntityFieldConfig
-  entities?: Entity[]
+  label: string
+  fieldConfig: EntityFieldConfig
+  entities: Entity[]
   entityPieceCounts?: Record<string, number>
   availableCategories?: AvailableGroup[]
   onEntityClick?: (id: string) => void
-  onPieceClick?: (id: string) => void
-  onCreate?: (data: EntityFormData) => Promise<void>
-  onUpdate?: (id: string, data: EntityFormData) => Promise<void>
-  onDelete?: (id: string) => Promise<void>
-  // Piece mode
-  pieces?: Piece[]
-  designs?: Design[]
-  collections?: Collection[]
+  onCreate: (data: EntityFormData) => Promise<void>
+  onUpdate: (id: string, data: EntityFormData) => Promise<void>
+  onDelete: (id: string) => Promise<void>
 }
 
 export function EntitiesView({
@@ -55,16 +39,11 @@ export function EntitiesView({
   entityPieceCounts,
   availableCategories,
   onEntityClick,
-  onPieceClick,
   onCreate,
   onUpdate,
-  onDelete,
-  pieces,
-  designs,
-  collections
+  onDelete
 }: Props) {
   const t = useTranslations('entityForm')
-  const locale = useLocale() as 'en' | 'fi'
   const [modal, setModal] = useState<ModalState>(null)
 
   return (
@@ -74,77 +53,40 @@ export function EntitiesView({
           <h1 className="text-2xl font-bold tracking-wide">{title}</h1>
           <p className="mt-2 text-sm text-gray-500">{description}</p>
         </div>
-        {label && onCreate && (
-          <button
-            onClick={() => setModal({ type: 'create' })}
-            className="rounded-lg border border-gray-500 bg-gray-200 px-4 py-1.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-300"
-          >
-            {t('newButton', { label })}
-          </button>
-        )}
+        <button
+          onClick={() => setModal({ type: 'create' })}
+          className="rounded-lg border border-gray-500 bg-gray-200 px-4 py-1.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-300"
+        >
+          {t('newButton', { label })}
+        </button>
       </div>
 
-      {pieces ? (
-        <ul className="mt-6 flex flex-wrap gap-4">
-          {pieces.map((piece) => {
-            const design = designs?.find((d) => d.id === piece.designId)
-            const collection = piece.collectionId
-              ? collections?.find((c) => c.id === piece.collectionId)
-              : undefined
+      <ul className="mt-6 space-y-2">
+        {entities.map((entity) => (
+          <EntityCard
+            key={entity.id}
+            entity={entity}
+            onClick={onEntityClick ? () => onEntityClick(entity.id) : undefined}
+            onEdit={() => setModal({ type: 'edit', entity })}
+            onDelete={() => onDelete(entity.id)}
+            pieceCount={entityPieceCounts?.[entity.id]}
+          />
+        ))}
+      </ul>
 
-            return (
-              <PieceCard
-                key={piece.id}
-                piece={piece}
-                designName={design?.names[locale] ?? piece.designId}
-                collectionName={collection?.names[locale]}
-                onClick={onPieceClick ? () => onPieceClick(piece.id) : () => setModal({ type: 'edit-piece', piece })}
-                onDelete={onDelete ? () => onDelete(piece.id) : undefined}
-              />
-            )
-          })}
-        </ul>
-      ) : (
-        <ul className="mt-6 space-y-2">
-          {entities?.map((entity) => (
-            <EntityCard
-              key={entity.id}
-              entity={entity}
-              onClick={onEntityClick ? () => onEntityClick(entity.id) : undefined}
-              onEdit={() => setModal({ type: 'edit', entity })}
-              onDelete={onDelete ? () => onDelete(entity.id) : undefined}
-              pieceCount={entityPieceCounts?.[entity.id]}
-            />
-          ))}
-        </ul>
-      )}
-
-      {modal && label && fieldConfig && (
+      {modal && (
         <EntityFormModal
           label={label}
           fieldConfig={fieldConfig}
-          entity={
-            modal.type === 'edit'
-              ? modal.entity
-              : modal.type === 'edit-piece'
-                ? {
-                    ...modal.piece,
-                    collectionId: modal.piece.collectionId ?? undefined
-                  }
-                : undefined
-          }
+          entity={modal.type === 'edit' ? modal.entity : undefined}
           availableCategories={availableCategories}
-          availableCollections={collections}
-          availableDesigns={designs}
           onClose={() => setModal(null)}
           onCreate={onCreate}
           onUpdate={onUpdate}
           onDelete={
-            (modal.type === 'edit' || modal.type === 'edit-piece') && onDelete
+            modal.type === 'edit'
               ? () => {
-                  const id =
-                    modal.type === 'edit' ? modal.entity.id : modal.piece.id
-                  onDelete(id)
+                  onDelete(modal.entity.id)
                   setModal(null)
                 }
               : undefined

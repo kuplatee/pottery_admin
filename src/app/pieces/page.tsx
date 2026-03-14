@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
 import { usePieceActions } from '@/services/graphql-client/hooks/usePieceActions'
-import { EntitiesView } from '@/components/views/EntitiesView'
+import { PiecesView } from '@/components/views/PiecesView'
 import type { EntityFieldConfig, EntityFormData } from '@/components/entity-form-modal/types/entity.types'
 
 const PIECE_FIELD_CONFIG: EntityFieldConfig = {
@@ -40,7 +40,7 @@ export default function PiecesPage() {
   }
 
   return (
-    <EntitiesView
+    <PiecesView
       title={t('title')}
       description={t('description')}
       label={t('label')}
