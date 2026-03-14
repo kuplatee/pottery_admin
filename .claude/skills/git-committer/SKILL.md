@@ -15,8 +15,4 @@ In each message, there should be a "title" row and then more detailed informatio
 
 Before making the commit, always show the planned commit message to the user and ask if it looks good or if they want to change anything. Make clear that the user can suggest edits to any part of the message. Only proceed with the commit after the user has approved the message, applying any requested changes first.
 
-
-
-
-
-
+Always commit all changed files that are not ignored unless specifically told not to include some files.
