@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import type { Design, Piece } from '@/types/graphql-schema-types.generated'
 import { DbIdInfo } from '@/components/entity-form-modal/layout/DbIdInfo'
@@ -15,6 +16,7 @@ type Props = {
 }
 
 export function SingleDesignView({ entity, pieces }: Props) {
+  const router = useRouter()
   const t = useTranslations('singleDesign')
   const tPages = useTranslations('pages.designs')
   const tForm = useTranslations('entityForm')
@@ -75,6 +77,7 @@ export function SingleDesignView({ entity, pieces }: Props) {
                   <li
                     key={piece.id}
                     className="relative h-32 w-32 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-sm transition-shadow hover:shadow-md"
+                    onClick={() => router.push(`/pieces/${piece.id}`)}
                   >
                     {imageUrl ? (
                       <img

@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
 import { usePieceActions } from '@/services/graphql-client/hooks/usePieceActions'
@@ -15,6 +16,7 @@ const PIECE_FIELD_CONFIG: EntityFieldConfig = {
 
 export default function PiecesPage() {
   const t = useTranslations('pages.pieces')
+  const router = useRouter()
   const { state } = useAppState()
   const { createPiece, updatePiece, deletePiece } = usePieceActions()
 
@@ -46,6 +48,7 @@ export default function PiecesPage() {
       pieces={state.pieces}
       designs={state.designs}
       collections={state.collections}
+      onPieceClick={(id) => router.push(`/pieces/${id}`)}
       onCreate={handleCreatePiece}
       onUpdate={handleUpdatePiece}
       onDelete={deletePiece}

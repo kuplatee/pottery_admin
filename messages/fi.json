@@ -4,6 +4,7 @@
     "create": "Luo",
     "delete": "Poista",
     "cancel": "Peruuta",
+    "goBack": "Takaisin",
     "confirmDeleteTitle": "Vahvista poisto",
     "confirmDeleteMessage": "Haluatko varmasti poistaa tämän kohteen? Toimintoa ei voi peruuttaa."
   },
@@ -37,6 +38,11 @@
     "noCollectionsAvailable": "Ei kokoelmia saatavilla",
     "sold": "Myyty",
     "pieceCount": "Esineitä:"
+  },
+  "singlePiece": {
+    "collection": "Kokoelma",
+    "noCollection": "Ei kokoelmaa",
+    "noImage": "Ei kuvaa"
   },
   "singleDesign": {
     "english": "Englanti",

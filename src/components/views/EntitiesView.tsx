@@ -36,6 +36,7 @@ type Props = {
   entityPieceCounts?: Record<string, number>
   availableCategories?: AvailableGroup[]
   onEntityClick?: (id: string) => void
+  onPieceClick?: (id: string) => void
   onCreate?: (data: EntityFormData) => Promise<void>
   onUpdate?: (id: string, data: EntityFormData) => Promise<void>
   onDelete?: (id: string) => Promise<void>
@@ -54,6 +55,7 @@ export function EntitiesView({
   entityPieceCounts,
   availableCategories,
   onEntityClick,
+  onPieceClick,
   onCreate,
   onUpdate,
   onDelete,
@@ -96,7 +98,7 @@ export function EntitiesView({
                 piece={piece}
                 designName={design?.names[locale] ?? piece.designId}
                 collectionName={collection?.names[locale]}
-                onClick={() => setModal({ type: 'edit-piece', piece })}
+                onClick={onPieceClick ? () => onPieceClick(piece.id) : () => setModal({ type: 'edit-piece', piece })}
                 onDelete={onDelete ? () => onDelete(piece.id) : undefined}
               />
             )
