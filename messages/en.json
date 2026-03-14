@@ -35,7 +35,8 @@
     "noDesignsAvailable": "No designs available",
     "collections": "Collections",
     "noCollectionsAvailable": "No collections available",
-    "sold": "Sold"
+    "sold": "Sold",
+    "pieceCount": "Pieces:"
   },
   "pages": {
     "categories": {

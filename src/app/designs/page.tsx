@@ -11,6 +11,11 @@ export default function DesignsPage() {
   const { state } = useAppState()
   const { createDesign, updateDesign, deleteDesign } = useDesignActions()
 
+  const pieceCountsByDesignId = state.pieces.reduce<Record<string, number>>((acc, piece) => {
+    acc[piece.designId] = (acc[piece.designId] ?? 0) + 1
+    return acc
+  }, {})
+
   return (
     <EntitiesView
       title={t('title')}
@@ -23,6 +28,7 @@ export default function DesignsPage() {
         categoryIds: true
       }}
       entities={state.designs}
+      entityPieceCounts={pieceCountsByDesignId}
       availableCategories={state.categories}
       onCreate={(data) =>
         createDesign({

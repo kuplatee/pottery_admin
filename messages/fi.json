@@ -35,7 +35,8 @@
     "noDesignsAvailable": "Ei malleja saatavilla",
     "collections": "Kokoelmat",
     "noCollectionsAvailable": "Ei kokoelmia saatavilla",
-    "sold": "Myyty"
+    "sold": "Myyty",
+    "pieceCount": "Esineitä:"
   },
   "pages": {
     "categories": {
