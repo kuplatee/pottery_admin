@@ -1,7 +1,7 @@
 import { vi } from 'vitest'
-import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firestore'
+import type { DocumentSnapshot, DocumentData } from 'firebase-admin/firestore'
 
-type MockDoc = Pick<QueryDocumentSnapshot<DocumentData>, 'id'> & {
+type MockDoc = Pick<DocumentSnapshot<DocumentData>, 'id'> & {
   data: () => DocumentData
 }
 
@@ -25,6 +25,14 @@ export function makeMockDb(docs: MockDoc[] = [], options: MockDbOptions = {}) {
           get: vi.fn().mockResolvedValue({ empty: !options.hasReferencingDocs }),
         }),
       }),
+    }),
+    runTransaction: vi.fn().mockImplementation(async (callback: (tx: any) => Promise<void>) => {
+      const transaction = {
+        get: vi.fn().mockImplementation((ref: any) => ref.get()),
+        update: vi.fn().mockImplementation((ref: any, data: any) => ref.update(data)),
+        delete: vi.fn().mockImplementation((ref: any) => ref.delete()),
+      }
+      return callback(transaction)
     }),
   }
 }

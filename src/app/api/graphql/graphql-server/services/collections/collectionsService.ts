@@ -2,13 +2,12 @@ import type { Collection, CreateCollectionInput, UpdateCollectionInput } from '.
 import {
   getAllCollectionDocuments,
   getCollectionDocumentById,
-  createCollectionDocument,
-  updateCollectionDocument,
-  deleteCollectionDocument
+  createCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToCollection } from './collectionMappers'
+import { hasPiecesReferencingCollection } from '../database-utils/referentialIntegrityChecks'
 import { NotFoundError, ReferentialIntegrityError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
 
@@ -18,16 +17,13 @@ export async function getAllCollections(db: Firestore): Promise<Collection[]> {
   return docs.map(docToCollection)
 }
 
-export async function getCollection(
-  db: Firestore,
-  id: string
-): Promise<Collection | null | undefined> {
+export async function getCollection(db: Firestore, id: string): Promise<Collection> {
   const doc = await getCollectionDocumentById(db, DB_COLLECTIONS.COLLECTIONS, id)
   if (!doc) {
-    return null
+    throw new NotFoundError(ENTITY_NAMES.COLLECTION, id)
   }
 
-  return docToCollection(doc as Parameters<typeof docToCollection>[0])
+  return docToCollection(doc)
 }
 
 export async function createCollection(
@@ -41,45 +37,51 @@ export async function createCollection(
 
   const id = await createCollectionDocument(db, DB_COLLECTIONS.COLLECTIONS, data)
 
-  return { id, ...input }
+  return {
+    id,
+    names: { en: input.names.en, fi: input.names.fi },
+    description: { en: input.description.en, fi: input.description.fi }
+  }
 }
 
 export async function updateCollection(
   db: Firestore,
   input: UpdateCollectionInput
 ): Promise<Collection> {
-  const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.COLLECTIONS, input.id)
-  if (!existing) {
-    throw new NotFoundError(ENTITY_NAMES.COLLECTION, input.id)
-  }
+  await db.runTransaction(async (transaction) => {
+    const ref = db.collection(DB_COLLECTIONS.COLLECTIONS).doc(input.id)
+    const doc = await transaction.get(ref)
+    if (!doc.exists) {
+      throw new NotFoundError(ENTITY_NAMES.COLLECTION, input.id)
+    }
 
-  const data = {
+    transaction.update(ref, {
+      names: { en: input.names.en, fi: input.names.fi },
+      description: { en: input.description.en, fi: input.description.fi }
+    })
+  })
+
+  return {
+    id: input.id,
     names: { en: input.names.en, fi: input.names.fi },
     description: { en: input.description.en, fi: input.description.fi }
   }
-
-  await updateCollectionDocument(db, DB_COLLECTIONS.COLLECTIONS, input.id, data)
-
-  return { ...input }
 }
 
 export async function deleteCollection(db: Firestore, id: string): Promise<string> {
-  const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.COLLECTIONS, id)
-  if (!existing) {
-    throw new NotFoundError(ENTITY_NAMES.COLLECTION, id)
-  }
+  await db.runTransaction(async (transaction) => {
+    const ref = db.collection(DB_COLLECTIONS.COLLECTIONS).doc(id)
+    const doc = await transaction.get(ref)
+    if (!doc.exists) {
+      throw new NotFoundError(ENTITY_NAMES.COLLECTION, id)
+    }
 
-  const referencingPieces = await db
-    .collection(DB_COLLECTIONS.PIECES)
-    .where('collectionId', '==', id)
-    .limit(1)
-    .get()
+    if (await hasPiecesReferencingCollection(db, transaction, id)) {
+      throw new ReferentialIntegrityError(ENTITY_NAMES.COLLECTION, id, 'pieces')
+    }
 
-  if (!referencingPieces.empty) {
-    throw new ReferentialIntegrityError(ENTITY_NAMES.COLLECTION, id, 'pieces')
-  }
-
-  await deleteCollectionDocument(db, DB_COLLECTIONS.COLLECTIONS, id)
+    transaction.delete(ref)
+  })
 
   return id
 }

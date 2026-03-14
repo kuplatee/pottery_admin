@@ -2,13 +2,12 @@ import type { Category, CreateCategoryInput, UpdateCategoryInput } from './types
 import {
   getAllCollectionDocuments,
   getCollectionDocumentById,
-  createCollectionDocument,
-  updateCollectionDocument,
-  deleteCollectionDocument
+  createCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToCategory } from './categoryMappers'
+import { hasDesignsReferencingCategory } from '../database-utils/referentialIntegrityChecks'
 import { NotFoundError, ReferentialIntegrityError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
 
@@ -18,14 +17,13 @@ export async function getAllCategories(db: Firestore): Promise<Category[]> {
   return docs.map(docToCategory)
 }
 
-export async function getCategory(
-  db: Firestore,
-  id: string
-): Promise<Category | null | undefined> {
+export async function getCategory(db: Firestore, id: string): Promise<Category> {
   const doc = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, id)
-  if (!doc) return null
+  if (!doc) {
+    throw new NotFoundError(ENTITY_NAMES.CATEGORY, id)
+  }
 
-  return docToCategory(doc as Parameters<typeof docToCategory>[0])
+  return docToCategory(doc)
 }
 
 export async function createCategory(
@@ -35,44 +33,43 @@ export async function createCategory(
   const data = { names: { en: input.names.en, fi: input.names.fi } }
   const id = await createCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, data)
 
-  return { id, names: input.names }
+  return { id, names: { en: input.names.en, fi: input.names.fi } }
 }
 
 export async function updateCategory(
   db: Firestore,
   input: UpdateCategoryInput
 ): Promise<Category> {
-  const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, input.id)
-  if (!existing) {
-    throw new NotFoundError(ENTITY_NAMES.CATEGORY, input.id)
-  }
+  await db.runTransaction(async (transaction) => {
+    const ref = db.collection(DB_COLLECTIONS.CATEGORIES).doc(input.id)
+    const doc = await transaction.get(ref)
+    if (!doc.exists) {
+      throw new NotFoundError(ENTITY_NAMES.CATEGORY, input.id)
+    }
 
-  const data = { names: { en: input.names.en, fi: input.names.fi } }
-  await updateCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, input.id, data)
+    transaction.update(ref, { names: { en: input.names.en, fi: input.names.fi } })
+  })
 
-  return { id: input.id, names: input.names }
+  return { id: input.id, names: { en: input.names.en, fi: input.names.fi } }
 }
 
 export async function deleteCategory(
   db: Firestore,
   id: string
 ): Promise<string> {
-  const existing = await getCollectionDocumentById(db, DB_COLLECTIONS.CATEGORIES, id)
-  if (!existing) {
-    throw new NotFoundError(ENTITY_NAMES.CATEGORY, id)
-  }
+  await db.runTransaction(async (transaction) => {
+    const ref = db.collection(DB_COLLECTIONS.CATEGORIES).doc(id)
+    const doc = await transaction.get(ref)
+    if (!doc.exists) {
+      throw new NotFoundError(ENTITY_NAMES.CATEGORY, id)
+    }
 
-  const referencingDesigns = await db
-    .collection(DB_COLLECTIONS.DESIGNS)
-    .where('categoryIds', 'array-contains', id)
-    .limit(1)
-    .get()
+    if (await hasDesignsReferencingCategory(db, transaction, id)) {
+      throw new ReferentialIntegrityError(ENTITY_NAMES.CATEGORY, id, 'designs')
+    }
 
-  if (!referencingDesigns.empty) {
-    throw new ReferentialIntegrityError(ENTITY_NAMES.CATEGORY, id, 'designs')
-  }
-
-  await deleteCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, id)
+    transaction.delete(ref)
+  })
 
   return id
 }

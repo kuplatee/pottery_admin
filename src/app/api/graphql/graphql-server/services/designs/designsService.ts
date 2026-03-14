@@ -2,13 +2,12 @@ import type { Design, CreateDesignInput, UpdateDesignInput } from './types'
 import {
   getAllCollectionDocuments,
   getCollectionDocumentById,
-  createCollectionDocument,
-  updateCollectionDocument,
-  deleteCollectionDocument
+  createCollectionDocument
 } from '../database-utils/firestoreUtils'
 import { DB_COLLECTIONS } from '../database-utils/collectionNames'
 import { ENTITY_NAMES } from '../database-utils/entityNames'
 import { docToDesign } from './designMappers'
+import { hasPiecesReferencingDesign } from '../database-utils/referentialIntegrityChecks'
 import { NotFoundError, ReferentialIntegrityError, ValidationError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
 
@@ -28,16 +27,13 @@ export async function getAllDesigns(db: Firestore): Promise<Design[]> {
   return docs.map(docToDesign)
 }
 
-export async function getDesign(
-  db: Firestore,
-  id: string
-): Promise<Design | null | undefined> {
+export async function getDesign(db: Firestore, id: string): Promise<Design> {
   const doc = await getCollectionDocumentById(db, DB_COLLECTIONS.DESIGNS, id)
   if (!doc) {
-    return null
+    throw new NotFoundError(ENTITY_NAMES.DESIGN, id)
   }
 
-  return docToDesign(doc as Parameters<typeof docToDesign>[0])
+  return docToDesign(doc)
 }
 
 export async function createDesign(
@@ -66,7 +62,13 @@ export async function createDesign(
 
   const id = await createCollectionDocument(db, DB_COLLECTIONS.DESIGNS, data)
 
-  return { id, ...input }
+  return {
+    id,
+    names: { en: input.names.en, fi: input.names.fi },
+    categoryIds: input.categoryIds,
+    description: { en: input.description.en, fi: input.description.fi },
+    details: { en: input.details.en, fi: input.details.fi }
+  }
 }
 
 export async function updateDesign(
@@ -75,59 +77,52 @@ export async function updateDesign(
 ): Promise<Design> {
   assertDetailsKeysConsistent(input.details)
 
-  const existing = await getCollectionDocumentById(
-    db,
-    DB_COLLECTIONS.DESIGNS,
-    input.id
-  )
-  if (!existing) {
-    throw new NotFoundError(ENTITY_NAMES.DESIGN, input.id)
-  }
-
-  for (const categoryId of input.categoryIds) {
-    const category = await getCollectionDocumentById(
-      db,
-      DB_COLLECTIONS.CATEGORIES,
-      categoryId
-    )
-    if (!category) {
-      throw new NotFoundError(ENTITY_NAMES.CATEGORY, categoryId)
+  await db.runTransaction(async (transaction) => {
+    const ref = db.collection(DB_COLLECTIONS.DESIGNS).doc(input.id)
+    const doc = await transaction.get(ref)
+    if (!doc.exists) {
+      throw new NotFoundError(ENTITY_NAMES.DESIGN, input.id)
     }
-  }
 
-  const data = {
+    for (const categoryId of input.categoryIds) {
+      const categoryRef = db.collection(DB_COLLECTIONS.CATEGORIES).doc(categoryId)
+      const categoryDoc = await transaction.get(categoryRef)
+      if (!categoryDoc.exists) {
+        throw new NotFoundError(ENTITY_NAMES.CATEGORY, categoryId)
+      }
+    }
+
+    transaction.update(ref, {
+      names: { en: input.names.en, fi: input.names.fi },
+      categoryIds: input.categoryIds,
+      description: { en: input.description.en, fi: input.description.fi },
+      details: { en: input.details.en, fi: input.details.fi }
+    })
+  })
+
+  return {
+    id: input.id,
     names: { en: input.names.en, fi: input.names.fi },
     categoryIds: input.categoryIds,
     description: { en: input.description.en, fi: input.description.fi },
     details: { en: input.details.en, fi: input.details.fi }
   }
-
-  await updateCollectionDocument(db, DB_COLLECTIONS.DESIGNS, input.id, data)
-
-  return { ...input }
 }
 
 export async function deleteDesign(db: Firestore, id: string): Promise<string> {
-  const existing = await getCollectionDocumentById(
-    db,
-    DB_COLLECTIONS.DESIGNS,
-    id
-  )
-  if (!existing) {
-    throw new NotFoundError(ENTITY_NAMES.DESIGN, id)
-  }
+  await db.runTransaction(async (transaction) => {
+    const ref = db.collection(DB_COLLECTIONS.DESIGNS).doc(id)
+    const doc = await transaction.get(ref)
+    if (!doc.exists) {
+      throw new NotFoundError(ENTITY_NAMES.DESIGN, id)
+    }
 
-  const referencingPieces = await db
-    .collection(DB_COLLECTIONS.PIECES)
-    .where('designId', '==', id)
-    .limit(1)
-    .get()
+    if (await hasPiecesReferencingDesign(db, transaction, id)) {
+      throw new ReferentialIntegrityError(ENTITY_NAMES.DESIGN, id, 'pieces')
+    }
 
-  if (!referencingPieces.empty) {
-    throw new ReferentialIntegrityError(ENTITY_NAMES.DESIGN, id, 'pieces')
-  }
-
-  await deleteCollectionDocument(db, DB_COLLECTIONS.DESIGNS, id)
+    transaction.delete(ref)
+  })
 
   return id
 }
