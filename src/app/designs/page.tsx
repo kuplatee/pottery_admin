@@ -13,7 +13,7 @@ export default function DesignsPage() {
   const t = useTranslations('pages.designs')
   const router = useRouter()
   const { state } = useAppState()
-  const { createDesign, updateDesign, deleteDesign } = useDesignActions()
+  const { create, update, remove } = useDesignActions()
 
   const pieceCountsByDesignId = state.pieces.reduce<Record<string, number>>((acc, piece) => {
     acc[piece.designId] = (acc[piece.designId] ?? 0) + 1
@@ -36,7 +36,7 @@ export default function DesignsPage() {
       onEntityClick={(id) => router.push(`/designs/${id}`)}
       availableCategories={state.categories}
       onCreate={(data) =>
-        createDesign({
+        create({
           names: data.names!,
           categoryIds: data.categoryIds ?? [],
           description: data.description ?? (Object.fromEntries(SUPPORTED_LANGUAGES.map(lang => [lang, ''])) as LocalizedString),
@@ -44,7 +44,7 @@ export default function DesignsPage() {
         })
       }
       onUpdate={(id, data) =>
-        updateDesign({
+        update({
           id,
           names: data.names!,
           categoryIds: data.categoryIds ?? [],
@@ -52,7 +52,7 @@ export default function DesignsPage() {
           details: toLocalizedJson(data.details)
         })
       }
-      onDelete={(id) => deleteDesign(id)}
+      onDelete={(id) => remove(id)}
     />
   )
 }

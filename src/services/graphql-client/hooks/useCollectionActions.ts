@@ -1,77 +1,36 @@
 'use client'
 
-import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
-import { useAppState } from '@/state/AppStateContext'
-import { withToast } from '@/services/toast/withToast'
-
-import type {
-  CreateCollectionInput,
-  UpdateCollectionInput
-} from '@/types/graphql-schema-types.generated'
+import type { Collection } from '@/types/graphql-schema-types.generated'
+import type { CreateCollectionInput, UpdateCollectionInput } from '@/types/graphql-schema-types.generated'
 import {
   CreateCollectionMutation,
   CreateCollectionDocument,
   UpdateCollectionMutation,
   UpdateCollectionDocument,
-  DeleteCollectionMutation,
   DeleteCollectionDocument
 } from '../graphql-queries/collections.generated'
+import { createEntityActions } from './createEntityActions'
 
-export function useCollectionActions() {
-  const client = useApiClient()
-  const { dispatch } = useAppState()
-
-  async function createCollection(input: CreateCollectionInput): Promise<void> {
-    await withToast(
-      async () => {
-        const result = await client.mutate<CreateCollectionMutation>({
-          mutation: CreateCollectionDocument,
-          variables: { input }
-        })
-
-        if (result.data) {
-          dispatch({
-            type: 'ADD_COLLECTION',
-            payload: result.data.createCollection
-          })
-        }
-      },
-      { success: 'Collection created', error: 'Failed to create collection' }
-    )
+export const useCollectionActions = createEntityActions<
+  Collection,
+  CreateCollectionInput,
+  UpdateCollectionInput,
+  CreateCollectionMutation,
+  UpdateCollectionMutation
+>({
+  namespace: 'pages.collections',
+  documents: {
+    create: CreateCollectionDocument,
+    update: UpdateCollectionDocument,
+    delete: DeleteCollectionDocument
+  },
+  extract: {
+    create: (data) => data.createCollection,
+    update: (data) => data.updateCollection
+  },
+  toAction: {
+    add: (entity) => ({ type: 'ADD_COLLECTION', payload: entity }),
+    update: (entity) => ({ type: 'UPDATE_COLLECTION', payload: entity }),
+    remove: (id) => ({ type: 'DELETE_COLLECTION', payload: id })
   }
-
-  async function updateCollection(input: UpdateCollectionInput): Promise<void> {
-    await withToast(
-      async () => {
-        const result = await client.mutate<UpdateCollectionMutation>({
-          mutation: UpdateCollectionDocument,
-          variables: { input }
-        })
-
-        if (result.data) {
-          dispatch({
-            type: 'UPDATE_COLLECTION',
-            payload: result.data.updateCollection
-          })
-        }
-      },
-      { success: 'Collection updated', error: 'Failed to update collection' }
-    )
-  }
-
-  async function deleteCollection(id: string): Promise<void> {
-    await withToast(
-      async () => {
-        await client.mutate<DeleteCollectionMutation>({
-          mutation: DeleteCollectionDocument,
-          variables: { id }
-        })
-
-        dispatch({ type: 'DELETE_COLLECTION', payload: id })
-      },
-      { error: 'Failed to delete collection' }
-    )
-  }
-
-  return { createCollection, updateCollection, deleteCollection }
-}
+})

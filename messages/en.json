@@ -51,6 +51,13 @@
     "pieces": "Pieces ({count})",
     "noImage": "No image"
   },
+  "actions": {
+    "createSuccess": "{label} created",
+    "createError": "Failed to create {label}",
+    "updateSuccess": "{label} updated",
+    "updateError": "Failed to update {label}",
+    "deleteError": "Failed to delete {label}"
+  },
   "pages": {
     "categories": {
       "title": "Categories",

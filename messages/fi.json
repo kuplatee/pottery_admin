@@ -51,6 +51,13 @@
     "pieces": "Esineet ({count})",
     "noImage": "Ei kuvaa"
   },
+  "actions": {
+    "createSuccess": "{label} luotu",
+    "createError": "{label}: luonti epäonnistui",
+    "updateSuccess": "{label} päivitetty",
+    "updateError": "{label}: päivitys epäonnistui",
+    "deleteError": "{label}: poisto epäonnistui"
+  },
   "pages": {
     "categories": {
       "title": "Kategoriat",

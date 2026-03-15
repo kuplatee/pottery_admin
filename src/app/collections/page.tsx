@@ -8,8 +8,7 @@ import { EntitiesView } from '@/components/views/EntitiesView'
 export default function CollectionsPage() {
   const t = useTranslations('pages.collections')
   const { state } = useAppState()
-  const { createCollection, updateCollection, deleteCollection } =
-    useCollectionActions()
+  const { create, update, remove } = useCollectionActions()
 
   return (
     <EntitiesView
@@ -19,16 +18,16 @@ export default function CollectionsPage() {
       fieldConfig={{ names: true, description: true }}
       entities={state.collections}
       onCreate={(data) =>
-        createCollection({ names: data.names!, description: data.description! })
+        create({ names: data.names!, description: data.description! })
       }
       onUpdate={(id, data) =>
-        updateCollection({
+        update({
           id,
           names: data.names!,
           description: data.description!
         })
       }
-      onDelete={(id) => deleteCollection(id)}
+      onDelete={(id) => remove(id)}
     />
   )
 }

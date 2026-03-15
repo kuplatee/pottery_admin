@@ -8,8 +8,7 @@ import { EntitiesView } from '@/components/views/EntitiesView'
 export default function CategoriesPage() {
   const t = useTranslations('pages.categories')
   const { state } = useAppState()
-  const { createCategory, updateCategory, deleteCategory } =
-    useCategoryActions()
+  const { create, update, remove } = useCategoryActions()
 
   return (
     <EntitiesView
@@ -18,9 +17,9 @@ export default function CategoriesPage() {
       description={t('description')}
       fieldConfig={{ names: true }}
       entities={state.categories}
-      onCreate={(data) => createCategory({ names: data.names! })}
-      onUpdate={(id, data) => updateCategory({ id, names: data.names! })}
-      onDelete={(id) => deleteCategory(id)}
+      onCreate={(data) => create({ names: data.names! })}
+      onUpdate={(id, data) => update({ id, names: data.names! })}
+      onDelete={(id) => remove(id)}
     />
   )
 }

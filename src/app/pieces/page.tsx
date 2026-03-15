@@ -18,10 +18,10 @@ export default function PiecesPage() {
   const t = useTranslations('pages.pieces')
   const router = useRouter()
   const { state } = useAppState()
-  const { createPiece, updatePiece, deletePiece } = usePieceActions()
+  const { create, update, remove } = usePieceActions()
 
   async function handleCreatePiece(data: EntityFormData): Promise<void> {
-    await createPiece({
+    await create({
       designId: data.designId!,
       sold: data.sold ?? false,
       imageFileNames: data.imageFileNames ?? [],
@@ -30,7 +30,7 @@ export default function PiecesPage() {
   }
 
   async function handleUpdatePiece(id: string, data: EntityFormData): Promise<void> {
-    await updatePiece({
+    await update({
       id,
       designId: data.designId!,
       sold: data.sold ?? false,
@@ -51,7 +51,7 @@ export default function PiecesPage() {
       onPieceClick={(id) => router.push(`/pieces/${id}`)}
       onCreate={handleCreatePiece}
       onUpdate={handleUpdatePiece}
-      onDelete={deletePiece}
+      onDelete={remove}
     />
   )
 }
