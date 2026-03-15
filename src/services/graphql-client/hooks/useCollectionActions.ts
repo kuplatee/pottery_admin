@@ -2,6 +2,7 @@
 
 import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
 import { useAppState } from '@/state/AppStateContext'
+import { withToast } from '@/services/toast/withToast'
 
 import type {
   CreateCollectionInput,
@@ -21,34 +22,55 @@ export function useCollectionActions() {
   const { dispatch } = useAppState()
 
   async function createCollection(input: CreateCollectionInput): Promise<void> {
-    const result = await client.mutate<CreateCollectionMutation>({
-      mutation: CreateCollectionDocument,
-      variables: { input }
-    })
+    await withToast(
+      async () => {
+        const result = await client.mutate<CreateCollectionMutation>({
+          mutation: CreateCollectionDocument,
+          variables: { input }
+        })
 
-    if (result.data) {
-      dispatch({ type: 'ADD_COLLECTION', payload: result.data.createCollection })
-    }
+        if (result.data) {
+          dispatch({
+            type: 'ADD_COLLECTION',
+            payload: result.data.createCollection
+          })
+        }
+      },
+      { success: 'Collection created', error: 'Failed to create collection' }
+    )
   }
 
   async function updateCollection(input: UpdateCollectionInput): Promise<void> {
-    const result = await client.mutate<UpdateCollectionMutation>({
-      mutation: UpdateCollectionDocument,
-      variables: { input }
-    })
+    await withToast(
+      async () => {
+        const result = await client.mutate<UpdateCollectionMutation>({
+          mutation: UpdateCollectionDocument,
+          variables: { input }
+        })
 
-    if (result.data) {
-      dispatch({ type: 'UPDATE_COLLECTION', payload: result.data.updateCollection })
-    }
+        if (result.data) {
+          dispatch({
+            type: 'UPDATE_COLLECTION',
+            payload: result.data.updateCollection
+          })
+        }
+      },
+      { success: 'Collection updated', error: 'Failed to update collection' }
+    )
   }
 
   async function deleteCollection(id: string): Promise<void> {
-    await client.mutate<DeleteCollectionMutation>({
-      mutation: DeleteCollectionDocument,
-      variables: { id }
-    })
+    await withToast(
+      async () => {
+        await client.mutate<DeleteCollectionMutation>({
+          mutation: DeleteCollectionDocument,
+          variables: { id }
+        })
 
-    dispatch({ type: 'DELETE_COLLECTION', payload: id })
+        dispatch({ type: 'DELETE_COLLECTION', payload: id })
+      },
+      { error: 'Failed to delete collection' }
+    )
   }
 
   return { createCollection, updateCollection, deleteCollection }

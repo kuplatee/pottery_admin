@@ -2,6 +2,7 @@
 
 import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
 import { useAppState } from '@/state/AppStateContext'
+import { withToast } from '@/services/toast/withToast'
 
 import type {
   CreatePieceInput,
@@ -21,34 +22,49 @@ export function usePieceActions() {
   const { dispatch } = useAppState()
 
   async function createPiece(input: CreatePieceInput): Promise<void> {
-    const result = await client.mutate<CreatePieceMutation>({
-      mutation: CreatePieceDocument,
-      variables: { input }
-    })
+    await withToast(
+      async () => {
+        const result = await client.mutate<CreatePieceMutation>({
+          mutation: CreatePieceDocument,
+          variables: { input }
+        })
 
-    if (result.data) {
-      dispatch({ type: 'ADD_PIECE', payload: result.data.createPiece })
-    }
+        if (result.data) {
+          dispatch({ type: 'ADD_PIECE', payload: result.data.createPiece })
+        }
+      },
+      { success: 'Piece created', error: 'Failed to create piece' }
+    )
   }
 
   async function updatePiece(input: UpdatePieceInput): Promise<void> {
-    const result = await client.mutate<UpdatePieceMutation>({
-      mutation: UpdatePieceDocument,
-      variables: { input }
-    })
+    await withToast(
+      async () => {
+        const result = await client.mutate<UpdatePieceMutation>({
+          mutation: UpdatePieceDocument,
+          variables: { input }
+        })
 
-    if (result.data) {
-      dispatch({ type: 'UPDATE_PIECE', payload: result.data.updatePiece })
-    }
+        if (result.data) {
+          dispatch({ type: 'UPDATE_PIECE', payload: result.data.updatePiece })
+        }
+      },
+      { success: 'Piece updated', error: 'Failed to update piece' }
+    )
   }
 
   async function deletePiece(id: string): Promise<void> {
-    await client.mutate<DeletePieceMutation>({
-      mutation: DeletePieceDocument,
-      variables: { id }
-    })
+    await withToast(
+      async () => {
+        await client.mutate<DeletePieceMutation>({
+          mutation: DeletePieceDocument,
+          variables: { id }
+        })
 
-    dispatch({ type: 'DELETE_PIECE', payload: id })
+        dispatch({ type: 'DELETE_PIECE', payload: id })
+      },
+      { error: 'Failed to delete piece' }
+    )
   }
 
   return { createPiece, updatePiece, deletePiece }

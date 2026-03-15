@@ -12,19 +12,15 @@ Here's what I found — ranked by importance:
    throws (network error, GraphQL error), it propagates uncaught — no error state, no user feedback.  
    Silent failures.
 
-4. No single-entity GraphQL queries  
-   SPEC explicitly says "Provide both list queries and single-item queries." Only list queries exist.  
-   The getCategory(db, id) service function has no GraphQL resolver wiring it up.
-
-5. deleteImages in Cloudinary service swallows errors  
+4. deleteImages in Cloudinary service swallows errors  
    Errors are caught and console.error'd — callers never know deletion failed. On a production system,
    orphaned images are a real operational problem.
 
-6. Tests mock Firestore  
+5. Tests mock Firestore  
    The makeMockDb is a hand-rolled mock. It doesn't enforce real Firestore constraints (e.g., it returns
    whatever you configure, not what a real query returns). These tests pass for the wrong reasons and  
    won't catch real query/structure bugs.
 
-7. getUploadSignature is defined as a Mutation  
+6. getUploadSignature is defined as a Mutation  
    Semantically it's a Query — no side effects, just signs parameters. Mutations imply writes. This  
    violates GraphQL conventions and will confuse future maintainers.

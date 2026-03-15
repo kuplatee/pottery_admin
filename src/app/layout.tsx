@@ -5,6 +5,7 @@ import { AppStateProvider } from '@/state/AppStateProvider'
 import { ApiClientProvider } from '@/services/graphql-client/client/ApiClientProvider'
 import { DataLoader } from '@/components/data/DataLoader'
 import TopNav from '@/components/navigation/TopNav'
+import { AppToaster } from '@/services/toast/AppToaster'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <ApiClientProvider>
             <AppStateProvider>
+              <AppToaster />
               <DataLoader />
               <TopNav />
               {children}
