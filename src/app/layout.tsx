@@ -3,7 +3,6 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { AppStateProvider } from '@/state/AppStateProvider'
 import { ApiClientProvider } from '@/services/graphql-client/client/ApiClientProvider'
-import { DataLoader } from '@/components/data/DataLoader'
 import TopNav from '@/components/navigation/TopNav'
 import { AppToaster } from '@/services/toast/AppToaster'
 import './globals.css'
@@ -28,7 +27,6 @@ export default async function RootLayout({
           <ApiClientProvider>
             <AppStateProvider>
               <AppToaster />
-              <DataLoader />
               <TopNav />
               {children}
             </AppStateProvider>

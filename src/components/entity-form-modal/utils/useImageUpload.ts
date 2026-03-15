@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client'
+import type { ApolloClient } from '@apollo/client'
 import {
   GetUploadSignatureMutation,
   GetUploadSignatureDocument
@@ -11,7 +11,7 @@ import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
 export type UploadState = 'idle' | 'uploading' | 'error'
 
 async function uploadFileToCloudinary(
-  client: ApolloClient<NormalizedCacheObject>,
+  client: ApolloClient,
   file: File
 ): Promise<string> {
   const result = await client.mutate<GetUploadSignatureMutation>({

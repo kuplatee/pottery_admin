@@ -1,94 +1,55 @@
 import type { DocumentNode } from '@apollo/client'
+import { useMutation } from '@apollo/client/react'
 import { useTranslations } from 'next-intl'
-import { useApiClient } from '@/services/graphql-client/client/ApiClientContext'
-import { useAppState } from '@/state/AppStateContext'
 import { withToast } from '@/services/toast/withToast'
-import type { AppStateAction } from '@/state/types'
 
-interface EntityActionsConfig<TEntity, TCreateMutation, TUpdateMutation> {
+interface EntityActionsConfig {
   namespace: string
   documents: {
     create: DocumentNode
     update: DocumentNode
     delete: DocumentNode
   }
-  extract: {
-    create: (data: TCreateMutation) => TEntity
-    update: (data: TUpdateMutation) => TEntity
-  }
-  toAction: {
-    add: (entity: TEntity) => AppStateAction
-    update: (entity: TEntity) => AppStateAction
-    remove: (id: string) => AppStateAction
-  }
+  refetchQueries: DocumentNode[]
 }
 
-export function createEntityActions<
-  TEntity,
-  TCreateInput,
-  TUpdateInput,
-  TCreateMutation,
-  TUpdateMutation
->(config: EntityActionsConfig<TEntity, TCreateMutation, TUpdateMutation>) {
+export function createEntityActions<TCreateInput, TUpdateInput>(
+  config: EntityActionsConfig
+) {
   return function useEntityActions() {
-    const client = useApiClient()
-    const { dispatch } = useAppState()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tPage = useTranslations(config.namespace as any) as (
-      key: string
-    ) => string
+    const tPage = useTranslations(config.namespace as any) as (key: string) => string
     const tActions = useTranslations('actions')
     const label = tPage('label')
 
+    const [createMutation] = useMutation(config.documents.create, {
+      refetchQueries: config.refetchQueries
+    })
+    const [updateMutation] = useMutation(config.documents.update, {
+      refetchQueries: config.refetchQueries
+    })
+    const [deleteMutation] = useMutation(config.documents.delete, {
+      refetchQueries: config.refetchQueries
+    })
+
     async function create(input: TCreateInput): Promise<void> {
       await withToast(
-        async () => {
-          const result = await client.mutate<TCreateMutation>({
-            mutation: config.documents.create,
-            variables: { input }
-          })
-          if (result.data) {
-            dispatch(config.toAction.add(config.extract.create(result.data)))
-          }
-        },
-        {
-          success: tActions('createSuccess', { label }),
-          error: tActions('createError', { label })
-        }
+        async () => { await createMutation({ variables: { input } }) },
+        { success: tActions('createSuccess', { label }), error: tActions('createError', { label }) }
       )
     }
 
     async function update(input: TUpdateInput): Promise<void> {
       await withToast(
-        async () => {
-          const result = await client.mutate<TUpdateMutation>({
-            mutation: config.documents.update,
-            variables: { input }
-          })
-          if (result.data) {
-            dispatch(config.toAction.update(config.extract.update(result.data)))
-          }
-        },
-        {
-          success: tActions('updateSuccess', { label }),
-          error: tActions('updateError', { label })
-        }
+        async () => { await updateMutation({ variables: { input } }) },
+        { success: tActions('updateSuccess', { label }), error: tActions('updateError', { label }) }
       )
     }
 
     async function remove(id: string): Promise<void> {
       await withToast(
-        async () => {
-          await client.mutate({
-            mutation: config.documents.delete,
-            variables: { id }
-          })
-          dispatch(config.toAction.remove(id))
-        },
-        {
-          success: tActions('deleteSuccess', { label }),
-          error: tActions('deleteError', { label })
-        }
+        async () => { await deleteMutation({ variables: { id } }) },
+        { success: tActions('deleteSuccess', { label }), error: tActions('deleteError', { label }) }
       )
     }
 

@@ -1,15 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
-import { ApiClientContext } from './ApiClientContext'
+import { ApolloProvider } from '@apollo/client/react'
 import { makeGraphQLClient } from './makeGraphQLClient'
 
 export function ApiClientProvider({ children }: { children: React.ReactNode }) {
   const client = useMemo(() => makeGraphQLClient(), [])
 
-  return (
-    <ApiClientContext.Provider value={client}>
-      {children}
-    </ApiClientContext.Provider>
-  )
+  return <ApolloProvider client={client}>{children}</ApolloProvider>
 }
