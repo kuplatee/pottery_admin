@@ -60,6 +60,7 @@
     "createError": "{label}: luonti epäonnistui",
     "updateSuccess": "{label} päivitetty",
     "updateError": "{label}: päivitys epäonnistui",
+    "deleteSuccess": "{label} poistettu",
     "deleteError": "{label}: poisto epäonnistui"
   },
   "pages": {

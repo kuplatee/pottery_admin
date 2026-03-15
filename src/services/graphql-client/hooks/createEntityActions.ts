@@ -34,7 +34,9 @@ export function createEntityActions<
     const client = useApiClient()
     const { dispatch } = useAppState()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tPage = useTranslations(config.namespace as any) as (key: string) => string
+    const tPage = useTranslations(config.namespace as any) as (
+      key: string
+    ) => string
     const tActions = useTranslations('actions')
     const label = tPage('label')
 
@@ -83,7 +85,10 @@ export function createEntityActions<
           })
           dispatch(config.toAction.remove(id))
         },
-        { error: tActions('deleteError', { label }) }
+        {
+          success: tActions('deleteSuccess', { label }),
+          error: tActions('deleteError', { label })
+        }
       )
     }
 

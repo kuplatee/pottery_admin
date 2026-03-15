@@ -60,6 +60,7 @@
     "createError": "Failed to create {label}",
     "updateSuccess": "{label} updated",
     "updateError": "Failed to update {label}",
+    "deleteSuccess": "{label} deleted",
     "deleteError": "Failed to delete {label}"
   },
   "pages": {
