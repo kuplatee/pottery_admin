@@ -38,7 +38,7 @@ export function useEntityForm({
     register,
     handleSubmit,
     control,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<FormValues>({
     // Cast is safe: buildSchema always produces a schema compatible with FormValues.
     // Zod v4 + react-hook-form resolver types can't infer the dynamic spread shape.
@@ -95,6 +95,7 @@ export function useEntityForm({
     register,
     control,
     errors,
+    isSubmitting,
     handleSubmit: handleSubmit(onSubmit),
     multilingualRegistrations,
     multilingualErrors

@@ -51,6 +51,10 @@
     "pieces": "Pieces ({count})",
     "noImage": "No image"
   },
+  "dataLoader": {
+    "loadError": "Failed to load app data. Please refresh the page.",
+    "loadErrorTitle": "Loading failed"
+  },
   "actions": {
     "createSuccess": "{label} created",
     "createError": "Failed to create {label}",

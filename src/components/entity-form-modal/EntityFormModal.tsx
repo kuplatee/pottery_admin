@@ -53,6 +53,7 @@ export function EntityFormModal({
     register,
     control,
     errors,
+    isSubmitting,
     handleSubmit,
     multilingualRegistrations,
     multilingualErrors
@@ -162,7 +163,7 @@ export function EntityFormModal({
               />
             )}
 
-            <ModalActions isEditing={isEditing} onDelete={onDelete} />
+            <ModalActions isEditing={isEditing} isSubmitting={isSubmitting} onDelete={onDelete} />
           </form>
         </div>
       </div>

@@ -4,16 +4,17 @@ import { MainActionButton } from '@/components/common-primitives/MainActionButto
 
 type Props = {
   isEditing: boolean
+  isSubmitting: boolean
   onDelete?: () => void
 }
 
-export function ModalActions({ isEditing, onDelete }: Props) {
+export function ModalActions({ isEditing, isSubmitting, onDelete }: Props) {
   const t = useTranslations('common')
 
   return (
     <div className="flex items-center justify-end gap-2 pt-2">
       {isEditing && onDelete && <DeleteTextButton onClick={onDelete} />}
-      <MainActionButton label={isEditing ? t('save') : t('create')} />
+      <MainActionButton label={isEditing ? t('save') : t('create')} disabled={isSubmitting} />
     </div>
   )
 }

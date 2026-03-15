@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 
 import { EntityFormModal } from '@/components/entity-form-modal/EntityFormModal'
@@ -11,10 +10,10 @@ import type {
   EntityData,
   AvailableGroup
 } from '@/components/entity-form-modal/types/entity.types'
+import { useModalState } from '@/components/entity-form-modal/utils/useModalState'
 import { EntityCard } from './EntityCard'
 
 type Entity = EntityData & { names: MultilingualText }
-type ModalState = { type: 'create' } | { type: 'edit'; entity: Entity } | null
 
 type Props = {
   title: string
@@ -44,7 +43,7 @@ export function EntitiesView({
   onDelete
 }: Props) {
   const t = useTranslations('entityForm')
-  const [modal, setModal] = useState<ModalState>(null)
+  const { modal, openCreate, openEdit, close } = useModalState<Entity>()
 
   return (
     <main className="p-8">
@@ -54,7 +53,7 @@ export function EntitiesView({
           <p className="mt-2 text-sm text-gray-500">{description}</p>
         </div>
         <button
-          onClick={() => setModal({ type: 'create' })}
+          onClick={openCreate}
           className="rounded-lg border border-gray-500 bg-gray-200 px-4 py-1.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-300"
         >
           {t('newButton', { label })}
@@ -67,7 +66,7 @@ export function EntitiesView({
             key={entity.id}
             entity={entity}
             onClick={onEntityClick ? () => onEntityClick(entity.id) : undefined}
-            onEdit={() => setModal({ type: 'edit', entity })}
+            onEdit={() => openEdit(entity)}
             onDelete={() => onDelete(entity.id)}
             pieceCount={entityPieceCounts?.[entity.id]}
           />
@@ -80,14 +79,14 @@ export function EntitiesView({
           fieldConfig={fieldConfig}
           entity={modal.type === 'edit' ? modal.entity : undefined}
           availableCategories={availableCategories}
-          onClose={() => setModal(null)}
+          onClose={close}
           onCreate={onCreate}
           onUpdate={onUpdate}
           onDelete={
             modal.type === 'edit'
               ? () => {
                   onDelete(modal.entity.id)
-                  setModal(null)
+                  close()
                 }
               : undefined
           }

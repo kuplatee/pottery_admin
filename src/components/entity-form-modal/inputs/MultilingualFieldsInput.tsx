@@ -1,6 +1,7 @@
 'use client'
 
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
+import { useLocale } from 'next-intl'
 import {
   SUPPORTED_LANGUAGES,
   LANGUAGE_LABELS,
@@ -22,12 +23,14 @@ export function MultilingualFieldsInput({
   registrations,
   errors
 }: Props) {
+  const locale = useLocale() as Language
+
   return (
     <>
       <SectionTitle>{label}</SectionTitle>
       {SUPPORTED_LANGUAGES.map((lang) => (
         <div key={lang}>
-          <LanguageLabel htmlFor={`${label}-${lang}`}>{LANGUAGE_LABELS[lang]}</LanguageLabel>
+          <LanguageLabel htmlFor={`${label}-${lang}`}>{LANGUAGE_LABELS[locale][lang]}</LanguageLabel>
           <AutoResizeTextarea registration={registrations[lang]} className="mt-1" />
           {errors[lang]?.message && <ErrorMessage message={errors[lang].message} />}
         </div>

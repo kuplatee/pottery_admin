@@ -5,7 +5,7 @@ import {
   type Control,
   type UseFormRegister
 } from 'react-hook-form'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import {
   SUPPORTED_LANGUAGES,
   LANGUAGE_LABELS,
@@ -53,6 +53,7 @@ export function DetailsFieldsInput({
   errors
 }: Props) {
   const t = useTranslations('entityForm')
+  const locale = useLocale() as Language
   const { fields, append, remove } = useFieldArray({ control, name: fieldName })
 
   const fieldErrors: RowErrors[] = errors?.[fieldName] ?? []
@@ -73,7 +74,7 @@ export function DetailsFieldsInput({
         <div className="mt-3 space-y-1">
           {SUPPORTED_LANGUAGES.map((lang, langIndex) => (
             <div key={lang} className={langIndex > 0 ? 'pt-2' : undefined}>
-              <LanguageLabel>{LANGUAGE_LABELS[lang]}</LanguageLabel>
+              <LanguageLabel>{LANGUAGE_LABELS[locale][lang]}</LanguageLabel>
               <div className="space-y-2">
                 {fields.map((field, index) => {
                   const rowErrors = fieldErrors[index]

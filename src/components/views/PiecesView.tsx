@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 
 import { EntityFormModal } from '@/components/entity-form-modal/EntityFormModal'
@@ -8,6 +7,7 @@ import type {
   EntityFieldConfig,
   EntityFormData
 } from '@/components/entity-form-modal/types/entity.types'
+import { useModalState } from '@/components/entity-form-modal/utils/useModalState'
 import { PieceCard } from './PieceCard'
 import type { Language } from '@/lib/languages'
 
@@ -15,8 +15,6 @@ type LocalizedNames = Record<Language, string>
 type Piece = { id: string; designId: string; sold: boolean; collectionId?: string | null; imageFileNames: string[] }
 type Design = { id: string; names: LocalizedNames }
 type Collection = { id: string; names: LocalizedNames }
-
-type ModalState = { type: 'create' } | { type: 'edit'; piece: Piece } | null
 
 type Props = {
   title: string
@@ -47,7 +45,7 @@ export function PiecesView({
 }: Props) {
   const t = useTranslations('entityForm')
   const locale = useLocale() as Language
-  const [modal, setModal] = useState<ModalState>(null)
+  const { modal, openCreate, openEdit, close } = useModalState<Piece>()
 
   return (
     <main className="p-8">
@@ -57,7 +55,7 @@ export function PiecesView({
           <p className="mt-2 text-sm text-gray-500">{description}</p>
         </div>
         <button
-          onClick={() => setModal({ type: 'create' })}
+          onClick={openCreate}
           className="rounded-lg border border-gray-500 bg-gray-200 px-4 py-1.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-300"
         >
           {t('newButton', { label })}
@@ -77,7 +75,7 @@ export function PiecesView({
               piece={piece}
               designName={design?.names[locale] ?? piece.designId}
               collectionName={collection?.names[locale]}
-              onClick={onPieceClick ? () => onPieceClick(piece.id) : () => setModal({ type: 'edit', piece })}
+              onClick={onPieceClick ? () => onPieceClick(piece.id) : () => openEdit(piece)}
               onDelete={() => onDelete(piece.id)}
             />
           )
@@ -90,19 +88,19 @@ export function PiecesView({
           fieldConfig={fieldConfig}
           entity={
             modal.type === 'edit'
-              ? { ...modal.piece, collectionId: modal.piece.collectionId ?? undefined }
+              ? { ...modal.entity, collectionId: modal.entity.collectionId ?? undefined }
               : undefined
           }
           availableCollections={collections}
           availableDesigns={designs}
-          onClose={() => setModal(null)}
+          onClose={close}
           onCreate={onCreate}
           onUpdate={onUpdate}
           onDelete={
             modal.type === 'edit'
               ? () => {
-                  onDelete(modal.piece.id)
-                  setModal(null)
+                  onDelete(modal.entity.id)
+                  close()
                 }
               : undefined
           }

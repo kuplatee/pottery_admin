@@ -1,7 +1,9 @@
 'use client'
 
 import { Controller, type Control } from 'react-hook-form'
+import { useLocale } from 'next-intl'
 import type { AvailableGroup } from '../types/entity.types'
+import type { Language } from '@/lib/languages'
 import { ErrorMessage } from '@/components/common-primitives/ErrorMessage'
 import { SectionTitle } from '@/components/common-primitives/SectionTitle'
 
@@ -25,6 +27,8 @@ export function GroupPickerInput({
   emptyLabel,
   error
 }: Props) {
+  const locale = useLocale() as Language
+
   return (
     <div>
       <SectionTitle>{label}</SectionTitle>
@@ -66,7 +70,7 @@ export function GroupPickerInput({
                         : 'border-gray-300 bg-white text-gray-600 hover:border-gray-500'
                     }`}
                   >
-                    {group.names.en}
+                    {group.names[locale]}
                   </button>
                 )
               })}

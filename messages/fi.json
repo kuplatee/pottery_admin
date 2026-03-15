@@ -51,6 +51,10 @@
     "pieces": "Esineet ({count})",
     "noImage": "Ei kuvaa"
   },
+  "dataLoader": {
+    "loadError": "Sovelluksen tietojen lataus epäonnistui. Päivitä sivu.",
+    "loadErrorTitle": "Lataus epäonnistui"
+  },
   "actions": {
     "createSuccess": "{label} luotu",
     "createError": "{label}: luonti epäonnistui",
