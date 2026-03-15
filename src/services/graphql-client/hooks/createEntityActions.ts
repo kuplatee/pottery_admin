@@ -3,6 +3,10 @@ import { useMutation } from '@apollo/client/react'
 import { useTranslations } from 'next-intl'
 import { withToast } from '@/services/toast/withToast'
 
+// NOTE: mutations use refetchQueries to keep the UI in sync after changes.
+// This re-fetches the full entity list on every mutation, which is fine at
+// current scale. If any entity type grows large, switch to pagination +
+// Apollo cache.modify to avoid fetching unbounded lists on every mutation.
 interface EntityActionsConfig {
   namespace: string
   documents: {
