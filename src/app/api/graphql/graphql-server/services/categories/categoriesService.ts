@@ -30,10 +30,10 @@ export async function createCategory(
   db: Firestore,
   input: CreateCategoryInput
 ): Promise<Category> {
-  const data = { names: { en: input.names.en, fi: input.names.fi } }
+  const data = { names: { ...input.names } }
   const id = await createCollectionDocument(db, DB_COLLECTIONS.CATEGORIES, data)
 
-  return { id, names: { en: input.names.en, fi: input.names.fi } }
+  return { id, names: { ...input.names } }
 }
 
 export async function updateCategory(
@@ -47,10 +47,10 @@ export async function updateCategory(
       throw new NotFoundError(ENTITY_NAMES.CATEGORY, input.id)
     }
 
-    transaction.update(ref, { names: { en: input.names.en, fi: input.names.fi } })
+    transaction.update(ref, { names: { ...input.names } })
   })
 
-  return { id: input.id, names: { en: input.names.en, fi: input.names.fi } }
+  return { id: input.id, names: { ...input.names } }
 }
 
 export async function deleteCategory(

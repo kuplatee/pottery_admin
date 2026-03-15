@@ -17,7 +17,7 @@ type Props = {
   onDelete?: () => void
 }
 
-export function PieceCard({ piece, designName, collectionName, onClick, onDelete }: Props) {
+export function PieceCard({ piece, designName, collectionName, onClick }: Props) {
   const t = useTranslations()
   const imageUrl = piece.imageFileNames[0] ? `${PHOTO_BASE_URL}${piece.imageFileNames[0]}` : null
 

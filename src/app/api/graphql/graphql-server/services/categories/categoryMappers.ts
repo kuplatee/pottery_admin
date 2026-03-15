@@ -4,6 +4,8 @@ import type {
 } from 'firebase-admin/firestore'
 import type { Category } from './types'
 import { InternalDataError } from '../../errors/AppError'
+import { SUPPORTED_LANGUAGES } from '@/lib/languages'
+import type { LocalizedString } from '../common/types'
 
 export function docToCategory(
   doc: DocumentSnapshot<DocumentData>
@@ -15,9 +17,8 @@ export function docToCategory(
 
   return {
     id: doc.id,
-    names: {
-      en: data.names.en,
-      fi: data.names.fi
-    }
+    names: Object.fromEntries(
+      SUPPORTED_LANGUAGES.map(lang => [lang, data.names[lang] as string])
+    ) as LocalizedString
   }
 }

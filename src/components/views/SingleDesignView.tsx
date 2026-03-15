@@ -80,6 +80,7 @@ export function SingleDesignView({ entity, pieces }: Props) {
                     onClick={() => router.push(`/pieces/${piece.id}`)}
                   >
                     {imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={imageUrl}
                         alt={piece.id}

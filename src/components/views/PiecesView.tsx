@@ -9,8 +9,9 @@ import type {
   EntityFormData
 } from '@/components/entity-form-modal/types/entity.types'
 import { PieceCard } from './PieceCard'
+import type { Language } from '@/lib/languages'
 
-type LocalizedNames = { en: string; fi: string }
+type LocalizedNames = Record<Language, string>
 type Piece = { id: string; designId: string; sold: boolean; collectionId?: string | null; imageFileNames: string[] }
 type Design = { id: string; names: LocalizedNames }
 type Collection = { id: string; names: LocalizedNames }
@@ -45,7 +46,7 @@ export function PiecesView({
   onDelete
 }: Props) {
   const t = useTranslations('entityForm')
-  const locale = useLocale() as 'en' | 'fi'
+  const locale = useLocale() as Language
   const [modal, setModal] = useState<ModalState>(null)
 
   return (

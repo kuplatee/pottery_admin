@@ -1,21 +1,18 @@
+import { SUPPORTED_LANGUAGES } from '@/lib/languages'
 import type { DetailsEntry } from '@/components/entity-form-modal/inputs/DetailsFieldsInput'
+import type { LocalizedDetails } from '@/app/api/graphql/graphql-server/services/designs/types'
 
-export function toLocalizedJson(details: DetailsEntry[] | undefined): {
-  en: Record<string, string>
-  fi: Record<string, string>
-} {
+export function toLocalizedJson(details: DetailsEntry[] | undefined): LocalizedDetails {
   if (!details) {
-    return { en: {}, fi: {} }
+    return Object.fromEntries(SUPPORTED_LANGUAGES.map(lang => [lang, {}])) as LocalizedDetails
   }
-  return details.reduce<{
-    en: Record<string, string>
-    fi: Record<string, string>
-  }>(
+  return details.reduce<LocalizedDetails>(
     (acc, entry) => {
-      acc.en[entry.key.en] = entry.value.en
-      acc.fi[entry.key.fi] = entry.value.fi
+      for (const lang of SUPPORTED_LANGUAGES) {
+        acc[lang][entry.key[lang]] = entry.value[lang]
+      }
       return acc
     },
-    { en: {}, fi: {} }
+    Object.fromEntries(SUPPORTED_LANGUAGES.map(lang => [lang, {}])) as LocalizedDetails
   )
 }

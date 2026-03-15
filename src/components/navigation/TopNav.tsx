@@ -6,9 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import LanguageToggle from '@/components/language/LanguageToggle'
 
-const NAV_HREFS = ['/categories', '/collections', '/designs', '/pieces'] as const
-
-type NavHref = (typeof NAV_HREFS)[number]
+type NavHref = '/categories' | '/collections' | '/designs' | '/pieces'
 
 export default function TopNav() {
   const pathname = usePathname()

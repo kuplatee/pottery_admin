@@ -10,13 +10,15 @@ import { docToDesign } from './designMappers'
 import { hasPiecesReferencingDesign } from '../database-utils/referentialIntegrityChecks'
 import { NotFoundError, ReferentialIntegrityError, ValidationError } from '../../errors/AppError'
 import type { Firestore } from 'firebase-admin/firestore'
+import { SUPPORTED_LANGUAGES } from '@/lib/languages'
 
 function assertDetailsKeysConsistent(details: CreateDesignInput['details']): void {
-  const enCount = Object.keys(details.en).length
-  const fiCount = Object.keys(details.fi).length
-  if (enCount !== fiCount) {
+  const counts = SUPPORTED_LANGUAGES.map(lang => Object.keys(details[lang]).length)
+  const [first, ...rest] = counts
+  if (rest.some(c => c !== first)) {
+    const breakdown = SUPPORTED_LANGUAGES.map(lang => `${lang}: ${Object.keys(details[lang]).length}`).join(', ')
     throw new ValidationError(
-      `details must have the same number of keys in each language — en: ${enCount}, fi: ${fiCount}`
+      `details must have the same number of keys in each language — ${breakdown}`
     )
   }
 }
@@ -54,20 +56,20 @@ export async function createDesign(
   }
 
   const data = {
-    names: { en: input.names.en, fi: input.names.fi },
+    names: { ...input.names },
     categoryIds: input.categoryIds,
-    description: { en: input.description.en, fi: input.description.fi },
-    details: { en: input.details.en, fi: input.details.fi }
+    description: { ...input.description },
+    details: { ...input.details }
   }
 
   const id = await createCollectionDocument(db, DB_COLLECTIONS.DESIGNS, data)
 
   return {
     id,
-    names: { en: input.names.en, fi: input.names.fi },
+    names: { ...input.names },
     categoryIds: input.categoryIds,
-    description: { en: input.description.en, fi: input.description.fi },
-    details: { en: input.details.en, fi: input.details.fi }
+    description: { ...input.description },
+    details: { ...input.details }
   }
 }
 
@@ -93,19 +95,19 @@ export async function updateDesign(
     }
 
     transaction.update(ref, {
-      names: { en: input.names.en, fi: input.names.fi },
+      names: { ...input.names },
       categoryIds: input.categoryIds,
-      description: { en: input.description.en, fi: input.description.fi },
-      details: { en: input.details.en, fi: input.details.fi }
+      description: { ...input.description },
+      details: { ...input.details }
     })
   })
 
   return {
     id: input.id,
-    names: { en: input.names.en, fi: input.names.fi },
+    names: { ...input.names },
     categoryIds: input.categoryIds,
-    description: { en: input.description.en, fi: input.description.fi },
-    details: { en: input.details.en, fi: input.details.fi }
+    description: { ...input.description },
+    details: { ...input.details }
   }
 }
 

@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl'
 import { useAppState } from '@/state/AppStateContext'
 import { useDesignActions } from '@/services/graphql-client/hooks/useDesignActions'
 import { toLocalizedJson } from './designFormUtils'
+import { SUPPORTED_LANGUAGES } from '@/lib/languages'
+import type { LocalizedString } from '@/app/api/graphql/graphql-server/services/common/types'
 import { EntitiesView } from '@/components/views/EntitiesView'
 
 export default function DesignsPage() {
@@ -37,7 +39,7 @@ export default function DesignsPage() {
         createDesign({
           names: data.names!,
           categoryIds: data.categoryIds ?? [],
-          description: data.description ?? { en: '', fi: '' },
+          description: data.description ?? (Object.fromEntries(SUPPORTED_LANGUAGES.map(lang => [lang, ''])) as LocalizedString),
           details: toLocalizedJson(data.details)
         })
       }
@@ -46,7 +48,7 @@ export default function DesignsPage() {
           id,
           names: data.names!,
           categoryIds: data.categoryIds ?? [],
-          description: data.description ?? { en: '', fi: '' },
+          description: data.description ?? (Object.fromEntries(SUPPORTED_LANGUAGES.map(lang => [lang, ''])) as LocalizedString),
           details: toLocalizedJson(data.details)
         })
       }

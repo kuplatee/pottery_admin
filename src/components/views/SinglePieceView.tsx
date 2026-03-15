@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import type { Category, Collection, Design, Piece } from '@/types/graphql-schema-types.generated'
+import Image from 'next/image'
 import { DbIdInfo } from '@/components/entity-form-modal/layout/DbIdInfo'
 import { LabeledValue } from '@/components/common-primitives/LabeledValue'
 import enMessages from '../../../messages/en.json'
@@ -52,10 +53,12 @@ export function SinglePieceView({ entity, design, collection, categories }: Prop
 
         <div className="relative h-64 w-64 overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl}
               alt={entity.id}
-              className="h-full w-full object-cover object-center"
+              fill
+              className="object-cover object-center"
+              sizes="256px"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-xs text-gray-400">

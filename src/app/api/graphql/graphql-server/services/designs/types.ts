@@ -1,9 +1,7 @@
+import type { Language } from '@/lib/languages'
 import type { LocalizedString } from '../common/types'
 
-export type LocalizedDetails = {
-  en: Record<string, string>
-  fi: Record<string, string>
-}
+export type LocalizedDetails = Record<Language, Record<string, string>>
 
 export type Design = {
   id: string

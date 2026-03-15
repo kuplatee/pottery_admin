@@ -1,3 +1,5 @@
+import { SUPPORTED_LANGUAGES } from '@/lib/languages'
+
 export const nonEmptyString = {
   type: 'string',
   minLength: 1,
@@ -6,13 +8,10 @@ export const nonEmptyString = {
 
 export const localizedStringSchema = {
   type: 'object',
-  properties: {
-    en: nonEmptyString,
-    fi: nonEmptyString,
-  },
-  required: ['en', 'fi'],
+  properties: Object.fromEntries(SUPPORTED_LANGUAGES.map(lang => [lang, nonEmptyString])),
+  required: [...SUPPORTED_LANGUAGES],
   additionalProperties: false,
-} as const
+}
 
 export const nonEmptyStringArray = {
   type: 'array',
@@ -23,16 +22,9 @@ export const nonEmptyStringArray = {
 
 export const localizedDetailsSchema = {
   type: 'object',
-  properties: {
-    en: {
-      type: 'object',
-      additionalProperties: { type: 'string' },
-    },
-    fi: {
-      type: 'object',
-      additionalProperties: { type: 'string' },
-    },
-  },
-  required: ['en', 'fi'],
+  properties: Object.fromEntries(
+    SUPPORTED_LANGUAGES.map(lang => [lang, { type: 'object', additionalProperties: { type: 'string' } }])
+  ),
+  required: [...SUPPORTED_LANGUAGES],
   additionalProperties: false,
-} as const
+}

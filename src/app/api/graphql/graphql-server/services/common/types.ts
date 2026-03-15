@@ -1,4 +1,3 @@
-export type LocalizedString = {
-  en: string
-  fi: string
-}
+import type { Language } from '@/lib/languages'
+
+export type LocalizedString = Record<Language, string>

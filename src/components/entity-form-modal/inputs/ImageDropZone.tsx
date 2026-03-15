@@ -93,6 +93,7 @@ export function ImageDropZone({
         <ul className="mt-4 flex flex-wrap gap-4">
           {uploadedFileNames.map((publicId) => (
             <li key={publicId} className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${process.env.NEXT_PUBLIC_PHOTO_BASE_URL ?? ''}${publicId}`}
                 alt={publicId}
@@ -105,6 +106,7 @@ export function ImageDropZone({
           ))}
           {pendingFiles.map((file, index) => (
             <li key={`pending-${index}`} className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={URL.createObjectURL(file)}
                 alt={file.name}

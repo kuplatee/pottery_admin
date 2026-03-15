@@ -31,16 +31,16 @@ export async function createCollection(
   input: CreateCollectionInput
 ): Promise<Collection> {
   const data = {
-    names: { en: input.names.en, fi: input.names.fi },
-    description: { en: input.description.en, fi: input.description.fi }
+    names: { ...input.names },
+    description: { ...input.description }
   }
 
   const id = await createCollectionDocument(db, DB_COLLECTIONS.COLLECTIONS, data)
 
   return {
     id,
-    names: { en: input.names.en, fi: input.names.fi },
-    description: { en: input.description.en, fi: input.description.fi }
+    names: { ...input.names },
+    description: { ...input.description }
   }
 }
 
@@ -56,15 +56,15 @@ export async function updateCollection(
     }
 
     transaction.update(ref, {
-      names: { en: input.names.en, fi: input.names.fi },
-      description: { en: input.description.en, fi: input.description.fi }
+      names: { ...input.names },
+      description: { ...input.description }
     })
   })
 
   return {
     id: input.id,
-    names: { en: input.names.en, fi: input.names.fi },
-    description: { en: input.description.en, fi: input.description.fi }
+    names: { ...input.names },
+    description: { ...input.description }
   }
 }
 

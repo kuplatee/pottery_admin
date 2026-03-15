@@ -3,8 +3,10 @@ import type {
   DocumentData,
   DocumentReference
 } from 'firebase-admin/firestore'
-import type { Design } from './types'
+import type { Design, LocalizedDetails } from './types'
 import { InternalDataError } from '../../errors/AppError'
+import { SUPPORTED_LANGUAGES } from '@/lib/languages'
+import type { LocalizedString } from '../common/types'
 
 export function docToDesign(doc: DocumentSnapshot<DocumentData>): Design {
   const data = doc.data()
@@ -14,20 +16,20 @@ export function docToDesign(doc: DocumentSnapshot<DocumentData>): Design {
 
   return {
     id: doc.id,
-    names: {
-      en: data.names.en,
-      fi: data.names.fi
-    },
+    names: Object.fromEntries(
+      SUPPORTED_LANGUAGES.map(lang => [lang, data.names[lang] as string])
+    ) as LocalizedString,
     categoryIds: (data.categoryIds as Array<string | DocumentReference>).map(
       (ref) => (typeof ref === 'string' ? ref : ref.id)
     ),
-    description: {
-      en: data.description.en,
-      fi: data.description.fi
-    },
-    details: {
-      en: typeof data.details.en === 'string' ? JSON.parse(data.details.en) : data.details.en,
-      fi: typeof data.details.fi === 'string' ? JSON.parse(data.details.fi) : data.details.fi
-    }
+    description: Object.fromEntries(
+      SUPPORTED_LANGUAGES.map(lang => [lang, data.description[lang] as string])
+    ) as LocalizedString,
+    details: Object.fromEntries(
+      SUPPORTED_LANGUAGES.map(lang => [
+        lang,
+        typeof data.details[lang] === 'string' ? JSON.parse(data.details[lang]) : data.details[lang]
+      ])
+    ) as LocalizedDetails
   }
 }
