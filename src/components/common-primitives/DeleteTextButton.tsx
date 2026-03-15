@@ -30,7 +30,9 @@ export function DeleteTextButton({ onClick }: Props) {
       >
         {t('delete')}
       </button>
-      {isConfirming && <ConfirmDeleteModal onConfirm={handleConfirm} onCancel={handleCancel} />}
+      {isConfirming && (
+        <ConfirmDeleteModal onConfirm={handleConfirm} onCancel={handleCancel} />
+      )}
     </>
   )
 }

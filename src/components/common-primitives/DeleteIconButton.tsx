@@ -35,7 +35,9 @@ export function DeleteButton({ onClick }: Props) {
       >
         <TrashIcon />
       </button>
-      {isConfirming && <ConfirmDeleteModal onConfirm={handleConfirm} onCancel={handleCancel} />}
+      {isConfirming && (
+        <ConfirmDeleteModal onConfirm={handleConfirm} onCancel={handleCancel} />
+      )}
     </>
   )
 }
