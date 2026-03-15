@@ -23,7 +23,7 @@ export function AppToaster() {
       style={toastColors}
       toastOptions={{
         classNames: {
-          closeButton: 'transition-transform duration-150 hover:scale-125 hover:!bg-inherit hover:!border-inherit [&>svg]:transition-[stroke-width] [&>svg]:duration-150 hover:[&>svg]:[stroke-width:2.5]'
+          closeButton: '!w-6 !h-6 transition-transform duration-150 hover:scale-125 hover:!bg-inherit hover:!border-inherit [&>svg]:!w-5 [&>svg]:!h-5 [&>svg]:[stroke-width:2] [&>svg]:transition-[stroke-width] [&>svg]:duration-150 hover:[&>svg]:[stroke-width:3]'
         }
       }}
     />
